@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{021A0B6B-AD05-4FD3-88DB-64387EFCD2DB}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Application</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Common\Source;$(SolutionDir)\glfw\include;$(SolutionDir)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);$(SolutionDir)\glfw\lib-msvc120;$(SolutionDir)\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Common\Source;$(SolutionDir)\glfw\include;$(SolutionDir)\glew\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Configuration);$(SolutionDir)\glfw\lib-msvc120;$(SolutionDir)\glew\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;glfw3.lib;opengl32.lib;winmm.lib;Common.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\AnimMetabee.cpp" />
+    <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Assignment03.cpp" />
+    <ClCompile Include="Source\Bullet.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Camera2.cpp" />
+    <ClCompile Include="Source\Camera3.cpp" />
+    <ClCompile Include="Source\CharacterAnimator.cpp" />
+    <ClCompile Include="Source\CharacterManager.cpp" />
+    <ClCompile Include="Source\CharacterRenderer.cpp" />
+    <ClCompile Include="Source\Door.cpp" />
+    <ClCompile Include="Source\LoadOBJ.cpp" />
+    <ClCompile Include="Source\LoadTGA.cpp" />
+    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Mesh.cpp" />
+    <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\ObjectBuilder.cpp" />
+    <ClCompile Include="Source\ObjectInteractor.cpp" />
+    <ClCompile Include="Source\Rock.cpp" />
+    <ClCompile Include="Source\SceneGameOver.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp" />
+    <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Slime.cpp" />
+    <ClCompile Include="Source\UIManager.cpp" />
+    <ClCompile Include="Source\Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\AnimMetabee.h" />
+    <ClInclude Include="Source\Application.h" />
+    <ClInclude Include="Source\Assignment03.h" />
+    <ClInclude Include="Source\Bullet.h" />
+    <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Camera2.h" />
+    <ClInclude Include="Source\Camera3.h" />
+    <ClInclude Include="Source\CharacterAnimator.h" />
+    <ClInclude Include="Source\CharacterManager.h" />
+    <ClInclude Include="Source\CharacterRenderer.h" />
+    <ClInclude Include="Source\Door.h" />
+    <ClInclude Include="Source\Geometry.h" />
+    <ClInclude Include="Source\IAnimation.h" />
+    <ClInclude Include="Source\Light.h" />
+    <ClInclude Include="Source\LoadOBJ.h" />
+    <ClInclude Include="Source\LoadTGA.h" />
+    <ClInclude Include="Source\Material.h" />
+    <ClInclude Include="Source\Mesh.h" />
+    <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\Object.h" />
+    <ClInclude Include="Source\ObjectBuilder.h" />
+    <ClInclude Include="Source\ObjectInteractor.h" />
+    <ClInclude Include="Source\Rock.h" />
+    <ClInclude Include="Source\Scene.h" />
+    <ClInclude Include="Source\SceneGameOver.h" />
+    <ClInclude Include="Source\SceneManager.h" />
+    <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Slime.h" />
+    <ClInclude Include="Source\UIManager.h" />
+    <ClInclude Include="Source\Utility.h" />
+    <ClInclude Include="Source\Vertex.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

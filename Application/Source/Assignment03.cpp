@@ -281,26 +281,11 @@ void Assignment03::Update(double dt) {
 
 	// Shoot bullet on left click
 	if (Application::IsKeyPressed(MK_LBUTTON) && !charManager.isRockPickedUp) {
-		(*shoulderRotX) -= 300 * _dt;
-		(*armRotX) = 0;
-		(*armRotY) = 90;
-		(*shoulderRotY) = 10;
-		(*shoulderRotX) = Math::Clamp<float>((*shoulderRotX), -90, 0);
 
-		pendingReset = true;
-
-		// Wait until arm is raised then shoot bullet
-		if (_elapsedTime >= nextShootTime && (*shoulderRotX) <= -90) {
+		if (_elapsedTime >= nextShootTime ) {
 			objBuilder.createObject(new Bullet(this, camera.getPosition()));
 			nextShootTime = _elapsedTime + shootCooldown;
 		}
-	}
-	else if (pendingReset) {
-		(*shoulderRotX) = 0;
-		(*armRotX) = 0;
-		(*armRotY) = 0;
-		(*shoulderRotY) = 0;
-		pendingReset = false;
 	}
 
 	static bool canGodmodePress = true;
@@ -498,14 +483,16 @@ void Assignment03::Render() {
 	}
 	modelStack.PopMatrix();
 
-	// Metabee Transform
+
+	// Character Transform
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.position.x, camera.position.y - 0.75f, camera.position.z); // offset metabee down to align with camera
-	modelStack.Rotate(-camera.getYaw() + 90.0f, 0, 1, 0); // rotate body to align with camera
-	modelStack.Scale(0.2f, 0.2f, 0.2f);
-	RenderCharacter();
+	modelStack.Translate(camera.target.x, camera.target.y - 1, camera.target.z); 
+	modelStack.Rotate(-camera.getYaw() - 270.f, 0, 1, 0); 
+	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	RenderMesh(meshList[GEO_SPACESHIP],true);
 	modelStack.PopMatrix();
 
+	
 	objBuilder.renderObjects();
 
 	std::ostringstream fps;

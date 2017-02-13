@@ -282,7 +282,7 @@ void Assignment03::Update(double dt) {
 	// Shoot bullet on left click
 	if (Application::IsKeyPressed(MK_LBUTTON) && !charManager.isRockPickedUp) {
 
-		if (_elapsedTime >= nextShootTime ) {
+		if (_elapsedTime >= nextShootTime) {
 			objBuilder.createObject(new Bullet(this, camera.getPosition()));
 			nextShootTime = _elapsedTime + shootCooldown;
 		}
@@ -311,9 +311,9 @@ void Assignment03::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y,
-					 camera.position.z, camera.target.x, camera.target.y,
-					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+					 camera.target.x, camera.target.y, camera.target.z,
+					 camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -486,18 +486,36 @@ void Assignment03::Render() {
 
 	// Character Transform
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.target.x, camera.target.y - 1, camera.target.z); 
-	modelStack.Rotate(-camera.getYaw() - 270.f, 0, 1, 0); 
+	modelStack.Translate(camera.target.x, camera.target.y - 0.5f, camera.target.z);
+	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
+	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
+	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
-	RenderMesh(meshList[GEO_SPACESHIP],true);
+	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 
-	
+
 	objBuilder.renderObjects();
 
+
+	// Debugging Text
 	std::ostringstream fps;
 	fps << "FPS: " << (1 / _dt);
 	textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream targ;
+	targ << "Target: " << camera.getTarget().toString();
+	textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream upz;
+	upz << "Up: " << camera.getUp().toString();
+	textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream pitch;
+	pitch << "Pitch: " << camera.getPitch();
+	textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream yaw;
+	yaw << "Yaw: " << camera.getYaw();
+	textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+
+	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
 	textManager.renderTextOnScreen(UIManager::Text("<Quest>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));

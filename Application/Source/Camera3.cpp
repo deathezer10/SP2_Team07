@@ -30,23 +30,25 @@ void cbMouseEvent(GLFWwindow* window, int button, int action, int mods) {
 
 void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up) {
 	this->position = defaultPosition = pos;
-	this->target = defaultTarget = target;
 	this->view = defaultView = (target - position).Normalized();
+	this->target = defaultTarget = position + view;
+
+	this->up = defaultUp = up;
 
 	this->right = defaultRight = view.Cross(up);
-	this->right.y = 0;
 	this->right.Normalize();
 
-	this->up = defaultUp = right.Cross(view).Normalized();
-
-	yaw = 0.0f;
-	pitch = 0.0f;
+	yaw = -90;
+	pitch = 0;
+	roll = 0;
 
 	mouseMovedX = 0;
 	mouseMovedY = 0;
 
 	glfwSetMouseButtonCallback(glfwGetCurrentContext(), cbMouseEvent);
 
+	Reset();
+	ResetCursorVariables();
 }
 
 
@@ -89,7 +91,7 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = 4.0f * (float)dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * (float)dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 75.0f * (float)dt;
 	float rotationSpeed = 2.5f * (float)dt;
 
 	// "Sprint"
@@ -97,8 +99,17 @@ void Camera3::Update(double dt) {
 		CAMERA_SPEED *= 2.0f;
 	}
 
-	view = (target - position).Normalized();
-	right = view.Cross(up).Normalized();
+	if (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) {
+		if (roll > 1) {
+			roll -= rollFalloffSpeed * (float)dt;
+		}
+		else if (roll < -1) {
+			roll += rollFalloffSpeed * (float)dt;
+		}
+		else {
+			roll = 0;
+		}
+	}
 
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
@@ -115,20 +126,22 @@ void Camera3::Update(double dt) {
 	}
 
 	if (Application::IsKeyPressed('A')) { // Left
-		yaw -= CAMERA_SPEED;
-		
+		yaw -= CAMERA_LEFT_RIGHT_SPEED;
+		roll -= CAMERA_LEFT_RIGHT_SPEED;
+
 		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
+		rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
 		view = (target - position).Normalized();
 		view = rotation * view;
 		target = position + view;
 		up = rotation * up;
 	}
 	else if (Application::IsKeyPressed('D')) { // Right
-		yaw += CAMERA_SPEED;
+		yaw += CAMERA_LEFT_RIGHT_SPEED;
+		roll += CAMERA_LEFT_RIGHT_SPEED;
 
 		Mtx44 rotation;
-		rotation.SetToRotation(yaw, 0, 1, 0);
+		rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
 		view = (target - position).Normalized();
 		view = rotation * view;
 		target = position + view;
@@ -145,34 +158,19 @@ void Camera3::Update(double dt) {
 		target = position + view;
 	}
 
+	// Positional bounds check
+	position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
+	position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
+	position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
 
-	// Rotate Camera with mouse-axis
-	/*
-	if (mouseMovedX < 0) { // Left
-	float angle = rotationSpeed * mouseMovedDistanceX;
-	yaw -= angle;
+	// Limit maximum Roll angle
+	roll = Math::Clamp(roll, -rollAngleLimit, rollAngleLimit);
 
-	Mtx44 rotation;
-	rotation.SetToRotation(angle, 0, 1, 0);
+	// Re-calculate view and right vectors
 	view = (target - position).Normalized();
-	view = rotation * view;
-	target = position + view;
-	up = rotation * up;
-	}
+	right = view.Cross(up).Normalized();
 
-	if (mouseMovedX > 0) { // Right
-	float angle = -rotationSpeed * mouseMovedDistanceX;
-	yaw -= angle;
-
-	Mtx44 rotation;
-	rotation.SetToRotation(angle, 0, 1, 0);
-	view = (target - position).Normalized();
-	view = rotation * view;
-	target = position + view;
-	up = rotation * up;
-	}
-	*/
-
+	// It works :o
 	if (mouseMovedY > 0) { // Up
 		float angle = rotationSpeed * mouseMovedDistanceY;
 		pitch += angle;
@@ -185,8 +183,7 @@ void Camera3::Update(double dt) {
 		view = rotation * view;
 		target = position + view;
 	}
-
-	if (mouseMovedY < 0) { // Down
+	else if (mouseMovedY < 0) { // Down
 		float angle = -rotationSpeed * mouseMovedDistanceY;
 		pitch += angle;
 
@@ -198,20 +195,6 @@ void Camera3::Update(double dt) {
 		view = rotation * view;
 		target = position + view;
 	}
-
-	// Positional bounds check
-	position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
-	position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
-	position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
-
-	/*
-
-	target.x = cos(Math::DegreeToRadian(pitch)) * cos(Math::DegreeToRadian(yaw)) + position.x;
-	target.y = sin(Math::DegreeToRadian(pitch)) + position.y;
-	target.z = cos(Math::DegreeToRadian(pitch)) * sin(Math::DegreeToRadian(yaw)) + position.z;
-
-	*/
-
 
 }
 
@@ -229,6 +212,7 @@ void Camera3::Reset() {
 	up = defaultUp;
 	right = defaultRight;
 
-	yaw = 0.0f;
+	yaw = -90.0f;
 	pitch = 0.0f;
+	roll = 0.0f;
 }

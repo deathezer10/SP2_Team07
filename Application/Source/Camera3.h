@@ -26,6 +26,7 @@ public:
 	Vector3 getRight() { return right; };
 	float getYaw() { return yaw; };
 	float getPitch() { return pitch; };
+	float getRoll() { return roll; };
 	
 	double getMouseMovedX() { return mouseMovedX; };
 	double getMouseMovedY() { return mouseMovedY; };
@@ -41,8 +42,9 @@ private:
 	Vector3 defaultRight;
 
 	// Current angle of camera rotation
-	float yaw = 0;
+	float yaw = -90;
 	float pitch = 0;
+	float roll = 0; // Does not actually roll the camera
 
 	// Mouse direction moved, possible values: -1, 0, 1
 	double mouseMovedX;
@@ -55,11 +57,14 @@ private:
 	// Updates the direction in which the cursor has moved
 	void updateCursor(); 
 
+	// True if mouse is currently hidden
 	bool isMouseEnabled = true;
+	
+	// Both Minimum and Maximum Roll angle in both directions
+	const float rollAngleLimit = 50.0f;
 
-	// Maximum & Minimum height that the User can look
-	float _MinYawAngle = -9999990.0f; // -50
-	float _MaxYawAngle = 9999990.0f; // 50
+	// Rotate roll back to zero, unit is degrees per second
+	const float rollFalloffSpeed = 75.0f; 
 
 	// Cursor's previous position
 	double lastX = 0;

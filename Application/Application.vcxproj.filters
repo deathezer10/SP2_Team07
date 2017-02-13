@@ -45,6 +45,12 @@
     <Filter Include="Source Files\Object\Solid">
       <UniqueIdentifier>{e1f7fade-3496-4628-a383-6bc0d0ef8e9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PlayerData">
+      <UniqueIdentifier>{74716512-d02e-456e-8566-f2d2353cd4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PlayerData">
+      <UniqueIdentifier>{881fead1-5b9c-4da3-b3ab-7881de8f28e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -130,6 +136,8 @@
     </ClCompile>
     <ClCompile Include="Source\SceneShop.cpp">
       <Filter>Source Files\Scene</Filter>
+    <ClCompile Include="Source\PlayerDataManager.cpp">
+      <Filter>Source Files\PlayerData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,6 +239,8 @@
     </ClInclude>
     <ClInclude Include="Source\SceneShop.h">
       <Filter>Header Files\Scene</Filter>
+    <ClInclude Include="Source\PlayerDataManager.h">
+      <Filter>Header Files\PlayerData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

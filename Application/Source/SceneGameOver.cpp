@@ -11,11 +11,8 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "Assignment03.h"
-
 #include <sstream>
-
-
-
+#include "PlayerDataManager.h"
 SceneGameover::SceneGameover(Application* app, TYPE_MENU type) :
 _app(app),
 textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack), _menuType(type) {
@@ -148,7 +145,8 @@ void SceneGameover::Init() {
 void SceneGameover::Update(double dt) {
 
 	_dt = dt;
-
+	int _elapsedTime;
+	_elapsedTime = dt;
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
 	}
@@ -163,14 +161,117 @@ void SceneGameover::Update(double dt) {
 	}
 
 	camera.Update(dt);
+	static bool delay = true;
+	static bool delay2 = true;
+	//////////////////////////////////////////vvvvvvvvvvvvvvvvvvvARROW CONTROL FOR MAIN MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////////////////////
+	if (_menuType == MENU_MAIN)
+	{
+		if (Application::IsKeyPressed(VK_UP)) {
+			_menuSelected = 0;
+		}
 
-	if (Application::IsKeyPressed(VK_UP)) {
-		_menuSelected = 0;
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			delay = true;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && delay)
+		{
+			_menuSelected = 1;
+			delay = false;
+		}
 	}
-	else if (Application::IsKeyPressed(VK_DOWN)) {
-		_menuSelected = 1;
+	//////////////////////////////////////////^^^^^^^^^^^^^^^^^^^^^ARROW CONTROL FOR MAIN MENU^^^^^^^^^^^^^^^^^^^^^^^^^//////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+	///////////////////////////////////////////////vvvvvvvvvvvvvvvvvvARROW CONTROL FOR VICTORY MENUvvvvvvvvvvvvvvvvvvvvvvv/////////////////////////////////////////
+	if (_menuType == MENU_VICTORY)
+	{
+		if (!Application::IsKeyPressed(VK_UP)) {
+			delay2 = true;
+		}
+		if (Application::IsKeyPressed(VK_UP) && delay2) {
+			if (_menuSelected >= 1)
+			{
+				_menuSelected -= 1;
+				delay2 = false;
+			}
+		}
+
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			delay = true;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && delay)
+		{
+			if (_menuSelected <= 1)
+			{
+				_menuSelected += 1;
+				delay = false;
+			}
+		}
 	}
-	else if (Application::IsKeyPressed(VK_RETURN)) {
+	///////////////////////////////////////////^^^^^^^^^^^^^^^^^^^^^ARROW CONTROL FOR VICTORY MENU^^^^^^^^^^^^^^^^^^^/////////////////////////////////////////////
+
+
+
+
+
+
+
+	////////////////////////////////////////////////////////vvvvvvvvvvvvARROWS CONTROL FOR GAME OVER MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////
+	if (_menuType == MENU_GAMEOVER)
+	{
+		if (!Application::IsKeyPressed(VK_UP)) {
+			delay2 = true;
+		}
+		if (Application::IsKeyPressed(VK_UP) && delay2) {
+			if (_menuSelected >= 1)
+			{
+				_menuSelected -= 1;
+				delay2 = false;
+			}
+		}
+		if (!Application::IsKeyPressed(VK_DOWN))
+		{
+			delay = true;
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && delay)
+		{
+			if (_menuSelected <= 1)
+			{
+				_menuSelected += 1;
+				delay = false;
+			}
+		}
+	}
+	/////////////////////////////////////////////////////////^^^^^^^^^^^^^^^^ARROWS CONTROL FOR GAME OVER MENU^^^^^^^^^^^^^^//////////////////////////////
+
+
+
+
+
+	//////////////////////////////////////////////////////////vvvvvvvvvvvvvCHANGE GAME STATEvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////
+	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_GAMEOVER)
+	{
+		switch (_menuSelected)
+		{
+		case 0:
+			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			break;
+		case 1:
+			SceneManager::getInstance()->changeScene(new SceneGameover(_app, TYPE_MENU::MENU_MAIN));
+			break;
+		case 2:
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+			break;
+		}
+	}
+	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_MAIN) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
@@ -181,6 +282,23 @@ void SceneGameover::Update(double dt) {
 			break;
 		}
 	}
+	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_VICTORY)
+	{
+		switch (_menuSelected)
+		{
+		case 0:
+			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			break;
+		case 1:
+			SceneManager::getInstance()->changeScene(new SceneGameover(_app, TYPE_MENU::MENU_MAIN));
+			break;
+		case 2:
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+			break;
+		}
+	}
+	/////////////////////////////////////////////////////////////////^^^^^^^^^^^^^^CHANGE GAME STATE^^^^^^^^^^^^^^^^^^//////////////////////////////////////////////
+
 
 }
 
@@ -208,8 +326,8 @@ void SceneGameover::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-					 camera.position.z, camera.target.x, camera.target.y,
-					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+		camera.position.z, camera.target.x, camera.target.y,
+		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -219,7 +337,6 @@ void SceneGameover::Render() {
 	std::string title = "Title";
 	std::string option1 = "Option 1";
 	std::string option2 = "Option 2";
-
 	switch (_menuType) {
 
 	case TYPE_MENU::MENU_MAIN:
@@ -231,13 +348,13 @@ void SceneGameover::Render() {
 	case TYPE_MENU::MENU_GAMEOVER:
 		title = "Game Over: You died..";
 		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
+		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
 
 	case TYPE_MENU::MENU_VICTORY:
 		title = "You were Victorious!";
 		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
+		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
 
 	default:
@@ -249,8 +366,26 @@ void SceneGameover::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	if (_menuType == MENU_VICTORY)
+	{
+		std::string option3 = "Option 3";
+		std::string option4 = "Currency earned: ";
+		option4.append(std::to_string(PlayerDataManager::getInstance()->getPlayerData()->currency));
+		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+	}
+	if (_menuType == MENU_GAMEOVER)
+	{
+		std::string option3 = "Option 3";
+		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	}
 	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	
+
 	textManager.reset();
 }
 

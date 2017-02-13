@@ -1,5 +1,6 @@
-#include "Camera3.h"
 #include "Application.h"
+
+#include "Camera3.h"
 #include <GLFW\glfw3.h>
 
 Camera3::Camera3() {
@@ -88,6 +89,7 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = 4.0f * (float)dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * (float)dt;
 	float rotationSpeed = 2.5f * (float)dt;
 
 	// "Sprint"
@@ -101,19 +103,37 @@ void Camera3::Update(double dt) {
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
 		position.x += view.x * CAMERA_SPEED;
+		position.y += view.y * CAMERA_SPEED;
 		position.z += view.z * CAMERA_SPEED;
+		target = position + view;
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
 		position.x -= view.x * CAMERA_SPEED;
+		position.y -= view.y * CAMERA_SPEED;
 		position.z -= view.z * CAMERA_SPEED;
-	}
-	if (Application::IsKeyPressed('A')) { // Left
-		position = position - (right * CAMERA_SPEED);
 		target = position + view;
+	}
+
+	if (Application::IsKeyPressed('A')) { // Left
+		yaw -= CAMERA_SPEED;
+
+
+		Mtx44 rotation;
+		rotation.SetToRotation(yaw, 0, 1, 0);
+		view = (target - position).Normalized();
+		view = rotation * view;
+		target = position + view;
+		up = rotation * up;
 	}
 	else if (Application::IsKeyPressed('D')) { // Right
-		position = position + right * CAMERA_SPEED;
+		yaw += CAMERA_SPEED;
+
+		Mtx44 rotation;
+		rotation.SetToRotation(-yaw, 0, 1, 0);
+		view = (target - position).Normalized();
+		view = rotation * view;
 		target = position + view;
+		up = rotation * up;
 	}
 
 	// Camera Move Up / Down
@@ -121,38 +141,77 @@ void Camera3::Update(double dt) {
 		position = position + up  * CAMERA_SPEED;
 		target = position + view;
 	}
-	if (Application::IsKeyPressed('X')) { // Down
+	else if (Application::IsKeyPressed('X')) { // Down
 		position = position - up * CAMERA_SPEED;
 		target = position + view;
 	}
 
 
 	// Rotate Camera with mouse-axis
+	/*
 	if (mouseMovedX < 0) { // Left
-		yaw -= rotationSpeed * mouseMovedDistanceX;
+	float angle = rotationSpeed * mouseMovedDistanceX;
+	yaw -= angle;
+
+	Mtx44 rotation;
+	rotation.SetToRotation(angle, 0, 1, 0);
+	view = (target - position).Normalized();
+	view = rotation * view;
+	target = position + view;
+	up = rotation * up;
 	}
 
 	if (mouseMovedX > 0) { // Right
-		yaw += rotationSpeed * mouseMovedDistanceX;
+	float angle = -rotationSpeed * mouseMovedDistanceX;
+	yaw -= angle;
+
+	Mtx44 rotation;
+	rotation.SetToRotation(angle, 0, 1, 0);
+	view = (target - position).Normalized();
+	view = rotation * view;
+	target = position + view;
+	up = rotation * up;
 	}
+	*/
 
 	if (mouseMovedY > 0) { // Up
-		pitch += rotationSpeed * mouseMovedDistanceY;
+		float angle = rotationSpeed * mouseMovedDistanceY;
+		pitch += angle;
+
+		Mtx44 rotation;
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+		rotation.SetToRotation(angle, right.x, right.y, right.z);
+		view = rotation * view;
+		target = position + view;
 	}
 
 	if (mouseMovedY < 0) { // Down
-		pitch -= rotationSpeed * mouseMovedDistanceY;
+		float angle = -rotationSpeed * mouseMovedDistanceY;
+		pitch += angle;
+
+		Mtx44 rotation;
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+		rotation.SetToRotation(angle, right.x, right.y, right.z);
+		view = rotation * view;
+		target = position + view;
 	}
 
 	// Positional bounds check
 	position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
 	position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
 
-	pitch = Math::Clamp(pitch, _MinYawAngle, _MaxYawAngle); // clamp the up/down rotation of the camera to these angles
+	/*
 
 	target.x = cos(Math::DegreeToRadian(pitch)) * cos(Math::DegreeToRadian(yaw)) + position.x;
 	target.y = sin(Math::DegreeToRadian(pitch)) + position.y;
 	target.z = cos(Math::DegreeToRadian(pitch)) * sin(Math::DegreeToRadian(yaw)) + position.z;
+
+	*/
+
 
 }
 
@@ -172,8 +231,4 @@ void Camera3::Reset() {
 
 	yaw = 0.0f;
 	pitch = 0.0f;
-
-	target.x = cos(Math::DegreeToRadian(pitch)) * cos(Math::DegreeToRadian(yaw)) + position.x;
-	target.y = sin(Math::DegreeToRadian(pitch)) + position.y;
-	target.z = cos(Math::DegreeToRadian(pitch)) * sin(Math::DegreeToRadian(yaw)) + position.z;
 }

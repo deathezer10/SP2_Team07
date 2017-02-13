@@ -7,6 +7,8 @@
 // FPS Camera
 class Camera3 : public Camera2 {
 
+	friend class CharacterController;
+
 public:
 
 	Camera3();
@@ -39,8 +41,8 @@ private:
 	Vector3 defaultRight;
 
 	// Current angle of camera rotation
-	float yaw;
-	float pitch;
+	float yaw = 0;
+	float pitch = 0;
 
 	// Mouse direction moved, possible values: -1, 0, 1
 	double mouseMovedX;
@@ -56,8 +58,8 @@ private:
 	bool isMouseEnabled = true;
 
 	// Maximum & Minimum height that the User can look
-	float _MinYawAngle = -50.0f;
-	float _MaxYawAngle = 50.0f;
+	float _MinYawAngle = -9999990.0f; // -50
+	float _MaxYawAngle = 9999990.0f; // 50
 
 	// Cursor's previous position
 	double lastX = 0;

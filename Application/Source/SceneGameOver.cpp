@@ -145,8 +145,7 @@ void SceneGameover::Init() {
 void SceneGameover::Update(double dt) {
 
 	_dt = dt;
-	int _elapsedTime;
-	_elapsedTime = dt;
+
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
 	}

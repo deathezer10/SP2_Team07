@@ -1,8 +1,7 @@
 #ifndef PlayerDataManager_H
 #define PlayerDataManager_H
 
-struct PlayerData
-{
+struct PlayerData {
 	int currency;
 	bool level01_unlocked;
 	bool level02_unlocked;
@@ -41,25 +40,24 @@ struct PlayerData
 
 };
 
-class PlayerDataManager
-{
+class PlayerDataManager {
 	static PlayerDataManager* _instance;
 
 public:
 	static PlayerDataManager* getInstance();
 
-	void saveData();
-	void loadPlayerData();
-	PlayerData* getPlayerData(){ return &pData; };
+	void SaveData();
+	void LoadPlayerData();
+	PlayerData* getPlayerData() { return &pData; };
 
 
-protected:	
+protected:
 	PlayerDataManager();
-	~PlayerDataManager(){ delete _instance; };
+	~PlayerDataManager() { delete _instance; };
 
 private:
 	PlayerData pData;
-	
+
 
 
 

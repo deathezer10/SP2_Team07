@@ -116,8 +116,7 @@ void Camera3::Update(double dt) {
 
 	if (Application::IsKeyPressed('A')) { // Left
 		yaw -= CAMERA_SPEED;
-
-
+		
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
 		view = (target - position).Normalized();
@@ -129,7 +128,7 @@ void Camera3::Update(double dt) {
 		yaw += CAMERA_SPEED;
 
 		Mtx44 rotation;
-		rotation.SetToRotation(-yaw, 0, 1, 0);
+		rotation.SetToRotation(yaw, 0, 1, 0);
 		view = (target - position).Normalized();
 		view = rotation * view;
 		target = position + view;
@@ -202,6 +201,7 @@ void Camera3::Update(double dt) {
 
 	// Positional bounds check
 	position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
+	position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
 	position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
 
 	/*

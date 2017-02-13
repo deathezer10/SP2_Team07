@@ -13,15 +13,14 @@ using std::string;
 PlayerDataManager *PlayerDataManager::_instance = 0;
 
 
-PlayerDataManager* PlayerDataManager::getInstance(){
-	if (!_instance){
+PlayerDataManager* PlayerDataManager::getInstance() {
+	if (!_instance) {
 		_instance = new PlayerDataManager();
 	}
 	return _instance;
 }
 
-PlayerDataManager::PlayerDataManager()
-{
+PlayerDataManager::PlayerDataManager() {
 	pData = {
 
 		0, 0, 0, 0, 0,
@@ -34,18 +33,15 @@ PlayerDataManager::PlayerDataManager()
 }
 
 
-void PlayerDataManager::loadPlayerData()
-{
+void PlayerDataManager::LoadPlayerData() {
 	std::string line;
 	std::string delimiter = "|";
 
 	std::vector<int> v;
 
 	std::ifstream myfile("PlayerData");
-	if (myfile.is_open())
-	{
-		while (std::getline(myfile, line))
-		{
+	if (myfile.is_open()) {
+		while (std::getline(myfile, line)) {
 
 			std::string token = line.substr(0, line.find(delimiter));
 			line.erase(0, token.length() + 1);
@@ -57,12 +53,12 @@ void PlayerDataManager::loadPlayerData()
 		myfile.close();
 
 		pData.currency = v[0];
-		pData.level01_unlocked = v[1];
-		pData.level02_unlocked = v[2];
-		pData.level03_unlocked = v[3];
-		pData.SF1 = v[4];
-		pData.DF6 = v[5];
-		pData.A10 = v[6];
+		pData.level01_unlocked = !!v[1];
+		pData.level02_unlocked = !!v[2];
+		pData.level03_unlocked = !!v[3];
+		pData.SF1 = !!v[4];
+		pData.DF6 = !!v[5];
+		pData.A10 = !!v[6];
 
 		pData.FG1_Bullet_damage = v[7];
 		pData.FG1_Bullet_speed = v[8];
@@ -91,11 +87,9 @@ void PlayerDataManager::loadPlayerData()
 	}
 }
 
-void PlayerDataManager::saveData()
-{
+void PlayerDataManager::SaveData() {
 	std::ofstream myfile("PlayerData", ios::trunc);// open file and replace old data with new
-	if (myfile.is_open())
-	{
+	if (myfile.is_open()) {
 
 		myfile << "currency" << '|' << pData.currency << '\n';
 		myfile << "level01" << '|' << pData.level01_unlocked << '\n';
@@ -132,8 +126,7 @@ void PlayerDataManager::saveData()
 
 		myfile.close();
 	}
-	else
-	{
+	else {
 		std::cout << "save failed, unable to open file to save";
 
 	}

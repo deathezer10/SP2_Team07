@@ -33,7 +33,12 @@ PlayerDataManager::PlayerDataManager()
 	};
 }
 
-void PlayerDataManager::loadPlayerData()
+PlayerDataManager::~PlayerDataManager()
+{
+
+}
+
+PlayerData PlayerDataManager::getPlayerData()
 {
 	std::string line;
 	std::string delimiter = "|";
@@ -88,6 +93,7 @@ void PlayerDataManager::loadPlayerData()
 		pData.A10_shield_recharge_rate = v[26];
 
 	}
+	return pData;
 }
 
 void PlayerDataManager::saveData()

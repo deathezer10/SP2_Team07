@@ -54,7 +54,7 @@ public:
 
 
 protected:	
-	PlayerDataManager(){};
+	PlayerDataManager();
 	~PlayerDataManager(){ delete _instance; };
 
 private:

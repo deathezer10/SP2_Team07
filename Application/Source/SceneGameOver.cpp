@@ -12,6 +12,7 @@
 #include "LoadTGA.h"
 #include "Assignment03.h"
 #include <sstream>
+#include "PlayerDataManager.h"
 SceneGameover::SceneGameover(Application* app, TYPE_MENU type) :
 _app(app),
 textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack), _menuType(type) {
@@ -175,8 +176,8 @@ void SceneGameover::Update(double dt) {
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && delay)
 		{
-				_menuSelected = 1;
-				delay = false;
+			_menuSelected = 1;
+			delay = false;
 		}
 	}
 	//////////////////////////////////////////^^^^^^^^^^^^^^^^^^^^^ARROW CONTROL FOR MAIN MENU^^^^^^^^^^^^^^^^^^^^^^^^^//////////////////////////////////////////////////////////////
@@ -193,7 +194,7 @@ void SceneGameover::Update(double dt) {
 		if (!Application::IsKeyPressed(VK_UP)) {
 			delay2 = true;
 		}
-		if (Application::IsKeyPressed(VK_UP)&&delay2) {
+		if (Application::IsKeyPressed(VK_UP) && delay2) {
 			if (_menuSelected >= 1)
 			{
 				_menuSelected -= 1;
@@ -222,13 +223,13 @@ void SceneGameover::Update(double dt) {
 
 
 
-////////////////////////////////////////////////////////vvvvvvvvvvvvARROWS CONTROL FOR GAME OVER MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////
+	////////////////////////////////////////////////////////vvvvvvvvvvvvARROWS CONTROL FOR GAME OVER MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////
 	if (_menuType == MENU_GAMEOVER)
 	{
 		if (!Application::IsKeyPressed(VK_UP)) {
 			delay2 = true;
 		}
-		if (Application::IsKeyPressed(VK_UP)&&delay2) {
+		if (Application::IsKeyPressed(VK_UP) && delay2) {
 			if (_menuSelected >= 1)
 			{
 				_menuSelected -= 1;
@@ -270,7 +271,7 @@ void SceneGameover::Update(double dt) {
 			break;
 		}
 	}
-    if (Application::IsKeyPressed(VK_RETURN)&&_menuType==MENU_MAIN) {
+	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_MAIN) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
@@ -325,8 +326,8 @@ void SceneGameover::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-					 camera.position.z, camera.target.x, camera.target.y,
-					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+		camera.position.z, camera.target.x, camera.target.y,
+		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -360,19 +361,23 @@ void SceneGameover::Render() {
 		break;
 	}
 
-		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	if (_menuType == MENU_VICTORY)
+	{
+		std::string option3 = "Option 3";
+		std::string option4 = "Currency earned: ";
+		option4.append(std::to_string(PlayerDataManager::getInstance()->getPlayerData()->currency));
+		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		if (_menuType == MENU_VICTORY)
-		{
-			std::string option3 = "Option 3";
-			option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
-			textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-			textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		}
-	if (_menuType ==MENU_GAMEOVER)
+		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+	}
+	if (_menuType == MENU_GAMEOVER)
 	{
 		std::string option3 = "Option 3";
 		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
@@ -380,7 +385,7 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
 	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	
+
 	textManager.reset();
 }
 

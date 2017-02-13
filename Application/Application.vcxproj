@@ -105,7 +105,9 @@
     <ClCompile Include="Source\ObjectInteractor.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
     <ClCompile Include="Source\SceneGameOver.cpp" />
+    <ClCompile Include="Source\SceneMainMenu.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />
+    <ClCompile Include="Source\SceneShop.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\Slime.cpp" />
     <ClCompile Include="Source\UIManager.cpp" />
@@ -137,7 +139,9 @@
     <ClInclude Include="Source\Rock.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGameOver.h" />
+    <ClInclude Include="Source\SceneMainMenu.h" />
     <ClInclude Include="Source\SceneManager.h" />
+    <ClInclude Include="Source\SceneShop.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Slime.h" />
     <ClInclude Include="Source\UIManager.h" />

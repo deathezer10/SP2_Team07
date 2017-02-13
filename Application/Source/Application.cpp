@@ -12,6 +12,8 @@
 
 #include "SceneManager.h"
 #include "SceneGameOver.h"
+#include "SceneMainMenu.h"
+#include "SceneShop.h"
 
 GLFWwindow* m_window;
 
@@ -103,7 +105,8 @@ void Application::Run()
 {
     SceneManager* scene_manager = SceneManager::getInstance();
 
-    scene_manager->changeScene(new SceneGameover(this, SceneGameover::TYPE_MENU::MENU_MAIN));
+	scene_manager->changeScene(new SceneMainMenu(this, SceneMainMenu::TYPE_MENU::MENU_MAIN));
+	//scene_manager->changeScene(new SceneShop(this, SceneShop::TYPE_MENU::MENU_SHOP));
     scene_manager->Update();
 
 }

@@ -144,6 +144,8 @@ void SceneShop::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1); // Make sure you pass uniform parameters after glUseProgram()
 
+
+	pData = PlayerDataManager::getInstance()->getPlayerData();
 }
 
 void SceneShop::Update(double dt) {
@@ -165,8 +167,7 @@ void SceneShop::Update(double dt) {
 
 	camera.Update(dt);
 
-	static bool canChangeMenu = true;
-	static bool canChangeMenu2 = true;
+	
 
 	if (!Application::IsKeyPressed(VK_UP))
 	{
@@ -186,9 +187,9 @@ void SceneShop::Update(double dt) {
 		_menuSelected += 1;
 		canChangeMenu2 = false;
 	}
-	if (_menuSelected >2)
+	if (_menuSelected >5)
 	{
-		_menuSelected = 2;
+		_menuSelected = 5;
 	}
 	if (_menuSelected < 0)
 	{
@@ -197,14 +198,25 @@ void SceneShop::Update(double dt) {
 
 
 
-	else if (Application::IsKeyPressed(VK_RETURN)) {
+	if (Application::IsKeyPressed(VK_RETURN)) {
+	
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			pData->FG6_Bullet_damage++;
 			break;
 		case 1:
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
 			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			SceneManager::getInstance()->changeScene(new SceneMainMenu(_app)); // Change Scene
+			break;
+		
+		
 		}
 	}
 
@@ -241,18 +253,55 @@ void SceneShop::Render() {
 
 	RenderSkybox();
 
+
 	std::string newLine = "";
-	std::string title = "Title";
+	std::string title = "Welcome to the item shop";
+	//Upgrades
 	std::string option1 = "Option 1";
 	std::string option2 = "Option 2";
+	std::string option3 = "Option 3";
+	std::string option4 = "Option 4";
+	std::string option5 = "Option 5";
+	//Back
+	std::string option6 = "Option 6";
+	
+
+	
+
+	/*option1 = (_menuSelected == 0) ? ">Back" : "Back";
+
+	option2 = (_menuSelected == 1) ? ">Bullet Damage: " : "Bullet Damage: ";
+	option2 += std::to_string( pData->FG6_Bullet_damage);
+	option3 = (_menuSelected == 2) ? ">Bullet Speed: " : "Bullet Speed: ";
+	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
+	option5 = (_menuSelected == 4) ? ">Shield Hp: " : "Shield Hp: ";
+	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: ";*/
 
 
-	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	option1 = (_menuSelected == 0) ? ">Bullet Damage: " : "Bullet Damage: ";
+	option1 += std::to_string(pData->FG6_Bullet_damage);
+	option2 = (_menuSelected == 1) ? ">Bullet Speed: " : "Bullet Speed: ";
+	option3 = (_menuSelected == 2) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
+	option4 = (_menuSelected == 3) ? ">Shield Hp: " : "Shield Hp: ";
+	option5 = (_menuSelected == 4) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: "; 
+	option6 = (_menuSelected == 5) ? ">Back" : "Back";
+
+
+	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option6, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	
 	
 
 	textManager.reset();

@@ -17,10 +17,9 @@
 
 
 
-SceneMainMenu::SceneMainMenu(Application* app, TYPE_MENU type) :
+SceneMainMenu::SceneMainMenu(Application* app) :
 _app(app),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack), _menuType(type) {
-	_menuSelected = 0;
+textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack) {
 }
 
 SceneMainMenu::~SceneMainMenu() {
@@ -186,7 +185,7 @@ void SceneMainMenu::Update(double dt) {
 		_menuSelected += 1;
 		canChangeMenu2 = false;
 	}
-	if (_menuSelected >2)
+	if (_menuSelected > 2)
 	{
 		_menuSelected = 2;
 	}
@@ -207,7 +206,7 @@ void SceneMainMenu::Update(double dt) {
 			SceneManager::getInstance()->changeScene(new SceneShop(_app)); // Change Scene
 			break;
 		case 2:
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+			//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
 			break;
 		}
 	}
@@ -251,36 +250,11 @@ void SceneMainMenu::Render() {
 	std::string option2 = "Option 2";
 	std::string option3 = "Option 3";
 
-	switch (_menuType) {
+	title = "160212S: Computer Graphics Assignment 03";
+	option1 = (_menuSelected == 0) ? ">Play<" : "Play";
+	option2 = (_menuSelected == 1) ? ">Shop<" : "Shop";
+	option3 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 
-	case TYPE_MENU::MENU_MAIN:
-		title = "160212S: Computer Graphics Assignment 03";
-		option1 = (_menuSelected == 0) ? ">Play<" : "Play";
-		option2 = (_menuSelected == 1) ? ">Shop<" : "Shop";
-		option3 = (_menuSelected == 2) ? ">Quit<" : "Quit";
-		break;
-
-	case TYPE_MENU::MENU_GAMEOVER:
-		title = "Game Over: You died..";
-		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
-		break;
-
-	case TYPE_MENU::MENU_VICTORY:
-		title = "You were Victorious!";
-		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
-		break;
-
-	case TYPE_MENU::MENU_SHOP:
-		title = "You are at the Shop";
-		option1 = (_menuSelected == 0) ? ">Play<" : "Play";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
-		break;
-
-	default:
-		break;
-	}
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

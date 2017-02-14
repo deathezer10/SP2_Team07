@@ -8,9 +8,12 @@
 #include "Light.h"
 #include "UIManager.h"
 
+#include "PlayerDataManager.h"
+
 #include <vector>
 
 class Application;
+class PlayerDataManager;
 
 // This is a Game Menu Scene and not a GameOver Scene, was too late to refactor the Class name
 class SceneShop : public Scene {
@@ -68,6 +71,15 @@ public:
 		U_TOTAL,
 
 	};
+	enum TYPE_MENU {
+
+		MENU_MAIN = 0,
+		MENU_GAMEOVER,
+		MENU_SHOP,
+		MENU_VICTORY
+
+	};
+	
 
 	SceneShop(Application* app);
 	~SceneShop();
@@ -87,6 +99,10 @@ private:
 	const float camera_width = 75;
 	const float camera_height = 75;
 
+	 bool canChangeMenu = false;
+	 bool canChangeMenu2 = false;
+	 bool canChangeMenuBack = false;
+
 	MS modelStack, viewStack, projectionStack;
 	unsigned m_parameters[U_TOTAL];
 	unsigned m_vertexArrayID;
@@ -102,10 +118,13 @@ private:
 
 	UIManager textManager;
 
+	PlayerData* pData;
+
 	Application* _app;
 
 	unsigned _menuSelected;
-
+	TYPE_MENU _menuType;
+	
 };
 
 #endif

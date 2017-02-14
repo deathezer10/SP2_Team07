@@ -78,7 +78,7 @@ public:
 
 	};
 
-	SceneMainMenu(Application* app, TYPE_MENU type);
+	SceneMainMenu(Application* app);
 	~SceneMainMenu();
 
 	virtual void Init();
@@ -95,6 +95,10 @@ private:
 
 	const float camera_width = 75;
 	const float camera_height = 75;
+
+	bool canChangeMenu = false;
+	bool canChangeMenu2 = false;
+	bool canChangeMenuBack = false;
 
 	MS modelStack, viewStack, projectionStack;
 	unsigned m_parameters[U_TOTAL];
@@ -113,7 +117,8 @@ private:
 
 	Application* _app;
 
-	TYPE_MENU _menuType;
+
+
 	unsigned _menuSelected;
 
 };

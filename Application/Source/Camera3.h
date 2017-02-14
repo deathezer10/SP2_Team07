@@ -3,14 +3,13 @@
 
 #include "Camera2.h"
 #include "Mtx44.h"
+#include "ObjectCollider.h"
+
 
 // FPS Camera
 class Camera3 : public Camera2 {
-
-	friend class CharacterController;
-
+	
 public:
-
 	Camera3();
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
@@ -18,7 +17,7 @@ public:
 	virtual void Reset();
 
 	const float skyboxSize = 1001.0f; // Distance of each skybox textures from the origin
-	const float skyboxBound = 50.f; // Clamps position of the Camera to this value
+	const float skyboxBound = 1000.f; // Clamps position of the Camera to this value
 
 	Vector3 getTarget() { return target; };
 	Vector3 getUp() { return up; };
@@ -27,7 +26,10 @@ public:
 	float getYaw() { return yaw; };
 	float getPitch() { return pitch; };
 	float getRoll() { return roll; };
-	
+	float getCurrentVelocity() { return currentVelocity; };
+
+	Collider& getCollider() { return collider; }
+
 	double getMouseMovedX() { return mouseMovedX; };
 	double getMouseMovedY() { return mouseMovedY; };
 
@@ -36,39 +38,51 @@ public:
 
 	void ResetCursorVariables();
 
-	// Player Collision detection
-	const float bboxWidth = 5;
-	const float bboxHeight = 5;
+	// Player Box Collider
+	const float bboxWidth = 2;
+	const float bboxHeight = 1;
+	const float bboxDepth = 2;
 
 private:
 	Vector3 view;
 	Vector3 right;
 	Vector3 defaultRight;
-	
+	Collider collider;
+
 	// Current angle of camera rotation
 	float yaw = -90;
 	float pitch = 0;
 	float roll = 0; // Does not actually roll the camera
 
+	// Current speed of the camera
+	float currentVelocity = 1;
+	float velocityAccelerationRate = 1.0f;
+	float velocityDecelerationRate = 2.0f;
+	float velocityMax = 50;
+	float velocityMin = -10;
+
+	// Enable Mouse Horizontal Control
+	bool mouseYawEnabled = false;
+
 	// Mouse direction moved, possible values: -1, 0, 1
 	double mouseMovedX;
 	double mouseMovedY;
-	
+
 	// Distance the Cursor moved from the current and last frame. Used to determine mouse sensitivity
 	float mouseMovedDistanceX;
-	float mouseMovedDistanceY; 		
+	float mouseMovedDistanceY;
 
 	// Updates the direction in which the cursor has moved
-	void updateCursor(double dt); 
+	void updateCursor(double dt);
 
 	// True if mouse is currently hidden
 	bool isMouseEnabled = true;
-	
+
 	// Both Minimum and Maximum Roll angle in both directions
 	const float rollAngleLimit = 50.0f;
 
 	// Rotate roll back to zero, unit is degrees per second
-	const float rollFalloffSpeed = 75.0f; 
+	const float rollFalloffSpeed = 50.0f;
 
 	// Cursor's previous position
 	double lastX = 0;

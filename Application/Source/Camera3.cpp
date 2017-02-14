@@ -3,7 +3,7 @@
 #include "Camera3.h"
 #include <GLFW\glfw3.h>
 
-Camera3::Camera3() {
+Camera3::Camera3() : collider(&position, bboxWidth, bboxHeight, bboxDepth) {
 }
 
 Camera3::~Camera3() {
@@ -90,11 +90,12 @@ void Camera3::Update(double dt) {
 		ResetCursorVariables();
 	}
 
-	float CAMERA_SPEED = 4.0f * (float)dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 50.0f * (float)dt;
-	float rotationSpeed = 2.5f * (float)dt;
+	float CAMERA_SPEED = currentVelocity * (float)dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * (float)dt;
+	float rotationSpeed = 1.0f * (float)dt;
 
-	if (!Application::IsKeyPressed('W') || (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') && mouseMovedX == 0)) {
+	// Bring roll back to zero
+	if ((!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') || ((mouseMovedX == 0) && mouseYawEnabled))) {
 		if (roll > 1) {
 			roll -= rollFalloffSpeed * (float)dt;
 		}
@@ -105,44 +106,49 @@ void Camera3::Update(double dt) {
 			roll = 0;
 		}
 	}
+	
+	position.x += view.x * CAMERA_SPEED;
+	position.y += view.y * CAMERA_SPEED;
+	position.z += view.z * CAMERA_SPEED;
+	target = position + view;
 
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
-		position.x += view.x * CAMERA_SPEED;
-		position.y += view.y * CAMERA_SPEED;
-		position.z += view.z * CAMERA_SPEED;
-		target = position + view;
-
-		if (Application::IsKeyPressed('A') || (mouseMovedX < 0 && !Application::IsKeyPressed('D'))) { // Left
-			yaw -= CAMERA_LEFT_RIGHT_SPEED;
-			roll -= CAMERA_LEFT_RIGHT_SPEED;
-
-			Mtx44 rotation;
-			rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
-			view = (target - position).Normalized();
-			view = rotation * view;
-			target = position + view;
-			up = rotation * up;
-		}
-		else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && mouseMovedX > 0)) { // Right
-			yaw += CAMERA_LEFT_RIGHT_SPEED;
-			roll += CAMERA_LEFT_RIGHT_SPEED;
-
-			Mtx44 rotation;
-			rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
-			view = (target - position).Normalized();
-			view = rotation * view;
-			target = position + view;
-			up = rotation * up;
-		}
-
+		currentVelocity += velocityAccelerationRate * (float)dt;
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
+		currentVelocity -= velocityDecelerationRate * (float)dt;
 		CAMERA_SPEED /= 3;
 		position.x -= view.x * CAMERA_SPEED;
 		position.y -= view.y * CAMERA_SPEED;
 		position.z -= view.z * CAMERA_SPEED;
 		target = position + view;
+	}
+	else {
+		currentVelocity -= velocityDecelerationRate * (float)dt;
+	}
+
+	if (Application::IsKeyPressed('A') || ((mouseMovedX < 0 && mouseYawEnabled) && !Application::IsKeyPressed('D'))) { // Left
+		yaw -= CAMERA_LEFT_RIGHT_SPEED;
+		roll -= CAMERA_LEFT_RIGHT_SPEED;
+
+		Mtx44 rotation;
+		rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+		view = (target - position).Normalized();
+		view = rotation * view;
+		target = position + view;
+		up = rotation * up;
+	}
+	else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && (mouseMovedX > 0 && mouseYawEnabled))) { // Right
+		yaw += CAMERA_LEFT_RIGHT_SPEED;
+		roll += CAMERA_LEFT_RIGHT_SPEED;
+
+		Mtx44 rotation;
+		rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+		view = (target - position).Normalized();
+		view = rotation * view;
+		target = position + view;
+		up = rotation * up;
 	}
 
 	// Camera Move Up / Down
@@ -168,31 +174,36 @@ void Camera3::Update(double dt) {
 	right = view.Cross(up).Normalized();
 
 	// It works :o
-	if (Application::IsKeyPressed('W')){
-		if (mouseMovedY > 0) { // Up
-			float angle = rotationSpeed * mouseMovedDistanceY;
-			pitch += angle;
+	if (mouseMovedY > 0) { // Up
+		float angle = rotationSpeed * mouseMovedDistanceY;
+		pitch += angle;
 
-			Mtx44 rotation;
-			right.y = 0;
-			right.Normalize();
-			up = right.Cross(view).Normalized();
-			rotation.SetToRotation(angle, right.x, right.y, right.z);
-			view = rotation * view;
-			target = position + view;
-		}
-		else if (mouseMovedY < 0) { // Down
-			float angle = -rotationSpeed * mouseMovedDistanceY;
-			pitch += angle;
+		Mtx44 rotation;
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+		rotation.SetToRotation(angle, right.x, right.y, right.z);
+		view = rotation * view;
+		target = position + view;
+	}
+	else if (mouseMovedY < 0) { // Down
+		float angle = -rotationSpeed * mouseMovedDistanceY;
+		pitch += angle;
 
-			Mtx44 rotation;
-			right.y = 0;
-			right.Normalize();
-			up = right.Cross(view).Normalized();
-			rotation.SetToRotation(angle, right.x, right.y, right.z);
-			view = rotation * view;
-			target = position + view;
-		}
+		Mtx44 rotation;
+		right.y = 0;
+		right.Normalize();
+		up = right.Cross(view).Normalized();
+		rotation.SetToRotation(angle, right.x, right.y, right.z);
+		view = rotation * view;
+		target = position + view;
+	}
+
+	// Clamping max current velocity
+	if (Application::IsKeyPressed('S'))
+		currentVelocity = Math::Clamp(currentVelocity, velocityMin, velocityMax);
+	else {
+		currentVelocity = Math::Clamp(currentVelocity, 1.0f, velocityMax);
 	}
 }
 

@@ -10,7 +10,7 @@
 #include "Bullet.h"
 #include "Ring.h"
 
-class Assignment03;
+class Scene;
 
 
 // Stores Objects in the Scene and update the interactions accordingly
@@ -29,7 +29,6 @@ public:
 	void validateIterator(std::vector<Object*>::iterator it);
 	
 private:
-	Assignment03* _scene;
 	std::vector<Object*>::iterator objIterator;
 
 	// Was the iterator updated?

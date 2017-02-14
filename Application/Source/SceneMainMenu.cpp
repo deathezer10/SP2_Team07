@@ -19,11 +19,10 @@
 
 SceneMainMenu::SceneMainMenu() :
 textManager(this) {
+	_menuSelected = 0;
 }
 
 SceneMainMenu::~SceneMainMenu() {
-
-
 }
 
 void SceneMainMenu::Init() {
@@ -163,39 +162,36 @@ void SceneMainMenu::Update(double dt) {
 
 	camera.Update(dt);
 
-	static bool canChangeMenu = true;
-	static bool canChangeMenu2 = true;
+	static bool canChangeMenu = false;
+	static bool canChangeMenu2 = false;
+	static bool canChangeMenu3 = false;
 
-	if (!Application::IsKeyPressed(VK_UP))
-	{
+	if (!Application::IsKeyPressed(VK_UP)) {
 		canChangeMenu = true;
 	}
-	if (Application::IsKeyPressed(VK_UP) && canChangeMenu == true)
-	{
+	if (Application::IsKeyPressed(VK_UP) && canChangeMenu == true) {
 		_menuSelected -= 1;
 		canChangeMenu = false;
 	}
-	if (!Application::IsKeyPressed(VK_DOWN))
-	{
+	if (!Application::IsKeyPressed(VK_DOWN)) {
 		canChangeMenu2 = true;
 	}
-	if (Application::IsKeyPressed(VK_DOWN) && canChangeMenu2 == true)
-	{
+	if (Application::IsKeyPressed(VK_DOWN) && canChangeMenu2 == true) {
 		_menuSelected += 1;
 		canChangeMenu2 = false;
 	}
-	if (_menuSelected > 2)
-	{
+	if (_menuSelected > 2) {
 		_menuSelected = 2;
 	}
-	if (_menuSelected < 0)
-	{
+	if (_menuSelected < 0) {
 		_menuSelected = 0;
 	}
-
-
-
-	else if (Application::IsKeyPressed(VK_RETURN)) {
+	
+	if (!Application::IsKeyPressed(VK_RETURN)) {
+		canChangeMenu3 = true;
+	}
+	
+	if (Application::IsKeyPressed(VK_RETURN) && canChangeMenu3 == true) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
@@ -208,6 +204,8 @@ void SceneMainMenu::Update(double dt) {
 			//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
 			break;
 		}
+
+		canChangeMenu3 = false;
 	}
 
 }
@@ -236,8 +234,8 @@ void SceneMainMenu::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-		camera.position.z, camera.target.x, camera.target.y,
-		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+					 camera.position.z, camera.target.x, camera.target.y,
+					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -249,7 +247,7 @@ void SceneMainMenu::Render() {
 	std::string option2 = "Option 2";
 	std::string option3 = "Option 3";
 
-	title = "160212S: Computer Graphics Assignment 03";
+	title = "Space Fighter 27";
 	option1 = (_menuSelected == 0) ? ">Play<" : "Play";
 	option2 = (_menuSelected == 1) ? ">Shop<" : "Shop";
 	option3 = (_menuSelected == 2) ? ">Quit<" : "Quit";

@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include "Vector3.h"
-
+#include "ObjectCollider.h"
 
 class Scene;
 
@@ -11,18 +11,18 @@ class Scene;
 class Object {
 
 public:
-	Object(Scene* scene, Vector3 pos, bool colisionEnabled = true, float boxWidth = 5, float boxHeight = 5, float boxDepth = 5) :
-		_scene(scene), position(pos),
-		bboxWidth(boxWidth),
-		bboxHeight(boxHeight),
-		bboxDepth(boxDepth)	{};
+	Object(Scene* scene, Vector3 pos, bool colisionEnabled = false, float boxWidth = 5, float boxHeight = 5, float boxDepth = 5) :
+		_scene(scene),
+		position(pos),
+		collidable(colisionEnabled),
+		collider(&position, boxWidth, boxHeight, boxDepth) {
+	};
 
 	virtual ~Object() {};
 
 	virtual void checkInteract() = 0;
 	virtual void interact() = 0;
 	virtual void render();
-	bool checkCollision(Vector3 &other, Vector3* hitDirection);
 
 	Vector3 position;
 	float rotationX = 0;
@@ -31,13 +31,15 @@ public:
 	float scale = 1;
 	unsigned type;
 
-	float bboxWidth;
-	float bboxHeight;
-	float bboxDepth;
+	Collider& getCollider() { return collider; }
+	bool& isCollidable() { return collidable; }
+	void setCollision(bool enabled) { collidable = enabled; }
+
+	Scene* _scene;
 
 protected:
-	Scene* _scene;
+	Collider collider;
 	bool isInteracted = false;
-
+	bool collidable;
 };
 #endif

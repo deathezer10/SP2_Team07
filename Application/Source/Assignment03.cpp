@@ -208,7 +208,10 @@ void Assignment03::Init() {
 
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
-		objBuilder.createObject(new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20))));
+		Rock* myrock = new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20)));
+		myrock->setCollision(false);
+		myrock->getCollider().setBoundingBoxSize(Vector3(2, 2, 2));
+		objBuilder.createObject(myrock);
 	}
 
 	const size_t slimeAmount = 10;
@@ -307,8 +310,8 @@ void Assignment03::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+					 camera.target.x, camera.target.y, camera.target.z,
+					 camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -509,6 +512,10 @@ void Assignment03::Render() {
 	std::ostringstream yaw;
 	yaw << "Yaw: " << camera.getYaw();
 	textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream velocity;
+	velocity << "Current Velocity: " << camera.getCurrentVelocity();
+	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+
 
 	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));

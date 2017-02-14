@@ -13,25 +13,3 @@ void Object::render() {
 	_scene->RenderMesh(_scene->meshList[type], true);
 	_scene->modelStack.PopMatrix();
 }
-
-
-bool Object::checkCollision(Vector3 &other, Vector3* hitDirection){
-
-	float xMin = (-bboxWidth / 2) + position.x;
-	float xMax = (bboxWidth / 2) + position.x;
-
-	float yMin = (-bboxHeight / 2) + position.y;
-	float yMax = (bboxHeight / 2) + position.y;
-
-	float zMin = (-bboxDepth / 2) + position.z;
-	float zMax = (-bboxDepth / 2) + position.z;
-
-	if (other.x){
-		// TODO: Collision
-	}
-
-	Vector3 hitDir = other - position;
-	(*hitDirection) = hitDir;
-
-	return false;
-}

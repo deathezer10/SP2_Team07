@@ -6,7 +6,7 @@ ObjectInteractor::ObjectInteractor() {
 }
 
 ObjectInteractor::~ObjectInteractor() {
-	if (_objects.size()){
+	if (_objects.size()) {
 		for (auto &i : _objects)
 			delete i;
 	}
@@ -18,6 +18,15 @@ void ObjectInteractor::updateInteraction() {
 	objIterator = _objects.begin();
 
 	for (objIterator; objIterator != _objects.end();) {
+
+		if ((*objIterator)->isCollidable()) {
+			Vector3 gg;
+			if ((*objIterator)->getCollider().checkCollision((*objIterator)->_scene->camera.getCollider(), &gg)) {
+				(*objIterator)->_scene->camera.position += gg;
+				(*objIterator)->_scene->camera.target += gg;
+			}
+		}
+
 		(*objIterator)->checkInteract();
 
 		if (!_iteratorUpdated) {
@@ -25,7 +34,7 @@ void ObjectInteractor::updateInteraction() {
 		}
 		else {
 			// skip increment since vector.erase() already returned the value of the next valid iterator
-			_iteratorUpdated = false; 
+			_iteratorUpdated = false;
 		}
 
 	}

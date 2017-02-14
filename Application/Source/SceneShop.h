@@ -36,9 +36,9 @@ private:
 	const float camera_width = 75;
 	const float camera_height = 75;
 
-	 bool canChangeMenu = false;
-	 bool canChangeMenu2 = false;
-	 bool canChangeMenuBack = false;
+	bool canChangeMenu = false;
+	bool canChangeMenu2 = false;
+	bool canChangeMenuBack = false;
 
 	Light light[1];
 
@@ -53,7 +53,13 @@ private:
 	Application* _app;
 
 	unsigned _menuSelected;
-	
+
+	bool ChangeShip;
+	int column = 0;
+	int row = 0;
+
+
+
 };
 
 #endif

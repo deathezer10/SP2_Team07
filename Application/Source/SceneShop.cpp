@@ -16,6 +16,7 @@
 #include <sstream>
 
 
+std::string ShipType[4] = { "FG6", "SF1", "DF6", "A10" };
 
 SceneShop::SceneShop() :
 textManager(this) {
@@ -166,8 +167,6 @@ void SceneShop::Update(double dt) {
 
 	camera.Update(dt);
 
-	
-
 	if (!Application::IsKeyPressed(VK_UP))
 	{
 		canChangeMenu = true;
@@ -186,24 +185,67 @@ void SceneShop::Update(double dt) {
 		_menuSelected += 1;
 		canChangeMenu2 = false;
 	}
-	if (_menuSelected >5)
+	if (_menuSelected > 6)
 	{
-		_menuSelected = 5;
+		_menuSelected = 6;
 	}
 	if (_menuSelected < 0)
 	{
 		_menuSelected = 0;
 	}
 
+	//Changing ships-----------------------------------------------------
+	//const std::string ShipType[4] = { "FG6", "SF1", "DF6", "A10" };
 
+	
+
+
+
+
+	if (!Application::IsKeyPressed(VK_RIGHT) && !Application::IsKeyPressed(VK_LEFT))
+	{
+		ChangeShip = true;
+	}
+
+	if (Application::IsKeyPressed(VK_RIGHT) && ChangeShip == true)
+	{
+		column += 1;
+		ChangeShip = false;
+	}
+	else if (Application::IsKeyPressed(VK_LEFT) && ChangeShip == true)
+	{
+		column -= 1;
+		ChangeShip = false;
+	}
+
+	if (column < 0)
+	{
+		column = 0;
+	}
+	if (column > 3)
+	{
+		column = 3;
+	}
+
+	switch (column) {
+
+	case 0:
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	}
 
 	if (Application::IsKeyPressed(VK_RETURN)) {
-	
+
 		switch (_menuSelected) {
 		case 0:
-			pData->FG6_Bullet_damage++;
 			break;
 		case 1:
+			pData->FG6_Bullet_damage++;
 			break;
 		case 2:
 			break;
@@ -212,11 +254,15 @@ void SceneShop::Update(double dt) {
 		case 4:
 			break;
 		case 5:
+
+			break;
+		case 6:
+
 			SceneManager::getInstance()->changeScene(new SceneMainMenu()); // Change Scene
 			break;
-		
-		
+
 		}
+
 	}
 
 }
@@ -255,35 +301,32 @@ void SceneShop::Render() {
 
 	std::string newLine = "";
 	std::string title = "Welcome to the item shop";
+	//name
+	std::string option1 = "NAME";
 	//Upgrades
-	std::string option1 = "Option 1";
-	std::string option2 = "Option 2";
-	std::string option3 = "Option 3";
-	std::string option4 = "Option 4";
-	std::string option5 = "Option 5";
+	std::string option2 = "Option 1";
+	std::string option3 = "Option 2";
+	std::string option4 = "Option 3";
+	std::string option5 = "Option 4";
+	std::string option6 = "Option 5";
 	//Back
-	std::string option6 = "Option 6";
-	
+	std::string option7 = "Option 6";
 
-	
 
-	/*option1 = (_menuSelected == 0) ? ">Back" : "Back";
 
+
+
+
+	option1 = (_menuSelected == 0) ? ">Name of ship: " : "Name of ship: ";
+	option1 += ShipType[column];
 	option2 = (_menuSelected == 1) ? ">Bullet Damage: " : "Bullet Damage: ";
-	option2 += std::to_string( pData->FG6_Bullet_damage);
+	option2 += std::to_string(pData->FG6_Bullet_damage);
+
 	option3 = (_menuSelected == 2) ? ">Bullet Speed: " : "Bullet Speed: ";
 	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
 	option5 = (_menuSelected == 4) ? ">Shield Hp: " : "Shield Hp: ";
-	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: ";*/
-
-
-	option1 = (_menuSelected == 0) ? ">Bullet Damage: " : "Bullet Damage: ";
-	option1 += std::to_string(pData->FG6_Bullet_damage);
-	option2 = (_menuSelected == 1) ? ">Bullet Speed: " : "Bullet Speed: ";
-	option3 = (_menuSelected == 2) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
-	option4 = (_menuSelected == 3) ? ">Shield Hp: " : "Shield Hp: ";
-	option5 = (_menuSelected == 4) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: "; 
-	option6 = (_menuSelected == 5) ? ">Back" : "Back";
+	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: ";
+	option7 = (_menuSelected == 6) ? ">Back" : "Back";
 
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
@@ -300,8 +343,10 @@ void SceneShop::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option6, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	
-	
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option7, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+
+
 
 	textManager.reset();
 }

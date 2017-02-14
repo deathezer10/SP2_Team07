@@ -100,11 +100,11 @@ void PlayerDataManager::SaveData() {
 		myfile << "A-10" << '|' << pData.A10 << '\n';
 		//myfile << "" << '|' << pData. << "\n"; format template
 
-		myfile << "FG1_bullet_damage" << '|' << pData.FG1_Bullet_damage << "\n";
-		myfile << "FG1_bullet_speed" << '|' << pData.FG1_Bullet_speed << "\n";
-		myfile << "FG1_Bullet_rof" << '|' << pData.FG1_Bullet_ROF << "\n";
-		myfile << "FG1_shield_level" << '|' << pData.FG1_Shield_hp << "\n";
-		myfile << "FG1_shield_recharge " << '|' << pData.FG1_shield_recharge_rate << "\n";
+		myfile << "FG6_bullet_damage" << '|' << pData.FG6_Bullet_damage << "\n";
+		myfile << "FG6_bullet_speed" << '|' << pData.FG6_Bullet_speed << "\n";
+		myfile << "FG6_Bullet_rof" << '|' << pData.FG6_Bullet_ROF << "\n";
+		myfile << "FG6_shield_level" << '|' << pData.FG6_Shield_hp << "\n";
+		myfile << "FG6_shield_recharge " << '|' << pData.FG6_shield_recharge_rate << "\n";
 
 		myfile << "SF1_bullet_damage" << '|' << pData.SF1_Bullet_damage << "\n";
 		myfile << "SF1_bullet_speed" << '|' << pData.SF1_Bullet_speed << "\n";

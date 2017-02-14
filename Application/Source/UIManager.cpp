@@ -11,15 +11,12 @@
 
 
 
-UIManager::UIManager(Mesh** txtMesh, unsigned * mParameter, MS* mStack, MS* vStack, MS* pStack) {
+UIManager::UIManager(Scene* scene) {
 
-	modelStack = mStack;
-	viewStack = vStack;
-	projectionStack = pStack;
-	textMesh = txtMesh;
+	_scene = scene;
 
-	m_parameters = mParameter;
-
+	textMesh = &(_scene->meshList[Scene::GEO_TEXT]);
+	
 	anchor_offset[ANCHOR_BOT_LEFT] = 0;
 	anchor_offset[ANCHOR_BOT_RIGHT] = 0;
 	anchor_offset[ANCHOR_TOP_LEFT] = (Application::_windowHeight / 10) - 2;
@@ -73,20 +70,20 @@ void UIManager::renderTextOnScreen(Text text) {
 
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -10, 10); //size of screen UI
-	projectionStack->PushMatrix();
-	projectionStack->LoadMatrix(ortho);
-	viewStack->PushMatrix();
-	viewStack->LoadIdentity(); //No need camera for ortho mode
-	modelStack->PushMatrix();
-	modelStack->LoadIdentity(); //Reset modelStack
+	_scene->projectionStack.PushMatrix();
+	_scene->projectionStack.LoadMatrix(ortho);
+	_scene->viewStack.PushMatrix();
+	_scene->viewStack.LoadIdentity(); //No need camera for ortho mode
+	_scene->modelStack.PushMatrix();
+	_scene->modelStack.LoadIdentity(); //Reset modelStack
 
-	glUniform1i(m_parameters[U_TEXT_ENABLED], 1);
-	glUniform3fv(m_parameters[U_TEXT_COLOR], 1, &text.color.r);
-	glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-	glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glUniform1i(_scene->m_parameters[U_TEXT_ENABLED], 1);
+	glUniform3fv(_scene->m_parameters[U_TEXT_COLOR], 1, &text.color.r);
+	glUniform1i(_scene->m_parameters[U_LIGHTENABLED], 0);
+	glUniform1i(_scene->m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, (*textMesh)->textureID);
-	glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
+	glUniform1i(_scene->m_parameters[U_COLOR_TEXTURE], 0);
 
 	// Width of the entire string
 	float totalWidth = 0;
@@ -146,7 +143,7 @@ void UIManager::renderTextOnScreen(Text text) {
 
 	}
 
-	modelStack->Translate(tX + 1, tY + 1, 0); // minor offset to display properly
+	_scene->modelStack.Translate(tX + 1, tY + 1, 0); // minor offset to display properly
 
 	MS textStack;
 	unsigned stackCount = 0;
@@ -160,22 +157,22 @@ void UIManager::renderTextOnScreen(Text text) {
 
 		prevWidth = currentFontWidth[text.value[i]] / 32.0f;
 
-		Mtx44 MVP = projectionStack->Top() * viewStack->Top() * modelStack->Top() * textStack.Top();
-		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+		Mtx44 MVP = _scene->projectionStack.Top() * _scene->viewStack.Top() * _scene->modelStack.Top() * textStack.Top();
+		glUniformMatrix4fv(_scene->m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
 		(*textMesh)->Render((unsigned)text.value[i] * 6, 6);
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
+	glUniform1i(_scene->m_parameters[U_TEXT_ENABLED], 0);
 
 	for (unsigned i = 0; i < stackCount; ++i) {
 		textStack.PopMatrix();
 	}
 
-	projectionStack->PopMatrix();
-	viewStack->PopMatrix();
-	modelStack->PopMatrix();
+	_scene->projectionStack.PopMatrix();
+	_scene->viewStack.PopMatrix();
+	_scene->modelStack.PopMatrix();
 
 	glEnable(GL_DEPTH_TEST);
 }

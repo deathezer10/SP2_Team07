@@ -17,9 +17,8 @@
 
 
 
-SceneShop::SceneShop(Application* app) :
-_app(app),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack) {
+SceneShop::SceneShop() :
+textManager(this) {
 	_menuSelected = 0;
 }
 
@@ -213,7 +212,7 @@ void SceneShop::Update(double dt) {
 		case 4:
 			break;
 		case 5:
-			SceneManager::getInstance()->changeScene(new SceneMainMenu(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new SceneMainMenu()); // Change Scene
 			break;
 		
 		

@@ -17,9 +17,8 @@
 
 
 
-SceneMainMenu::SceneMainMenu(Application* app) :
-_app(app),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack) {
+SceneMainMenu::SceneMainMenu() :
+textManager(this) {
 }
 
 SceneMainMenu::~SceneMainMenu() {
@@ -199,11 +198,11 @@ void SceneMainMenu::Update(double dt) {
 	else if (Application::IsKeyPressed(VK_RETURN)) {
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
 			break;
 		case 1:
 			//insert scene transition to SceneMainMenu
-			SceneManager::getInstance()->changeScene(new SceneShop(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new SceneShop()); // Change Scene
 			break;
 		case 2:
 			//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true

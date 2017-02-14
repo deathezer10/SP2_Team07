@@ -62,7 +62,7 @@ private:
 	float currentHealth = 100;
 	float currentScore = 0;
 
-	Assignment03* _scene;
+	Scene* _scene;
 
 	bool isGodMode = false;
 

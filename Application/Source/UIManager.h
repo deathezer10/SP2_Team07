@@ -45,10 +45,10 @@ public:
 		UI_ANCHOR anchor;
 	};
 
-	UIManager(Mesh ** txtMesh, unsigned * mParameter, MS* mStack, MS* vStack, MS* pStack);
+	UIManager(Scene* scene);
 	~UIManager() {};
 
-	// Mesh pointer of the Scene's Text mesh
+	// Mesh of the Scene's Text mesh
 	Mesh** textMesh;
 
 	// Queue the given Text so that it gets called during Render()
@@ -56,7 +56,7 @@ public:
 
 	// Render the given Text to the screen
 	void renderTextOnScreen(Text text);
-    
+
 	// Load the font widths of a '.csv' into a vector for proper character spacing of text
 	bool LoadFontWidth(std::string fontPath);
 
@@ -67,8 +67,8 @@ public:
 	void dequeueText();
 
 private:
-	MS* modelStack, *viewStack, *projectionStack;
-	unsigned* m_parameters;
+
+	Scene* _scene;
 
 	std::vector<unsigned> currentFontWidth;
 

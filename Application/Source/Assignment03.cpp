@@ -15,10 +15,9 @@
 
 
 
-Assignment03::Assignment03(Application* app) :
-_app(app),
+Assignment03::Assignment03() :
 charManager(this, meshList[0], &m_parameters[0], &modelStack, &viewStack, &projectionStack),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack) {
+textManager(this) {
 }
 
 Assignment03::~Assignment03() {}
@@ -311,8 +310,8 @@ void Assignment03::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-					 camera.target.x, camera.target.y, camera.target.z,
-					 camera.up.x, camera.up.y, camera.up.z);
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {

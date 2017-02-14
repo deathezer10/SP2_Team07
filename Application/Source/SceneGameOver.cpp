@@ -13,9 +13,8 @@
 #include "Assignment03.h"
 #include <sstream>
 #include "PlayerDataManager.h"
-SceneGameover::SceneGameover(Application* app, TYPE_MENU type) :
-_app(app),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack), _menuType(type) {
+SceneGameover::SceneGameover(TYPE_MENU type) :
+textManager(this) {
 	_menuSelected = 0;
 }
 
@@ -260,10 +259,10 @@ void SceneGameover::Update(double dt) {
 		switch (_menuSelected)
 		{
 		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
 			break;
 		case 1:
-			SceneManager::getInstance()->changeScene(new SceneGameover(_app, TYPE_MENU::MENU_MAIN));
+			SceneManager::getInstance()->changeScene(new SceneGameover(TYPE_MENU::MENU_MAIN));
 			break;
 		case 2:
 			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
@@ -273,7 +272,7 @@ void SceneGameover::Update(double dt) {
 	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_MAIN) {
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
 			break;
 
 		case 1:
@@ -286,10 +285,10 @@ void SceneGameover::Update(double dt) {
 		switch (_menuSelected)
 		{
 		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03(_app)); // Change Scene
+			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
 			break;
 		case 1:
-			SceneManager::getInstance()->changeScene(new SceneGameover(_app, TYPE_MENU::MENU_MAIN));
+			SceneManager::getInstance()->changeScene(new SceneGameover(TYPE_MENU::MENU_MAIN));
 			break;
 		case 2:
 			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true

@@ -18,7 +18,7 @@ bool ring = true;
 SceneTutorial::SceneTutorial(Application* app) :
 _app(app),
 charManager(this, meshList[0], &m_parameters[0], &modelStack, &viewStack, &projectionStack),
-textManager(&meshList[GEO_TEXT], &m_parameters[0], &modelStack, &viewStack, &projectionStack) {
+textManager(this) {
 }
 
 SceneTutorial::~SceneTutorial() {}

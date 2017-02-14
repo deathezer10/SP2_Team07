@@ -52,7 +52,7 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 }
 
 
-void Camera3::updateCursor() {
+void Camera3::updateCursor(double dt) {
 
 	double currentX = 0;
 	double currentY = 0;
@@ -84,17 +84,17 @@ void Camera3::Update(double dt) {
 
 	// Cursor is shown, stop rotating the camera
 	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
-		updateCursor();
+		updateCursor(dt);
 	}
 	else {
 		ResetCursorVariables();
 	}
 
 	float CAMERA_SPEED = 4.0f * (float)dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 60.0f * (float)dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 50.0f * (float)dt;
 	float rotationSpeed = 2.5f * (float)dt;
 
-	if (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') && mouseMovedX == 0) {
+	if (!Application::IsKeyPressed('W') || (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') && mouseMovedX == 0)) {
 		if (roll > 1) {
 			roll -= rollFalloffSpeed * (float)dt;
 		}

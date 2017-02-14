@@ -49,13 +49,13 @@ private:
 	// Mouse direction moved, possible values: -1, 0, 1
 	double mouseMovedX;
 	double mouseMovedY;
-
+	
 	// Distance the Cursor moved from the current and last frame. Used to determine mouse sensitivity
 	float mouseMovedDistanceX;
-	float mouseMovedDistanceY; 
+	float mouseMovedDistanceY; 		
 
 	// Updates the direction in which the cursor has moved
-	void updateCursor(); 
+	void updateCursor(double dt); 
 
 	// True if mouse is currently hidden
 	bool isMouseEnabled = true;

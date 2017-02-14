@@ -4,12 +4,14 @@
 #include "MatrixStack.h"
 #include "AnimMetabee.h"
 
+class Scene;
+
 // Stores all the character animations
 class CharacterAnimator {
 
 
 public:
-	CharacterAnimator(MS* mStack);
+	CharacterAnimator(Scene* scene);
 	~CharacterAnimator();
 	void UpdateAnimation(float dt);
 

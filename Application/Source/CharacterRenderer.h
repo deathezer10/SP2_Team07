@@ -7,6 +7,9 @@
 #include "AnimMetabee.h"
 
 
+class Scene;
+
+
 /*
 \brief Responsible for the creation & rendering of specific character parts
 */
@@ -14,7 +17,7 @@ class CharacterRenderer {
 
 
 public:
-	CharacterRenderer(Mesh * meshlist, unsigned * mParameter, MS* mStack, MS* vStack, MS* pStack);
+	CharacterRenderer(Scene* scene);
 	~CharacterRenderer();
 
 	void renderMtbHead();
@@ -34,11 +37,10 @@ public:
 
 
 private:
-	MS *modelStack, *viewStack, *projectionStack;
+	Scene* _scene;
 
-	unsigned * m_parameters;
-
-	Mesh* meshList[NUM_GEOMETRY];
+	Mesh** meshList;
+	MS* modelStack;
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
 

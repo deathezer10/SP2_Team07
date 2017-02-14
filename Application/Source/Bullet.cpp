@@ -1,11 +1,11 @@
 #include <iterator>
-#include "Assignment03.h"
+#include "Scene.h"
 #include "Bullet.h"
 
 
 
-Bullet::Bullet(Assignment03* scene, Vector3 pos) : Object(scene, pos) {
-	type = Assignment03::GEO_NONE;
+Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos) {
+	type = Scene::GEO_NONE;
 
 	scale = 0.4f;
 	position.y -= 0.25f;
@@ -32,7 +32,7 @@ void Bullet::checkInteract() {
 	for (vector<Object*>::iterator it = vec.begin(); it != vec.end(); ++it) {
 
 		// Rock collision
-		if ((*it)->type == Assignment03::GEO_ROCK1 && !dynamic_cast<Rock*>((*it))->_isHarvested) {
+		if ((*it)->type == Scene::GEO_ROCK1 && !dynamic_cast<Rock*>((*it))->_isHarvested) {
 
 			if (((*it)->position - position).Length() < _interactDistance) {
 				(*it)->scale -= 2 * _scene->_dt; // Reduce size of rock when collided
@@ -46,7 +46,7 @@ void Bullet::checkInteract() {
 				return;
 			}
 		}
-		else if ((*it)->type == Assignment03::GEO_SLIME) { // Slime collision
+		else if ((*it)->type == Scene::GEO_SLIME) { // Slime collision
 
 			if (((*it)->position - position).Length() < _interactDistance * 2) {
 
@@ -77,7 +77,7 @@ void Bullet::render() {
 	_scene->modelStack.Rotate(rotationZ, 0, 0, 1);
 	_scene->modelStack.Scale(scale, scale, scale);
 
-	_scene->RenderMesh(_scene->meshList[Assignment03::GEO_BULLET], true);
+	_scene->RenderMesh(_scene->meshList[Scene::GEO_BULLET], true);
 
 	_scene->modelStack.PopMatrix();
 

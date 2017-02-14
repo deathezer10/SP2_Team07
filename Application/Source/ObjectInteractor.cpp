@@ -1,4 +1,3 @@
-#include <iterator>
 #include "ObjectInteractor.h"
 #include "Assignment03.h"
 
@@ -7,8 +6,11 @@ ObjectInteractor::ObjectInteractor() {
 }
 
 ObjectInteractor::~ObjectInteractor() {
-	for (auto &i : _objects)
-		delete i;
+	if (_objects.size()){
+		for (auto &i : _objects)
+			delete i;
+	}
+	_objects.clear();
 }
 
 void ObjectInteractor::updateInteraction() {

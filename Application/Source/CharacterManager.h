@@ -1,7 +1,6 @@
 #ifndef CHARACTER_MANAGER_H
 #define CHARACTER_MANAGER_H
 
-#include "Application.h"
 #include "MatrixStack.h"
 #include "Mesh.h"
 #include "Geometry.h"
@@ -15,7 +14,7 @@ class CharacterManager {
 
 
 public:
-	CharacterManager(Scene* scene, Mesh * meshlist, unsigned * mParameter, MS* mStack, MS* vStack, MS* pStack);
+	CharacterManager(Scene* scene);
 	~CharacterManager();
 
 	CharacterRenderer& getRenderer() {

@@ -1,4 +1,4 @@
-#include "Assignment03.h"
+#include "Scene.h"
 #include "Slime.h"
 
 
@@ -7,8 +7,8 @@ unsigned Slime::slimeCount = 0;
 
 
 
-Slime::Slime(Assignment03* scene, Vector3 pos) : Object(scene, pos) {
-	type = Assignment03::GEO_SLIME;
+Slime::Slime(Scene* scene, Vector3 pos) : Object(scene, pos) {
+	type = Scene::GEO_SLIME;
 	scale = 0.5f;
 	slimeCount++;
 };

@@ -9,7 +9,7 @@
 class Slime : public Object {
 	
 public:
-	Slime(Assignment03* scene, Vector3 pos);
+	Slime(Scene* scene, Vector3 pos);
 	~Slime() { slimeCount--; };
 
 	virtual void checkInteract();

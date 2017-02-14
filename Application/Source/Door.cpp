@@ -1,4 +1,5 @@
-#include "Assignment03.h"
+#include "Application.h"
+#include "Scene.h"
 #include "Door.h"
 
 
@@ -7,8 +8,8 @@ static bool canPress = false;
 
 
 
-Door::Door(Assignment03* scene, Vector3 pos) : Object(scene, pos) {
-	type = Assignment03::GEO_DOOR; scale = 0.5f;
+Door::Door(Scene* scene, Vector3 pos) : Object(scene, pos) {
+	type = Scene::GEO_DOOR; scale = 0.5f;
 };
 
 

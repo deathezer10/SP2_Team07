@@ -1,9 +1,9 @@
 #include "CharacterAnimator.h"
 
 
+#include "Scene.h"
 
-
-CharacterAnimator::CharacterAnimator(MS* mStack) : mStack_(mStack), animMetabee_(mStack) {
+CharacterAnimator::CharacterAnimator(Scene* scene) : mStack_(&scene->modelStack), animMetabee_(&scene->modelStack) {
 }
 
 CharacterAnimator::~CharacterAnimator() {

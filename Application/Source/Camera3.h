@@ -36,11 +36,15 @@ public:
 
 	void ResetCursorVariables();
 
+	// Player Collision detection
+	const float bboxWidth = 5;
+	const float bboxHeight = 5;
+
 private:
 	Vector3 view;
 	Vector3 right;
 	Vector3 defaultRight;
-
+	
 	// Current angle of camera rotation
 	float yaw = -90;
 	float pitch = 0;

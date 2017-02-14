@@ -105,6 +105,7 @@
     <ClCompile Include="Source\ObjectInteractor.cpp" />
     <ClCompile Include="Source\PlayerDataManager.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
+    <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneGameOver.cpp" />
     <ClCompile Include="Source\SceneMainMenu.cpp" />
     <ClCompile Include="Source\SceneManager.cpp" />

@@ -51,7 +51,6 @@ private:
 
 	Camera3 camera;
 
-	void RenderMesh(Mesh *mesh, bool enableLight);
 	void RenderSkybox();
 
 	UIManager textManager;

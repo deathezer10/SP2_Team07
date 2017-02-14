@@ -1,4 +1,5 @@
-#include "Assignment03.h"
+#include "Application.h"
+#include "Scene.h"
 #include "Rock.h"
 
 
@@ -7,13 +8,13 @@ static bool canPress = false;
 
 
 
-Rock::Rock(Assignment03* scene, Vector3 pos) : Object(scene, pos) {
-	type = Assignment03::GEO_ROCK1;
+Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
+	type = Scene::GEO_ROCK1;
 };
 
 
 void Rock::checkInteract() {
-
+	
 	if (_isHarvested)
 		return;
 

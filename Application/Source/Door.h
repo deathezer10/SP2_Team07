@@ -8,7 +8,7 @@
 class Door : public Object {
 	
 public:
-	Door(Assignment03* scene, Vector3 pos);
+	Door(Scene* scene, Vector3 pos);
 	~Door() {};
 
 	virtual void checkInteract();

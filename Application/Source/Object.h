@@ -1,35 +1,43 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-
-#include "Application.h"
 #include "Vector3.h"
 
 
-class Assignment03;
+class Scene;
 
 
 // Abstract Base Class for the Scene's Interactable Objects
 class Object {
-	
+
 public:
-    Object(Assignment03* scene, Vector3 pos) : _scene(scene), position(pos) {};
-    virtual ~Object() {};
+	Object(Scene* scene, Vector3 pos, bool colisionEnabled = true, float boxWidth = 5, float boxHeight = 5, float boxDepth = 5) :
+		_scene(scene), position(pos),
+		bboxWidth(boxWidth),
+		bboxHeight(boxHeight),
+		bboxDepth(boxDepth)	{};
+
+	virtual ~Object() {};
 
 	virtual void checkInteract() = 0;
-    virtual void interact() = 0;
-    virtual void render();
+	virtual void interact() = 0;
+	virtual void render();
+	bool checkCollision(Vector3 &other, Vector3* hitDirection);
 
-    Vector3 position;
-    float rotationX = 0;
-    float rotationY = 0;
-    float rotationZ = 0;
-    float scale = 1;
-    unsigned type;
+	Vector3 position;
+	float rotationX = 0;
+	float rotationY = 0;
+	float rotationZ = 0;
+	float scale = 1;
+	unsigned type;
+
+	float bboxWidth;
+	float bboxHeight;
+	float bboxDepth;
 
 protected:
-    Assignment03* _scene;
-    bool isInteracted = false;
+	Scene* _scene;
+	bool isInteracted = false;
 
 };
 #endif

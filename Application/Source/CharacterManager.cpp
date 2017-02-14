@@ -6,8 +6,8 @@
 
 
 
-CharacterManager::CharacterManager(Scene* scene, Mesh * meshlist, unsigned * mParameter, MS* mStack, MS* vStack, MS* pStack) :
-charRenderer(meshlist, mParameter, mStack, vStack, pStack), charAnimator(mStack) {
+CharacterManager::CharacterManager(Scene* scene) :
+charRenderer(scene), charAnimator(scene) {
 }
 
 CharacterManager::~CharacterManager() {

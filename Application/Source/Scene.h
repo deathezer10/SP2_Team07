@@ -1,10 +1,13 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Mesh.h"
-#include "MatrixStack.h"
+#include "CharacterManager.h"
+#include "UIManager.h"
+#include "ObjectBuilder.h"
+#include "Camera3.h"
 
 class Scene {
+
 public:
 	enum GEOMETRY_TYPE {
 
@@ -88,7 +91,7 @@ public:
 
 	};
 
-	Scene() {}
+	Scene();
 	~Scene() {}
 
 	virtual void Init() = 0;
@@ -106,6 +109,14 @@ public:
 	unsigned m_parameters[U_TOTAL];
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
+
+	CharacterManager charManager;
+	UIManager textManager;
+	ObjectBuilder objBuilder;
+	Camera3 camera;
+
+
+	void RenderMesh(Mesh *mesh, bool enableLight);
 
 };
 

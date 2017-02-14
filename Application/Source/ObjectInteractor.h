@@ -3,11 +3,11 @@
 
 #include <iterator>
 #include <vector>
+#include "Object.h"
 #include "Rock.h"
 #include "Door.h"
 #include "Slime.h"
 #include "Bullet.h"
-
 
 
 class Assignment03;

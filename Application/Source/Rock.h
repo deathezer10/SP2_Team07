@@ -9,7 +9,7 @@
 class Rock : public Object {
 	
 public:
-	Rock(Assignment03* scene, Vector3 pos);
+	Rock(Scene* scene, Vector3 pos);
 	~Rock() {};
 
 	virtual void checkInteract();

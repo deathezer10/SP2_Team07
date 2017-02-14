@@ -17,7 +17,7 @@ int count = 0;
 bool ring = true;
 SceneTutorial::SceneTutorial(Application* app) :
 _app(app),
-charManager(this, meshList[0], &m_parameters[0], &modelStack, &viewStack, &projectionStack),
+charManager(this),
 textManager(this) {
 }
 

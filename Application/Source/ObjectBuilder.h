@@ -1,9 +1,6 @@
 #ifndef OBJECTBUILDER_H
 #define OBJECTBUILDER_H
 
-
-#include <vector>
-
 #include "ObjectInteractor.h"
 
 

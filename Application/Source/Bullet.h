@@ -9,7 +9,7 @@ class Bullet : public Object {
 
 
 public:
-	Bullet(Assignment03* scene, Vector3 pos);
+	Bullet(Scene* scene, Vector3 pos);
     ~Bullet() {};
 		
 	virtual void checkInteract();

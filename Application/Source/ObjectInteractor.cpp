@@ -3,8 +3,7 @@
 #include "Assignment03.h"
 
 
-ObjectInteractor::ObjectInteractor(Assignment03* scene) {
-	_scene = scene;
+ObjectInteractor::ObjectInteractor() {
 }
 
 ObjectInteractor::~ObjectInteractor() {

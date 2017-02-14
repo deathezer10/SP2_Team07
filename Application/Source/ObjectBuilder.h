@@ -14,7 +14,7 @@ class Assignment03; // forward declaration
 class ObjectBuilder {
 
 public:
-	ObjectBuilder(Assignment03* scene);
+	ObjectBuilder();
 	~ObjectBuilder() {};
 
 	// Stores the Object into collection to allow interaction

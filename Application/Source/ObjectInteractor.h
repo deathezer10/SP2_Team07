@@ -17,7 +17,7 @@ class Assignment03;
 class ObjectInteractor {
 	
 public:
-	ObjectInteractor(Assignment03* scene);
+	ObjectInteractor();
 	~ObjectInteractor();
 
 	std::vector<Object*> _objects;

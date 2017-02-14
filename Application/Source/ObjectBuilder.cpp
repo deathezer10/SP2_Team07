@@ -2,8 +2,7 @@
 #include "Assignment03.h"
 #include <algorithm>
 
-ObjectBuilder::ObjectBuilder(Assignment03* scene) : objInteractor(scene) {
-	_scene = scene;
+ObjectBuilder::ObjectBuilder() {
 }
 
 

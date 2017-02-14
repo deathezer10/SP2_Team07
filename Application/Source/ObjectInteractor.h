@@ -8,7 +8,7 @@
 #include "Door.h"
 #include "Slime.h"
 #include "Bullet.h"
-
+#include "Ring.h"
 
 class Assignment03;
 

@@ -16,6 +16,7 @@
 SceneGameover::SceneGameover(TYPE_MENU type) :
 textManager(this) {
 	_menuSelected = 0;
+	_menuType = type;
 }
 
 SceneGameover::~SceneGameover() {

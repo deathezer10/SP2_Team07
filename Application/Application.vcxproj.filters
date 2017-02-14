@@ -140,10 +140,13 @@
     <ClCompile Include="Source\PlayerDataManager.cpp">
       <Filter>Source Files\PlayerData</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneTutorial.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ring.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTutorial.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -250,8 +253,11 @@
     <ClInclude Include="Source\PlayerDataManager.h">
       <Filter>Header Files\PlayerData</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Ring.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SceneTutorial.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

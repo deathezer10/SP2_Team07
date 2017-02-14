@@ -104,6 +104,7 @@
     <ClCompile Include="Source\ObjectBuilder.cpp" />
     <ClCompile Include="Source\ObjectInteractor.cpp" />
     <ClCompile Include="Source\PlayerDataManager.cpp" />
+    <ClCompile Include="Source\Ring.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
     <ClCompile Include="Source\SceneGameOver.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Source\ObjectBuilder.h" />
     <ClInclude Include="Source\ObjectInteractor.h" />
     <ClInclude Include="Source\PlayerDataManager.h" />
+    <ClInclude Include="Source\Ring.h" />
     <ClInclude Include="Source\Rock.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneGameOver.h" />

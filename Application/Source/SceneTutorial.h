@@ -22,7 +22,7 @@ class SceneTutorial : public Scene {
 	friend class Bullet;
 
 public:
-	SceneTutorial(Application* app);
+	SceneTutorial();
 	~SceneTutorial();
 
 	virtual void Init();
@@ -30,7 +30,6 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-	Application* _app;
 	CharacterManager charManager;
 	UIManager textManager;
 	ObjectBuilder objBuilder;

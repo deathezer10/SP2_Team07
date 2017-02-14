@@ -10,13 +10,11 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-
 #include <sstream>
 
 int count = 0;
 bool ring = true;
-SceneTutorial::SceneTutorial(Application* app) :
-_app(app),
+SceneTutorial::SceneTutorial() :
 charManager(this),
 textManager(this) {
 }
@@ -170,6 +168,8 @@ void SceneTutorial::Init() {
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
 
+
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
@@ -224,9 +224,12 @@ void SceneTutorial::Init() {
 	//const size_t slimeAmount = 10;
 
 	//// Create interactable rocks
-	//for (size_t i = 0; i < slimeAmount; i++) {
-	//	objBuilder.createObject(new Slime(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-	//}
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
 
 	//objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
 

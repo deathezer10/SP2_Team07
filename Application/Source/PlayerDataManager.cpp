@@ -60,11 +60,11 @@ void PlayerDataManager::LoadPlayerData() {
 		pData.DF6 = !!v[5];
 		pData.A10 = !!v[6];
 
-		pData.FG1_Bullet_damage = v[7];
-		pData.FG1_Bullet_speed = v[8];
-		pData.FG1_Bullet_ROF = v[9];
-		pData.FG1_Shield_hp = v[10];
-		pData.FG1_shield_recharge_rate = v[11];
+		pData.FG6_Bullet_damage = v[7];
+		pData.FG6_Bullet_speed = v[8];
+		pData.FG6_Bullet_ROF = v[9];
+		pData.FG6_Shield_hp = v[10];
+		pData.FG6_shield_recharge_rate = v[11];
 
 		pData.SF1_Bullet_damage = v[12];
 		pData.SF1_Bullet_speed = v[13];

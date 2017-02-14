@@ -11,11 +11,11 @@ struct PlayerData {
 	bool A10;
 
 	//default fighter upgrades
-	int FG1_Bullet_damage;// current level of bullet damage
-	int FG1_Bullet_speed;// current level of bullet speed
-	int FG1_Bullet_ROF;// current level of rate of fire
-	int FG1_Shield_hp;// current level of total shield ship has
-	int FG1_shield_recharge_rate;// current level of shield recharge rate
+	int FG6_Bullet_damage;// current level of bullet damage
+	int FG6_Bullet_speed;// current level of bullet speed
+	int FG6_Bullet_ROF;// current level of rate of fire
+	int FG6_Shield_hp;// current level of total shield ship has
+	int FG6_shield_recharge_rate;// current level of shield recharge rate
 
 	//fast type fighter upgrades
 	int SF1_Bullet_damage;

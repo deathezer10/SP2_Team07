@@ -1,9 +1,11 @@
 #include "Application.h"
-
 #include "Camera3.h"
 #include <GLFW\glfw3.h>
+#include "Scene.h"
 
-Camera3::Camera3() : collider(&position, bboxWidth, bboxHeight, bboxDepth) {
+
+
+Camera3::Camera3(Scene* scene) : _scene(scene), collider(&position, bboxWidth, bboxHeight, bboxDepth) {
 }
 
 Camera3::~Camera3() {
@@ -82,6 +84,8 @@ void Camera3::updateCursor(double dt) {
 
 void Camera3::Update(double dt) {
 
+	_elapsedTime += dt;
+
 	// Cursor is shown, stop rotating the camera
 	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
 		updateCursor(dt);
@@ -106,7 +110,7 @@ void Camera3::Update(double dt) {
 			roll = 0;
 		}
 	}
-	
+
 	position.x += view.x * CAMERA_SPEED;
 	position.y += view.y * CAMERA_SPEED;
 	position.z += view.z * CAMERA_SPEED;
@@ -114,9 +118,11 @@ void Camera3::Update(double dt) {
 
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
+		wasMovingForward = true;
 		currentVelocity += velocityAccelerationRate * (float)dt;
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
+		wasMovingForward = false;
 		currentVelocity -= velocityDecelerationRate * (float)dt;
 		CAMERA_SPEED /= 3;
 		position.x -= view.x * CAMERA_SPEED;
@@ -203,8 +209,24 @@ void Camera3::Update(double dt) {
 	if (Application::IsKeyPressed('S'))
 		currentVelocity = Math::Clamp(currentVelocity, velocityMin, velocityMax);
 	else {
-		currentVelocity = Math::Clamp(currentVelocity, 1.0f, velocityMax);
+		currentVelocity = Math::Clamp(currentVelocity, (wasMovingForward || currentVelocity > 0) ? 1.0f : -1.0f, velocityMax);
 	}
+
+	// Bullet logic
+	if (typeid(*_scene) == typeid(Assignment03))
+		shootBullet();
+}
+
+void Camera3::shootBullet(){
+
+	if (Application::IsKeyPressed(MK_LBUTTON)) {
+
+		if (_elapsedTime >= _nextShootTime) {
+			_scene->objBuilder.createObject(new Bullet(_scene, position));
+			_nextShootTime = _elapsedTime + 0.05;
+		}
+	}
+
 }
 
 void Camera3::ResetCursorVariables() {

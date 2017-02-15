@@ -22,6 +22,7 @@ void ObjectInteractor::updateInteraction() {
 		if ((*objIterator)->isCollidable()) {
 			Vector3 gg;
 			if ((*objIterator)->getCollider().checkCollision((*objIterator)->_scene->camera.getCollider(), &gg)) {
+				gg.Normalize();
 				(*objIterator)->_scene->camera.position += gg;
 				(*objIterator)->_scene->camera.target += gg;
 			}

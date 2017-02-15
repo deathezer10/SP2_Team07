@@ -10,19 +10,17 @@ Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	scale = 0.4f;
 	position.y -= 0.25f;
 
-	_defaultPosition = pos;
-	_defaultPitch = _scene->camera.getPitch();
-	_defaultYaw = _scene->camera.getYaw();
+	_startingPosition = scene->camera.getPosition();
+	_direction = scene->camera.getView().Normalized();
+
 }
 
 void Bullet::checkInteract() {
 
-	position.x += (_bulletSpeed * cos(Math::DegreeToRadian(_defaultYaw)) * _scene->_dt);
-	position.y += (_bulletSpeed * tan(Math::DegreeToRadian(_defaultPitch)) * _scene->_dt);
-	position.z += (_bulletSpeed * sin(Math::DegreeToRadian(_defaultYaw)) * _scene->_dt);
-	
+	position += _direction * _bulletSpeed * _scene->_dt;
+
 	// Remove bullet once reached max distance
-	if ((_defaultPosition - position).Length() >= _bulletMaxDistance) {
+	if ((_startingPosition - position).Length() >= _bulletMaxDistance) {
 		_scene->objBuilder.destroyObject(this);
 		return;
 	}

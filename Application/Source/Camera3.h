@@ -6,11 +6,14 @@
 #include "ObjectCollider.h"
 
 
-// FPS Camera
+
+class Scene;
+
+// Space Fighter Camera
 class Camera3 : public Camera2 {
 	
 public:
-	Camera3();
+	Camera3(Scene* scene);
 	~Camera3();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
 	virtual void Update(double dt);
@@ -19,19 +22,20 @@ public:
 	const float skyboxSize = 1001.0f; // Distance of each skybox textures from the origin
 	const float skyboxBound = 1000.f; // Clamps position of the Camera to this value
 
-	Vector3 getTarget() { return target; };
-	Vector3 getUp() { return up; };
-	Vector3 getPosition() { return position; };
-	Vector3 getRight() { return right; };
-	float getYaw() { return yaw; };
-	float getPitch() { return pitch; };
-	float getRoll() { return roll; };
-	float getCurrentVelocity() { return currentVelocity; };
+	Vector3& getTarget() { return target; };
+	Vector3& getUp() { return up; };
+	Vector3& getPosition() { return position; };
+	Vector3& getView(){ return view; };
+	Vector3& getRight() { return right; };
+	float& getYaw() { return yaw; };
+	float& getPitch() { return pitch; };
+	float& getRoll() { return roll; };
+	float& getCurrentVelocity() { return currentVelocity; };
 
-	Collider& getCollider() { return collider; }
+	Collider& getCollider() { return collider; };
 
-	double getMouseMovedX() { return mouseMovedX; };
-	double getMouseMovedY() { return mouseMovedY; };
+	double& getMouseMovedX() { return mouseMovedX; };
+	double& getMouseMovedY() { return mouseMovedY; };
 
 	void disableMouse() { isMouseEnabled = false; };
 	void enableMouse() { isMouseEnabled = true; };
@@ -43,7 +47,11 @@ public:
 	const float bboxHeight = 1;
 	const float bboxDepth = 2;
 
+	void setVelocity(float speed){ currentVelocity = speed; };
+
+
 private:
+	Scene* _scene;
 	Vector3 view;
 	Vector3 right;
 	Vector3 defaultRight;
@@ -60,6 +68,7 @@ private:
 	float velocityDecelerationRate = 2.0f;
 	float velocityMax = 50;
 	float velocityMin = -10;
+	bool wasMovingForward = true;
 
 	// Enable Mouse Horizontal Control
 	bool mouseYawEnabled = false;
@@ -88,6 +97,11 @@ private:
 	double lastX = 0;
 	double lastY = 0;
 
+	double _elapsedTime = 0;
+	double _nextShootTime = 0;
+
+	// Bullet shooting logic
+	void shootBullet();
 
 };
 #endif

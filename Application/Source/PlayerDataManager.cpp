@@ -16,6 +16,7 @@ PlayerDataManager *PlayerDataManager::_instance = 0;
 PlayerDataManager* PlayerDataManager::getInstance() {
 	if (!_instance) {
 		_instance = new PlayerDataManager();
+		_instance->LoadPlayerData(); // first time loading
 	}
 	return _instance;
 }

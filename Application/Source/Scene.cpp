@@ -6,7 +6,8 @@
 
 Scene::Scene() :
 charManager(this),
-textManager(this){
+textManager(this),
+camera(this){
 }
 
 

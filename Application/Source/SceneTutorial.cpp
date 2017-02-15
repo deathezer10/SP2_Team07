@@ -131,7 +131,7 @@ void SceneTutorial::Init() {
 	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kShininess = 1.0f;
 
-	meshList[GEO_RING] = MeshBuilder::GenerateTorus("RING", Color(.12f, .18f, .32f), 30, 18, 2, 0.3);
+	meshList[GEO_RING] = MeshBuilder::GenerateTorus("RING", Color(.12f, .18f, .32f), 30, 18, 2, 0.3f);
 	meshList[GEO_RING]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
 	meshList[GEO_RING]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_RING]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
@@ -799,7 +799,6 @@ void SceneTutorial::Exit() {
 		}
 	}
 
-	objBuilder.objInteractor.~ObjectInteractor();
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

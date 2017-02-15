@@ -73,6 +73,10 @@ void SceneGameover::Init() {
 	// Generate a default VAO for now
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
+	
+	for (int i = 0; i < NUM_GEOMETRY; ++i) {
+		meshList[i] = nullptr;
+	}
 
 	// Get a handle for our "MVP" uniform
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -442,7 +446,13 @@ void SceneGameover::RenderSkybox() {
 
 }
 
-void SceneGameover::Exit() {
+void SceneGameover::Exit() {	
+	for (int i = 0; i < NUM_GEOMETRY; ++i) {
+		if (meshList[i] != nullptr) {
+			delete meshList[i];
+		}
+	}
+
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

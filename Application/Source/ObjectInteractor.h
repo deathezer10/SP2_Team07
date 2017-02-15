@@ -9,6 +9,7 @@
 #include "Slime.h"
 #include "Bullet.h"
 #include "Ring.h"
+#include "PowerUp.h"
 
 class Scene;
 

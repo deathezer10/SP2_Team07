@@ -12,11 +12,8 @@
 #include "LoadTGA.h"
 #include <sstream>
 
-int count = 0;
-bool ring = true;
-SceneTutorial::SceneTutorial() :
-charManager(this),
-textManager(this) {
+
+SceneTutorial::SceneTutorial() {
 }
 
 SceneTutorial::~SceneTutorial() {}
@@ -134,12 +131,17 @@ void SceneTutorial::Init() {
 	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kShininess = 1.0f;
 
-	meshList[GEO_RING] = MeshBuilder::GenerateTorus("RING", Color(.12f, .18f, .32f),18,18,2,0.5);
+	meshList[GEO_RING] = MeshBuilder::GenerateTorus("RING", Color(.12f, .18f, .32f), 30, 18, 2, 0.3);
 	meshList[GEO_RING]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
 	meshList[GEO_RING]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_RING]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_RING]->material.kShininess = 1.0f;
 
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("powerup", Color(.12f, .18f, .32f));
+	meshList[GEO_CUBE]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
+	meshList[GEO_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
+	meshList[GEO_CUBE]->material.kShininess = 1.0f;
 
 	meshList[GEO_SLIME] = MeshBuilder::GenerateOBJ("slime", "OBJ/slime.obj");
 	meshList[GEO_SLIME]->textureID = LoadTGA("Image/slime.tga");
@@ -167,8 +169,6 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
-
-
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
@@ -224,12 +224,12 @@ void SceneTutorial::Init() {
 	//const size_t slimeAmount = 10;
 
 	//// Create interactable rocks
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
-		objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
+	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 
 	//objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
 
@@ -253,18 +253,11 @@ void SceneTutorial::Update(double dt) {
 	if (Application::IsKeyPressed(VK_F4)) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
-	//	if (camera.position.x-(torusposition.x)<=5)
-	//	{
-	//		ring = false;
-	///*		ring2 = false;
-	//		ring3 = false;
-	//		ring4 = false;
-	//		ring5 = false;*/
-	//		count++;
-	//	}
-
+	if (Ring::RingCount == 0 && currentObjective == 0)
+	{
+		++currentObjective;
+	}
 	camera.Update(dt);
-	charManager.getAnimator().getAnimMetabee().ProcessAnimation((float)dt);
 	objBuilder.objInteractor.updateInteraction();
 
 	static bool canPress = true;
@@ -294,8 +287,6 @@ void SceneTutorial::Update(double dt) {
 	float* armRotX = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightArmX];
 	float* armRotY = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightArmY];
 
-
-
 	static bool canGodmodePress = true;
 
 	// Godmode key
@@ -312,6 +303,24 @@ void SceneTutorial::Update(double dt) {
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
+	switch (currentObjective){
+
+	case 0:
+		break;
+
+	case 1:
+		if (objectspawned==false)
+			{
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
+				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
+				objectspawned = true;
+			}
+				break;
+		}
 }
 
 void SceneTutorial::Render() {
@@ -376,19 +385,7 @@ void SceneTutorial::Render() {
 	modelStack.Scale(.8f, .8f, .8f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
-	if (ring == true)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(20, 10, -10);
-		modelStack.Rotate(90, 0, 0, 1);
-		modelStack.Scale(.5f, .5f, .5f);
-		RenderMesh(meshList[GEO_RING], true);
-		modelStack.PopMatrix();
-	}
-	if (ring == false)
-	{
-		textManager.renderTextOnScreen(UIManager::Text("you got a ring", Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	}
+
 
 	// Lamp
 	modelStack.PushMatrix();
@@ -513,8 +510,6 @@ void SceneTutorial::Render() {
 	modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
-
-
 	objBuilder.renderObjects();
 
 
@@ -539,7 +534,23 @@ void SceneTutorial::Render() {
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text("Collect [6] Rings", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+	std::ostringstream objective;
+
+	switch (currentObjective){
+
+	case 0:
+		objective << "Collect [" << Ring::RingCount << "] Ring";
+		textManager.renderTextOnScreen(UIManager::Text{ objective.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_CENTER });
+		break;
+
+	case 1:
+		objective << "Collect Power Ups";
+		textManager.renderTextOnScreen(UIManager::Text{ objective.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_CENTER });
+
+		break;
+
+	}
 
 
 	std::ostringstream score;

@@ -43,12 +43,9 @@ private:
 	const float camera_height = 75;
 		
 	Light light[1];
-
-	Camera3 camera;
-
+	
 	void RenderSkybox();
 	
-	UIManager textManager;
 	
 	TYPE_MENU _menuType;
 	unsigned _menuSelected;

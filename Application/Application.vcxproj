@@ -105,6 +105,7 @@
     <ClCompile Include="Source\ObjectCollider.cpp" />
     <ClCompile Include="Source\ObjectInteractor.cpp" />
     <ClCompile Include="Source\PlayerDataManager.cpp" />
+    <ClCompile Include="Source\PowerUP.cpp" />
     <ClCompile Include="Source\Ring.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
     <ClCompile Include="Source\Scene.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Source\ObjectCollider.h" />
     <ClInclude Include="Source\ObjectInteractor.h" />
     <ClInclude Include="Source\PlayerDataManager.h" />
+    <ClInclude Include="Source\PowerUp.h" />
     <ClInclude Include="Source\Ring.h" />
     <ClInclude Include="Source\Rock.h" />
     <ClInclude Include="Source\Scene.h" />

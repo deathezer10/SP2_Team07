@@ -1,24 +1,25 @@
-#ifndef RING_H
-#define RING_H
+#ifndef POWERUP_H
+#define POWERUP_H
 
 
 #include "Object.h"
 
 
 // Interactable RING, pickable and harvestable
-class Ring : public Object {
+class PowerUp : public Object {
 
 public:
-	Ring(Scene* scene, Vector3 pos);
-	~Ring() { RingCount--; };
+	PowerUp(Scene* scene, Vector3 pos,int powerType);
+	~PowerUp() {};
 
 	virtual void checkInteract();
 	virtual void interact();
 	static int RingCount;
-	const float _interactDistance = 2.0f;
+	const float _interactDistance = 4.0f;
 
 private:
 	float _defaultScale = 1;
+	int powertype;
 
 };
 #endif

@@ -6,21 +6,11 @@
 #include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
-#include "CharacterManager.h"
-#include "UIManager.h"
-#include "ObjectBuilder.h"
-#include "ObjectInteractor.h"
 
 #include <vector>
 
 class SceneTutorial : public Scene {
-
-	friend class Object;
-	friend class ObjectBuilder;
-	friend class ObjectInteractor;
-	friend class UIManager;
-	friend class Bullet;
-
+	
 public:
 	SceneTutorial();
 	~SceneTutorial();
@@ -29,16 +19,10 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-
-	CharacterManager charManager;
-	UIManager textManager;
-	ObjectBuilder objBuilder;
-	Camera3 camera;
-
+	
 private:
 	Light light[2];
 	
-
 	void RenderCharacter();
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
@@ -49,6 +33,8 @@ private:
 
 	bool pendingReset = false;
 	float nextShootTime = 0;
+	bool objectspawned = false;
+	int currentObjective = 0;
 
 };
 

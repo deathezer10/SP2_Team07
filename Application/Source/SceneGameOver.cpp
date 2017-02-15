@@ -13,8 +13,7 @@
 #include "Assignment03.h"
 #include <sstream>
 #include "PlayerDataManager.h"
-SceneGameover::SceneGameover(TYPE_MENU type) :
-textManager(this) {
+SceneGameover::SceneGameover(TYPE_MENU type)  {
 	_menuSelected = 0;
 	_menuType = type;
 }

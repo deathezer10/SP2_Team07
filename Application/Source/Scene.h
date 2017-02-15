@@ -40,7 +40,8 @@ public:
 		GEO_ROCK1,
 		GEO_TDUMMY,
 		GEO_BULLET,
-
+		GEO_RING,
+		GEO_CUBE,
 		NUM_GEOMETRY
 	};
 

@@ -29,3 +29,5 @@ private:
 	float _NextDamageTime = 0; // DamageInterval's helper variable
 
 };
+
+#endif

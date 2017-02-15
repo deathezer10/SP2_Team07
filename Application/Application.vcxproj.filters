@@ -152,6 +152,9 @@
     <ClCompile Include="Source\ObjectCollider.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Tdummy.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="Source\ObjectCollider.h">
       <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tdummy.h">
+      <Filter>Header Files\Object\Solid</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

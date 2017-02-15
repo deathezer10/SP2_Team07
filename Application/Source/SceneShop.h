@@ -42,11 +42,11 @@ private:
 
 	Light light[1];
 
-	Camera3 camera;
+	
 
 	void RenderSkybox();
 
-	UIManager textManager;
+	
 
 	PlayerData* pData;
 
@@ -57,6 +57,7 @@ private:
 	bool ChangeShip;
 	int column = 0;
 	int row = 0;
+	bool CanPress;
 
 
 

@@ -12,14 +12,13 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "Assignment03.h"
-
 #include <sstream>
 
 
-std::string ShipType[4] = { "FG6", "SF1", "DF6", "A10" };
+std::string ShipType[4] = { "FG-6", "SF-1", "DF-6", "Trident-A10" };
 
-SceneShop::SceneShop() :
-textManager(this) {
+SceneShop::SceneShop()
+{
 	_menuSelected = 0;
 }
 
@@ -197,7 +196,7 @@ void SceneShop::Update(double dt) {
 	//Changing ships-----------------------------------------------------
 	//const std::string ShipType[4] = { "FG6", "SF1", "DF6", "A10" };
 
-	
+
 
 
 
@@ -207,12 +206,12 @@ void SceneShop::Update(double dt) {
 		ChangeShip = true;
 	}
 
-	if (Application::IsKeyPressed(VK_RIGHT) && ChangeShip == true)
+	if (Application::IsKeyPressed(VK_RIGHT) && ChangeShip == true && _menuSelected == 0)
 	{
 		column += 1;
 		ChangeShip = false;
 	}
-	else if (Application::IsKeyPressed(VK_LEFT) && ChangeShip == true)
+	else if (Application::IsKeyPressed(VK_LEFT) && ChangeShip == true && _menuSelected == 0)
 	{
 		column -= 1;
 		ChangeShip = false;
@@ -227,34 +226,158 @@ void SceneShop::Update(double dt) {
 		column = 3;
 	}
 
+	//Load in the save data
 	switch (column) {
 
 	case 0:
+		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_damage;
+		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_speed;
+		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_ROF;
+		PlayerDataManager::getInstance()->getPlayerData()->FG6_Shield_hp;
+		PlayerDataManager::getInstance()->getPlayerData()->FG6_shield_recharge_rate;
 		break;
 	case 1:
+		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_damage;
+		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_speed;
+		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_ROF;
+		PlayerDataManager::getInstance()->getPlayerData()->SF1_Shield_hp;
+		PlayerDataManager::getInstance()->getPlayerData()->SF1_shield_recharge_rate;
 		break;
 	case 2:
+		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_damage;
+		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_speed;
+		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_ROF;
+		PlayerDataManager::getInstance()->getPlayerData()->DF6_Shield_hp;
+		PlayerDataManager::getInstance()->getPlayerData()->DF6_shield_recharge_rate;
 		break;
 	case 3:
+		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_damage;
+		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_speed;
+		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_ROF;
+		PlayerDataManager::getInstance()->getPlayerData()->A10_Shield_hp;
+		PlayerDataManager::getInstance()->getPlayerData()->A10_shield_recharge_rate;
 		break;
 	}
 
-	if (Application::IsKeyPressed(VK_RETURN)) {
+	if (!Application::IsKeyPressed(VK_RETURN))
+	{
+		CanPress = true;
+	}
+	if (Application::IsKeyPressed(VK_RETURN)&& CanPress) {
 
 		switch (_menuSelected) {
 		case 0:
 			break;
 		case 1:
-			pData->FG6_Bullet_damage++;
+			if (column == 0 && pData->currency > 5)
+			{
+				pData->FG6_Bullet_damage++;
+				pData->currency -= 5;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 1)
+			{
+				pData->SF1_Bullet_damage++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 2)
+			{
+				pData->DF6_Bullet_damage++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 3)
+			{
+				pData->A10_Bullet_damage++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
 			break;
 		case 2:
+			if (column == 0)
+			{
+				pData->FG6_Bullet_speed++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 1)
+			{
+				pData->SF1_Bullet_speed++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 2)
+			{
+				pData->DF6_Bullet_speed++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 3)
+			{
+				pData->A10_Bullet_speed++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
 			break;
 		case 3:
+			if (column == 0)
+			{
+				pData->FG6_Bullet_ROF++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 1)
+			{
+				pData->SF1_Bullet_ROF++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 2)
+			{
+				pData->DF6_Bullet_ROF++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 3)
+			{
+				pData->A10_Bullet_ROF++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
 			break;
 		case 4:
+			if (column == 0)
+			{
+				pData->FG6_Shield_hp++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 1)
+			{
+				pData->SF1_Shield_hp++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 2)
+			{
+				pData->DF6_Shield_hp++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 3)
+			{
+				pData->A10_Shield_hp++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
 			break;
 		case 5:
-
+			if (column == 0)
+			{
+				pData->FG6_shield_recharge_rate++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 1)
+			{
+				pData->SF1_shield_recharge_rate++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 2)
+			{
+				pData->DF6_shield_recharge_rate++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+			if (column == 3)
+			{
+				pData->A10_shield_recharge_rate++;
+				PlayerDataManager::getInstance()->SaveData();
+			}
 			break;
 		case 6:
 
@@ -262,7 +385,7 @@ void SceneShop::Update(double dt) {
 			break;
 
 		}
-
+		CanPress = false;
 	}
 
 }
@@ -312,24 +435,104 @@ void SceneShop::Render() {
 	//Back
 	std::string option7 = "Option 6";
 
-
-
-
-
+	//Currency
+	std::string option8 = "Amount of money you have: ";
+	option8 += std::to_string(pData->currency);
 
 	option1 = (_menuSelected == 0) ? ">Name of ship: " : "Name of ship: ";
 	option1 += ShipType[column];
 	option2 = (_menuSelected == 1) ? ">Bullet Damage: " : "Bullet Damage: ";
-	option2 += std::to_string(pData->FG6_Bullet_damage);
+	if (column == 0)
+	{
+		option2 += std::to_string(pData->FG6_Bullet_damage);
+	}
+	if (column == 1)
+	{
+		option2 += std::to_string(pData->SF1_Bullet_damage);
+	}
+	if (column == 2)
+	{
+		option2 += std::to_string(pData->DF6_Bullet_damage);
+	}
+	if (column == 3)
+	{
+		option2 += std::to_string(pData->A10_Bullet_damage);
+	}
 
 	option3 = (_menuSelected == 2) ? ">Bullet Speed: " : "Bullet Speed: ";
+	if (column == 0)
+	{
+		option3 += std::to_string(pData->FG6_Bullet_speed);
+	}
+	if (column == 1)
+	{
+		option3 += std::to_string(pData->SF1_Bullet_speed);
+	}
+	if (column == 2)
+	{
+		option3 += std::to_string(pData->DF6_Bullet_speed);
+	}
+	if (column == 3)
+	{
+		option3 += std::to_string(pData->A10_Bullet_speed);
+	}
 	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
+	if (column == 0)
+	{
+		option4 += std::to_string(pData->FG6_Bullet_ROF);
+	}
+	if (column == 1)
+	{
+		option4 += std::to_string(pData->SF1_Bullet_ROF);
+	}
+	if (column == 2)
+	{
+		option4 += std::to_string(pData->DF6_Bullet_ROF);
+	}
+	if (column == 3)
+	{
+		option4 += std::to_string(pData->A10_Bullet_ROF);
+	}
 	option5 = (_menuSelected == 4) ? ">Shield Hp: " : "Shield Hp: ";
+	if (column == 0)
+	{
+		option5 += std::to_string(pData->FG6_Shield_hp);
+	}
+	if (column == 1)
+	{
+		option5 += std::to_string(pData->SF1_Shield_hp);
+	}
+	if (column == 2)
+	{
+		option5 += std::to_string(pData->DF6_Shield_hp);
+	}
+	if (column == 3)
+	{
+		option5 += std::to_string(pData->A10_Shield_hp);
+	}
 	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: ";
+	if (column == 0)
+	{
+		option6 += std::to_string(pData->FG6_shield_recharge_rate);
+	}
+	if (column == 1)
+	{
+		option6 += std::to_string(pData->SF1_shield_recharge_rate);
+	}
+	if (column == 2)
+	{
+		option6 += std::to_string(pData->DF6_shield_recharge_rate);
+	}
+	if (column == 3)
+	{
+		option6 += std::to_string(pData->A10_shield_recharge_rate);
+	}
 	option7 = (_menuSelected == 6) ? ">Back" : "Back";
 
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

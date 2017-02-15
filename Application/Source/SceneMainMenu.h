@@ -42,20 +42,18 @@ private:
 
 	const float camera_width = 75;
 	const float camera_height = 75;
-
-	bool canChangeMenu = false;
-	bool canChangeMenu2 = false;
-	bool canChangeMenuBack = false;
-
-	Light light[1];
-
-	Camera3 camera;
+	
+	Light light[1];	
 
 	void RenderSkybox();
-
-	UIManager textManager;
 	
-	unsigned _menuSelected;
+	bool canPressUp = false;
+	bool canPressDown = false;
+	bool canPressEnter = false;
+	bool isMenuOutside = true;
+	unsigned _outsideSelected = 0;
+	unsigned _insideSelected = 0;
+
 
 };
 

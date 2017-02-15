@@ -8,6 +8,8 @@
 #include "SceneManager.h"
 #include "SceneMainMenu.h"
 #include "SceneShop.h"
+#include "SceneTutorial.h"
+
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
@@ -17,9 +19,10 @@
 
 
 
-SceneMainMenu::SceneMainMenu() :
-textManager(this) {
-	_menuSelected = 0;
+SceneMainMenu::SceneMainMenu()
+{
+	_outsideSelected = 0;
+	_insideSelected = 0;
 }
 
 SceneMainMenu::~SceneMainMenu() {
@@ -162,50 +165,78 @@ void SceneMainMenu::Update(double dt) {
 
 	camera.Update(dt);
 
-	static bool canChangeMenu = false;
-	static bool canChangeMenu2 = false;
-	static bool canChangeMenu3 = false;
 
 	if (!Application::IsKeyPressed(VK_UP)) {
-		canChangeMenu = true;
+		canPressUp = true;
 	}
-	if (Application::IsKeyPressed(VK_UP) && canChangeMenu == true) {
-		_menuSelected -= 1;
-		canChangeMenu = false;
+	if (Application::IsKeyPressed(VK_UP) && canPressUp == true) {
+		if (isMenuOutside)
+			_outsideSelected--;
+		else
+			_insideSelected--;
+
+		canPressUp = false;
 	}
 	if (!Application::IsKeyPressed(VK_DOWN)) {
-		canChangeMenu2 = true;
+		canPressDown = true;
 	}
-	if (Application::IsKeyPressed(VK_DOWN) && canChangeMenu2 == true) {
-		_menuSelected += 1;
-		canChangeMenu2 = false;
+	if (Application::IsKeyPressed(VK_DOWN) && canPressDown == true) {
+		if (isMenuOutside)
+			_outsideSelected++;
+		else
+			_insideSelected++;
+
+		canPressDown = false;
 	}
-	if (_menuSelected > 2) {
-		_menuSelected = 2;
-	}
-	if (_menuSelected < 0) {
-		_menuSelected = 0;
-	}
-	
+
+	_insideSelected = Math::Clamp<int>(_insideSelected, 0, 4);
+	_outsideSelected = Math::Clamp<int>(_outsideSelected, 0, 2);
+
+
 	if (!Application::IsKeyPressed(VK_RETURN)) {
-		canChangeMenu3 = true;
+		canPressEnter = true;
 	}
-	
-	if (Application::IsKeyPressed(VK_RETURN) && canChangeMenu3 == true) {
-		switch (_menuSelected) {
-		case 0:
-			SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
-			break;
-		case 1:
-			//insert scene transition to SceneMainMenu
-			SceneManager::getInstance()->changeScene(new SceneShop()); // Change Scene
-			break;
-		case 2:
-			//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
-			break;
+
+	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter == true) {
+
+		if (isMenuOutside){
+
+			switch (_outsideSelected) {
+			case 0:
+				isMenuOutside = false;
+				//SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				break;
+			case 1:
+				//insert scene transition to SceneMainMenu
+				SceneManager::getInstance()->changeScene(new SceneShop()); // Change Scene
+				break;
+			case 2:
+				//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+				break;
+			}
+		}
+		else {
+			switch (_insideSelected)
+			{
+			case 0: // Tutorial
+				SceneManager::getInstance()->changeScene(new SceneTutorial()); // Change Scene
+				break;
+			case 1: // Dog fight
+				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				break;
+			case 2: // Payload
+				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				break;
+			case 3: // Boss
+				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				break;
+			case 4: // Back button
+				isMenuOutside = true;
+				break;
+			}
 		}
 
-		canChangeMenu3 = false;
+		canPressEnter = false;
 	}
 
 }
@@ -234,8 +265,8 @@ void SceneMainMenu::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-					 camera.position.z, camera.target.x, camera.target.y,
-					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+		camera.position.z, camera.target.x, camera.target.y,
+		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -247,22 +278,55 @@ void SceneMainMenu::Render() {
 	std::string option2 = "Option 2";
 	std::string option3 = "Option 3";
 
-	title = "Space Fighter 27";
-	option1 = (_menuSelected == 0) ? ">Play<" : "Play";
-	option2 = (_menuSelected == 1) ? ">Shop<" : "Shop";
-	option3 = (_menuSelected == 2) ? ">Quit<" : "Quit";
+	if (isMenuOutside)
+	{
+		title = "Space Fighter 27";
+		option1 = (_outsideSelected == 0) ? ">Play<" : "Play";
+		option2 = (_outsideSelected == 1) ? ">Shop<" : "Shop";
+		option3 = (_outsideSelected == 2) ? ">Quit<" : "Quit";
 
 
-	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
-	textManager.reset();
+		textManager.reset();
+	}
+	else
+	{
+		std::string option1 = "Tutorial";
+		std::string option2 = "level 1";
+		std::string option3 = "level 2";
+		std::string option4 = "level 3";
+		std::string option5 = "back";
+
+		title = "Level selection screen";
+		option1 = (_insideSelected == 0) ? ">Tutorial<" : "Tutorial";
+		option2 = (_insideSelected == 1) ? ">Level 1<" : "Level 1";
+		option3 = (_insideSelected == 2) ? ">Level 2<" : "Level 2";
+		option4 = (_insideSelected == 3) ? ">Level 3<" : "Level 3";
+		option5 = (_insideSelected == 4) ? ">back<" : "back";
+
+		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.reset();
+	}
+
 }
 
 void SceneMainMenu::RenderSkybox() {

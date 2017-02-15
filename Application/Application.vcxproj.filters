@@ -51,6 +51,12 @@
     <Filter Include="Header Files\PlayerData">
       <UniqueIdentifier>{881fead1-5b9c-4da3-b3ab-7881de8f28e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Object\NPC">
+      <UniqueIdentifier>{652e6301-6ab4-43ca-beb3-f921c10d216f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Object\NPC">
+      <UniqueIdentifier>{5f157378-f0e1-419c-97d8-192efbf5f7b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -116,13 +122,7 @@
     <ClCompile Include="Source\Door.cpp">
       <Filter>Source Files\Object\Solid</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Slime.cpp">
-      <Filter>Source Files\Object\Solid</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Bullet.cpp">
-      <Filter>Source Files\Object\Solid</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Object.cpp">
       <Filter>Source Files\Object\Solid</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGameOver.cpp">
@@ -152,11 +152,20 @@
     <ClCompile Include="Source\ObjectCollider.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Tdummy.cpp">
-      <Filter>Source Files\Object\Solid</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PowerUP.cpp">
       <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tdummy.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Slime.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,16 +241,10 @@
     <ClInclude Include="Source\ObjectInteractor.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Object.h">
-      <Filter>Header Files\Object\Solid</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Rock.h">
       <Filter>Header Files\Object\Solid</Filter>
     </ClInclude>
     <ClInclude Include="Source\Door.h">
-      <Filter>Header Files\Object\Solid</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Slime.h">
       <Filter>Header Files\Object\Solid</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bullet.h">
@@ -271,11 +274,20 @@
     <ClInclude Include="Source\ObjectCollider.h">
       <Filter>Header Files\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Tdummy.h">
-      <Filter>Header Files\Object\Solid</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PowerUp.h">
       <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tdummy.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Slime.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC.h">
+      <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

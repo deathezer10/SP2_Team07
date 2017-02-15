@@ -7,7 +7,7 @@ unsigned Slime::slimeCount = 0;
 
 
 
-Slime::Slime(Scene* scene, Vector3 pos) : Object(scene, pos) {
+Slime::Slime(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	type = Scene::GEO_SLIME;
 	scale = 0.5f;
 	slimeCount++;

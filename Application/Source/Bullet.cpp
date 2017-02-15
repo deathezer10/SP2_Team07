@@ -2,6 +2,7 @@
 #include <iterator>
 #include "Scene.h"
 #include "Bullet.h"
+#include "NPC.h"
 
 using std::map;
 
@@ -29,27 +30,27 @@ void Bullet::checkInteract() {
 		return;
 	}
 
-	std::multimap<td_OBJ_TYPE, Object*> vec = _scene->objBuilder.objInteractor._objects;
+	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
 
-	for (map<td_OBJ_TYPE, Object*>::iterator it = vec.begin(); it != vec.end(); ++it) {
+	for (map<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
 		Object* temp = it->second;
 
-		// Rock collision
-		if (temp->type == Scene::GEO_ROCK1 && !dynamic_cast<Rock*>(temp)->_isHarvested) {
+		// NPC bullet collision
+		if ((temp->position - position).Length() < _interactDistance) {
 
-			if ((temp->position - position).Length() < _interactDistance) {
-				temp->scale -= 2 * _scene->_dt; // Reduce size of rock when collided
+			NPC* npc = dynamic_cast<NPC*>(temp);
+			Vector3 pushAway = (npc->position - _scene->camera.position).Normalized();
+			pushAway *= 5; // multiply the unit vector by 5 so we can push him further
 
-				// Destroy the rock when it gets too small
-				if (temp->scale <= 0.2f) {
-					_scene->objBuilder.destroyObject(temp);
-				}
-
-				// _scene->objBuilder.destroyObject(this); // remove this bullet on collision
-				return;
-			}
+			// Damage the enemy and then remove this bullet
+			//npc->position += pushAway;
+			npc->reduceHealth(5);
+			npc->reduceVelocity(10);
+			_scene->objBuilder.destroyObject(this);
+			return;
 		}
+
 
 	}
 

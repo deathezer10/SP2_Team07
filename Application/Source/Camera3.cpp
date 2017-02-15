@@ -213,11 +213,10 @@ void Camera3::Update(double dt) {
 	}
 
 	// Bullet logic
-	if (typeid(*_scene) == typeid(Assignment03))
-		shootBullet();
+	shootBullet();
 }
 
-void Camera3::shootBullet(){
+void Camera3::shootBullet() {
 
 	if (Application::IsKeyPressed(MK_LBUTTON)) {
 
@@ -246,4 +245,24 @@ void Camera3::Reset() {
 	yaw = -90.0f;
 	pitch = 0.0f;
 	roll = 0.0f;
+}
+
+void Camera3::setBarrage(float speed, float duration) {
+
+	_nextBarrageResetTime = _elapsedTime + duration;
+
+	if (_elapsedTime >= _nextBarrageResetTime) {
+
+	}
+
+}
+
+void Camera3::setSpeedImpulse(float speed, float duration) {
+
+	_nextVelocityResetTime = _elapsedTime + duration;
+
+	if (_elapsedTime >= _nextVelocityResetTime) {
+
+	}
+
 }

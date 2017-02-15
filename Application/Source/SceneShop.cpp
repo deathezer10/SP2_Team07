@@ -230,39 +230,6 @@ void SceneShop::Update(double dt) {
 		column = 3;
 	}
 
-	//Load in the save data
-	switch (column) {
-
-	case 0:
-		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_damage;
-		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_speed;
-		PlayerDataManager::getInstance()->getPlayerData()->FG6_Bullet_ROF;
-		PlayerDataManager::getInstance()->getPlayerData()->FG6_Shield_hp;
-		PlayerDataManager::getInstance()->getPlayerData()->FG6_shield_recharge_rate;
-		break;
-	case 1:
-		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_damage;
-		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_speed;
-		PlayerDataManager::getInstance()->getPlayerData()->SF1_Bullet_ROF;
-		PlayerDataManager::getInstance()->getPlayerData()->SF1_Shield_hp;
-		PlayerDataManager::getInstance()->getPlayerData()->SF1_shield_recharge_rate;
-		break;
-	case 2:
-		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_damage;
-		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_speed;
-		PlayerDataManager::getInstance()->getPlayerData()->DF6_Bullet_ROF;
-		PlayerDataManager::getInstance()->getPlayerData()->DF6_Shield_hp;
-		PlayerDataManager::getInstance()->getPlayerData()->DF6_shield_recharge_rate;
-		break;
-	case 3:
-		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_damage;
-		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_speed;
-		PlayerDataManager::getInstance()->getPlayerData()->A10_Bullet_ROF;
-		PlayerDataManager::getInstance()->getPlayerData()->A10_Shield_hp;
-		PlayerDataManager::getInstance()->getPlayerData()->A10_shield_recharge_rate;
-		break;
-	}
-
 	if (!Application::IsKeyPressed(VK_RETURN))
 	{
 		CanPress = true;
@@ -440,10 +407,10 @@ void SceneShop::Render() {
 	std::string option7 = "Option 6";
 
 	//Currency
-	std::string option8 = "Amount of money you have: ";
+	std::string option8 = "Money: $";
 	option8 += std::to_string(pData->currency);
 
-	option1 = (_menuSelected == 0) ? ">Name of ship: " : "Name of ship: ";
+	option1 = (_menuSelected == 0) ? ">Selected Ship: " : "Selected Ship: ";
 	option1 += ShipType[column];
 	option2 = (_menuSelected == 1) ? ">Bullet Damage: " : "Bullet Damage: ";
 	if (column == 0)

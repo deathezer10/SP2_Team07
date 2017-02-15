@@ -47,6 +47,8 @@ public:
 	const float bboxHeight = 1;
 	const float bboxDepth = 2;
 
+	void setBarrage(float speed, float duration);
+	void setSpeedImpulse(float speed, float duration);
 	void setVelocity(float speed){ currentVelocity = speed; };
 
 
@@ -99,6 +101,8 @@ private:
 
 	double _elapsedTime = 0;
 	double _nextShootTime = 0;
+	double _nextVelocityResetTime = 0;
+	double _nextBarrageResetTime = 0;
 
 	// Bullet shooting logic
 	void shootBullet();

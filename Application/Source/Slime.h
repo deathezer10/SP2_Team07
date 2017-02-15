@@ -2,11 +2,11 @@
 #define SLIME_H
 
 
-#include "Object.h"
+#include "NPC.h"
 
 
 // Enemy Slime that moves towards player and damages him upon contact
-class Slime : public Object {
+class Slime : public NPC {
 	
 public:
 	Slime(Scene* scene, Vector3 pos);

@@ -210,7 +210,7 @@ void Assignment03::Init() {
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* myrock = new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20)));
-		myrock->setCollision(true);
+		myrock->setCollision(false);
 		myrock->getCollider().setBoundingBoxSize(Vector3(2, 2, 2));
 		objBuilder.createObject(myrock);
 	}

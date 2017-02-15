@@ -100,6 +100,7 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\NPC.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\ObjectBuilder.cpp" />
     <ClCompile Include="Source\ObjectCollider.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="Source\Material.h" />
     <ClInclude Include="Source\Mesh.h" />
     <ClInclude Include="Source\MeshBuilder.h" />
+    <ClInclude Include="Source\NPC.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectBuilder.h" />
     <ClInclude Include="Source\ObjectCollider.h" />

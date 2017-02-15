@@ -16,7 +16,7 @@ PlayerDataManager *PlayerDataManager::_instance = 0;
 PlayerDataManager* PlayerDataManager::getInstance() {
 	if (!_instance) {
 		_instance = new PlayerDataManager();
-		_instance->LoadPlayerData(); // first time loading
+		_instance->LoadPlayerData(); // load data on first init
 	}
 	return _instance;
 }
@@ -28,9 +28,19 @@ PlayerDataManager::PlayerDataManager() {
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0
+		0, 0, 0, 0, 0,
+		0, 0, 0
 
 	};
+
+	pStatData = {
+
+		0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0,
+
+	};
+
 }
 
 
@@ -85,6 +95,11 @@ void PlayerDataManager::LoadPlayerData() {
 		pData.A10_Shield_hp = v[25];
 		pData.A10_shield_recharge_rate = v[26];
 
+		pData.currentFighter = v[27];
+
+	}
+	else {
+		std::cout << "Load playerData failed, unable to open file to load" << std::endl;
 	}
 }
 
@@ -123,14 +138,21 @@ void PlayerDataManager::SaveData() {
 		myfile << "A10_bullet_speed" << '|' << pData.A10_Bullet_speed << "\n";
 		myfile << "A10_Bullet_rof" << '|' << pData.A10_Bullet_ROF << "\n";
 		myfile << "A10_" << '|' << pData.A10_Shield_hp << "\n";
-		myfile << "A10_shield_recharge " << '|' << pData.A10_shield_recharge_rate << "\n";
+		myfile << "A10_shield_recharge" << '|' << pData.A10_shield_recharge_rate << "\n";
 
+		myfile << "currentFighter" << '|' << pData.currentFighter << "\n";
 		myfile.close();
 	}
 	else {
-		std::cout << "save failed, unable to open file to save";
-
+		std::cout << "Save playerData failed, unable to open file to save" << std::endl;
 	}
+
+	// Update player Stats according to changes
+	// TODO UPDATE STATE ACCORDINGLY
+
 }
 
 
+void PlayerDataManager::ResetPlayerStat() {
+	// TODO RESET STATE
+}

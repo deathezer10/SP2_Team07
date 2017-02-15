@@ -215,7 +215,7 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new SceneShop()); // Change Scene
 				break;
 			case 2:
-				//glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+				glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Flag game to exit
 				break;
 			}
 		}

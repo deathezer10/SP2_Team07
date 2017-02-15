@@ -18,8 +18,8 @@ public:
 
 private:
     const float _interactDistance = 1.f;
-    const float _bulletSpeed = 10.0f;
-	const float _bulletMaxDistance = 10.0f;
+    float _bulletSpeed = 50.f;
+	const float _bulletMaxDistance = 100.0f;
 	
 	Vector3 _startingPosition;
 	Vector3 _direction;

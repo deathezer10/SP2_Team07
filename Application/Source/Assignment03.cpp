@@ -126,7 +126,8 @@ void Assignment03::Init() {
 	meshList[GEO_FLOOR]->material.kShininess = 0.5f;
 	meshList[GEO_FLOOR]->textureID = LoadTGA("Image/moonfloor.tga", true, true);
 
-	meshList[GEO_BULLET] = MeshBuilder::GenerateSphere("GEO_BULLET", Color(.12f, .18f, .32f), 16, 16, 0.15f);
+	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
+	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
@@ -209,7 +210,7 @@ void Assignment03::Init() {
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* myrock = new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20)));
-		myrock->setCollision(false);
+		myrock->setCollision(true);
 		myrock->getCollider().setBoundingBoxSize(Vector3(2, 2, 2));
 		objBuilder.createObject(myrock);
 	}
@@ -218,7 +219,7 @@ void Assignment03::Init() {
 
 	// Create interactable rocks
 	for (size_t i = 0; i < slimeAmount; i++) {
-		objBuilder.createObject(new Slime(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))));
+		objBuilder.createObject(new Slime(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))), td_OBJ_TYPE::TYPE_ENEMY);
 	}
 
 	objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
@@ -277,14 +278,6 @@ void Assignment03::Update(double dt) {
 	float* armRotY = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightArmY];
 
 
-	// Shoot bullet on left click
-	if (Application::IsKeyPressed(MK_LBUTTON) && !charManager.isRockPickedUp) {
-
-		if (_elapsedTime >= nextShootTime) {
-			objBuilder.createObject(new Bullet(this, camera.getPosition()));
-			nextShootTime = _elapsedTime + shootCooldown;
-		}
-	}
 
 	static bool canGodmodePress = true;
 
@@ -310,8 +303,8 @@ void Assignment03::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-					 camera.target.x, camera.target.y, camera.target.z,
-					 camera.up.x, camera.up.y, camera.up.z);
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -480,6 +473,7 @@ void Assignment03::Render() {
 
 	}
 	modelStack.PopMatrix();
+
 
 
 	// Character Transform
@@ -732,7 +726,6 @@ void Assignment03::Exit() {
 		}
 	}
 
-	objBuilder.objInteractor.~ObjectInteractor();
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 	glDeleteProgram(m_programID);
 }

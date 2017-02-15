@@ -223,7 +223,7 @@ void Camera3::shootBullet(){
 
 		if (_elapsedTime >= _nextShootTime) {
 			_scene->objBuilder.createObject(new Bullet(_scene, position));
-			_nextShootTime = _elapsedTime + 0.05;
+			_nextShootTime = _elapsedTime + 0.3;
 		}
 	}
 

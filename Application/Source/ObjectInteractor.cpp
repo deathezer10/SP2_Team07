@@ -8,7 +8,7 @@ ObjectInteractor::ObjectInteractor() {
 ObjectInteractor::~ObjectInteractor() {
 	if (_objects.size()) {
 		for (auto &i : _objects)
-			delete i;
+			delete i.second;
 	}
 	_objects.clear();
 }
@@ -19,16 +19,18 @@ void ObjectInteractor::updateInteraction() {
 
 	for (objIterator; objIterator != _objects.end();) {
 
-		if ((*objIterator)->isCollidable()) {
+		Object* temp = objIterator->second;
+
+		if (temp->isCollidable()) {
 			Vector3 gg;
-			if ((*objIterator)->getCollider().checkCollision((*objIterator)->_scene->camera.getCollider(), &gg)) {
+			if (temp->getCollider().checkCollision(temp->_scene->camera.getCollider(), &gg)) {
 				gg.Normalize();
-				(*objIterator)->_scene->camera.position += gg;
-				(*objIterator)->_scene->camera.target += gg;
+				temp->_scene->camera.position += gg;
+				temp->_scene->camera.target += gg;
 			}
 		}
 
-		(*objIterator)->checkInteract();
+		temp->checkInteract();
 
 		if (!_iteratorUpdated) {
 			++objIterator;
@@ -43,7 +45,7 @@ void ObjectInteractor::updateInteraction() {
 }
 
 
-void ObjectInteractor::validateIterator(std::vector<Object*>::iterator it) {
+void ObjectInteractor::validateIterator(std::map<td_OBJ_TYPE, Object*>::iterator it) {
 	objIterator = it;
 	_iteratorUpdated = true;
 }

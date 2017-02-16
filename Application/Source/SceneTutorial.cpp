@@ -118,14 +118,9 @@ void SceneTutorial::Init() {
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
 
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0, 0, 0), 250.f, 250.f, 50); // Original: 250, 250, 50
-	meshList[GEO_FLOOR]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
-	meshList[GEO_FLOOR]->material.kDiffuse.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_FLOOR]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_FLOOR]->material.kShininess = 0.5f;
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Image/moonfloor.tga", true, true);
-
-	meshList[GEO_BULLET] = MeshBuilder::GenerateSphere("GEO_BULLET", Color(.12f, .18f, .32f), 16, 16, 0.15f);
+	
+	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
+	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
@@ -146,20 +141,17 @@ void SceneTutorial::Init() {
 	meshList[GEO_SLIME] = MeshBuilder::GenerateOBJ("slime", "OBJ/slime.obj");
 	meshList[GEO_SLIME]->textureID = LoadTGA("Image/slime.tga");
 
-	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/spaceship.obj");
-	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/spaceship.tga");
+	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
+	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/fG6.tga");
 
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("building", "OBJ/building.obj");
-	meshList[GEO_BUILDING]->textureID = LoadTGA("Image/building.tga");
+	meshList[GEO_REGEN] = MeshBuilder::GenerateOBJ("regen", "OBJ/regen.obj");
+	meshList[GEO_REGEN]->textureID = LoadTGA("Image/regen.tga");
 
-	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("table", "OBJ/table.obj");
-	meshList[GEO_TABLE]->textureID = LoadTGA("Image/table.tga");
+	meshList[GEO_SPEED] = MeshBuilder::GenerateOBJ("speed", "OBJ/speed.obj");
+	meshList[GEO_SPEED]->textureID = LoadTGA("Image/speed.tga");
 
-	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("chair", "OBJ/chair.obj");
-	meshList[GEO_CHAIR]->textureID = LoadTGA("Image/chair.tga");
-
-	meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ/door.obj");
-	meshList[GEO_DOOR]->textureID = LoadTGA("Image/door.tga");
+	meshList[GEO_BARRAGE] = MeshBuilder::GenerateOBJ("barrage", "OBJ/barrage.obj");
+	meshList[GEO_BARRAGE]->textureID = LoadTGA("Image/barrage.tga");
 
 	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/crate.obj");
 	meshList[GEO_CRATE]->textureID = LoadTGA("Image/crate.tga");
@@ -179,7 +171,7 @@ void SceneTutorial::Init() {
 	light[0].type = Light::LIGHT_SPOT;
 	light[0].position.Set(0, 10, 5);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 0;
+	light[0].power = 2;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -192,8 +184,8 @@ void SceneTutorial::Init() {
 	// Lighting 2
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 10, -5);
-	light[1].color.Set(0, 0.0f, 1.0f);
-	light[1].power = 0.5f;
+	light[1].color.Set(1.0f, 1.0f, 1.0f);
+	light[1].power = 2.0f;
 
 
 	// Light 1
@@ -310,7 +302,7 @@ void SceneTutorial::Update(double dt) {
 
 	case 1:
 		if (objectspawned==false)
-			{
+			{//power up spawning
 				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
 				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
 				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
@@ -367,7 +359,7 @@ void SceneTutorial::Render() {
 
 	RenderSkybox();
 
-	RenderMesh(meshList[GEO_AXES], false);
+	//RenderMesh(meshList[GEO_AXES], false);
 
 
 	modelStack.PushMatrix();
@@ -375,9 +367,7 @@ void SceneTutorial::Render() {
 	RenderMesh(meshList[GEO_LIGHTBALL], false);
 	modelStack.PopMatrix();
 
-	modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_FLOOR], true);
-	modelStack.PopMatrix();
+
 
 	modelStack.PushMatrix();
 	modelStack.Translate(20, 4, -10);
@@ -387,118 +377,7 @@ void SceneTutorial::Render() {
 	modelStack.PopMatrix();
 
 
-	// Lamp
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 10);
-	modelStack.Rotate(-90, 0, 1, 0);
-	RenderMesh(meshList[GEO_LAMP], true);
-
-	{
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -20);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -10);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 0);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 10);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 20);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-	}
-
-	modelStack.PopMatrix();
-
-	// Building
-	modelStack.PushMatrix();
-	{
-		glDisable(GL_CULL_FACE); // Stop culling temporarily
-		modelStack.Translate(0, 0, -15);
-		modelStack.Scale(0.5f, 0.5f, 0.5f);
-		RenderMesh(meshList[GEO_BUILDING], true);
-		glEnable(GL_CULL_FACE); // Restore culling
-
-		// Table & Chairs
-		{
-			modelStack.PushMatrix();
-			modelStack.Scale(0.1f, 0.1f, 0.1f);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMesh(meshList[GEO_TABLE], true);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(-20, 0, 0);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(20, 0, 0);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, -35);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 35);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-			}
-			modelStack.PopMatrix();
-		}
-
-		// Crates
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(8, 0, 0);
-			modelStack.Scale(0.4f, 0.4f, 0.4f);
-			RenderMesh(meshList[GEO_CRATE], true);
-
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, -5);
-				modelStack.Rotate(60, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 5);
-				modelStack.Rotate(-45, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 4, 0);
-				modelStack.Rotate(45, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-			}
-
-			modelStack.PopMatrix();
-		}
-
-	}
-	modelStack.PopMatrix();
+	
 
 
 	// Character Transform
@@ -507,7 +386,7 @@ void SceneTutorial::Render() {
 	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
 	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
 	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
-	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	//modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 	objBuilder.renderObjects();
@@ -529,6 +408,9 @@ void SceneTutorial::Render() {
 	std::ostringstream yaw;
 	yaw << "Yaw: " << camera.getYaw();
 	textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	std::ostringstream velocity;
+	velocity << "Current Velocity: " << camera.getCurrentVelocity();
+	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 
 	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
@@ -553,15 +435,7 @@ void SceneTutorial::Render() {
 	}
 
 
-	std::ostringstream score;
-	score << "Rocks remaining: " << (10 - charManager.getCurrentScore());
-
-	textManager.renderTextOnScreen(UIManager::Text(score.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_RIGHT));
-
-	std::ostringstream slimes;
-	slimes << "Slimes Remaining: " << Slime::slimeCount;
-
-	textManager.renderTextOnScreen(UIManager::Text(slimes.str(), (Slime::slimeCount <= 0) ? Color(1, 1, 1) : Color(0, 1, 0), UIManager::ANCHOR_TOP_RIGHT));
+	
 
 	std::ostringstream godmode;
 	godmode << "Godmode: Enabled";

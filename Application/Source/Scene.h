@@ -42,6 +42,9 @@ public:
 		GEO_BULLET,
 		GEO_RING,
 		GEO_CUBE,
+		GEO_SPEED,
+		GEO_BARRAGE,
+		GEO_REGEN,
 		NUM_GEOMETRY
 	};
 

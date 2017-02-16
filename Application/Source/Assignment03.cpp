@@ -137,8 +137,8 @@ void Assignment03::Init() {
 	meshList[GEO_SLIME] = MeshBuilder::GenerateOBJ("slime", "OBJ/slime.obj");
 	meshList[GEO_SLIME]->textureID = LoadTGA("Image/slime.tga");
 
-	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/spaceship.obj");
-	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/spaceship.tga");
+	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/sf1.obj");
+	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/sf1.tga");
 
 	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("building", "OBJ/building.obj");
 	meshList[GEO_BUILDING]->textureID = LoadTGA("Image/building.tga");
@@ -152,8 +152,8 @@ void Assignment03::Init() {
 	meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ/door.obj");
 	meshList[GEO_DOOR]->textureID = LoadTGA("Image/door.tga");
 
-	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/crate.obj");
-	meshList[GEO_CRATE]->textureID = LoadTGA("Image/crate.tga");
+	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/regen.obj");
+	meshList[GEO_CRATE]->textureID = LoadTGA("Image/regen.tga");
 
 	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("lamp", "OBJ/lamp.obj");
 	meshList[GEO_LAMP]->textureID = LoadTGA("Image/lamp.tga");
@@ -482,7 +482,7 @@ void Assignment03::Render() {
 	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
 	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
 	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
-	modelStack.Scale(0.1f, 0.1f, 0.1f);
+	//modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 

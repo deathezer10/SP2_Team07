@@ -14,6 +14,7 @@ public:
 
 	virtual void checkInteract();
 	virtual void interact();
+	virtual void render();
 	static int RingCount;
 	const float _interactDistance = 4.0f;
 

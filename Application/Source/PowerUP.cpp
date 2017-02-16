@@ -4,7 +4,7 @@
 
 
 PowerUp::PowerUp(Scene* scene, Vector3 pos,int powerType) : Object(scene, pos) {
-	type = Scene::GEO_CUBE;
+	type = Scene::GEO_NONE;
 	powertype = powerType;
 };
 void PowerUp::checkInteract()
@@ -44,4 +44,46 @@ void PowerUp::checkInteract()
 }
 void PowerUp::interact()
 {
+}
+
+void PowerUp::render() {
+
+
+		_scene->modelStack.PushMatrix();
+		_scene->modelStack.Translate(position.x, position.y, position.z);
+		_scene->modelStack.Rotate(rotationY, 0, 1, 0);
+		_scene->modelStack.Rotate(rotationX, 0, 0, 1);
+		_scene->modelStack.Rotate(rotationZ, 1, 0, 0);
+		_scene->modelStack.Scale(scale, scale, scale);
+
+	switch (powertype)
+	{
+	case 0:
+	{
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_SPEED], true);
+
+		break;
+	}
+	case 1:
+	{
+		
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_BARRAGE], true);
+
+		break;
+	}
+	case 2:
+	{
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_REGEN], true);
+
+		break;
+	}
+	}
+
+
+		_scene->modelStack.PopMatrix();
+
+
+
+	
+
 }

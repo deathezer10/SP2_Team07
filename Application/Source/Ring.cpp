@@ -12,6 +12,9 @@ Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 };
 void Ring::checkInteract()
 {
+	Vector3 distance = (position - _scene->camera.position);
+	rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x)) ;
+
 	if ((position - _scene->camera.position).Length() < _interactDistance)
 	{
 		_scene->objBuilder.destroyObject(this);

@@ -127,7 +127,6 @@ public:
 	ObjectBuilder objBuilder;
 	Camera3 camera;
 
-
 	void RenderMesh(Mesh *mesh, bool enableLight);
 
 };

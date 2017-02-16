@@ -372,6 +372,8 @@ void SceneShop::Update(double dt) {
 		CanPress = false;
 	}
 
+	PlayerStat* gg = PlayerDataManager::getInstance()->getPlayerStats();
+	PlayerStat* gg2 = PlayerDataManager::getInstance()->getPlayerStats();
 }
 
 void SceneShop::Render() {
@@ -568,9 +570,9 @@ void SceneShop::Render() {
 void SceneShop::RenderSkybox() {
 
 	modelStack.PushMatrix();
-
+	
 	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-
+	
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -1000);
 	modelStack.Rotate(90, 1, 0, 0);

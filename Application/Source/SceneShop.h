@@ -44,7 +44,7 @@ private:
 	
 	void RenderSkybox();
 	
-	PlayerData* pData;
+	PlayerSaveData* pData;
 
 	Application* _app;
 

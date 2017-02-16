@@ -98,10 +98,7 @@ void SceneTutorial::Init() {
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball1", Color(1, 1, 1), 16, 16, 0.25f);
-	meshList[GEO_LIGHTBALL2] = MeshBuilder::GenerateSphere("lightball2", Color(0, 0, 1), 16, 16, 0.25f);
-
+	
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -119,8 +116,7 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
-
-
+	
 	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 
@@ -132,9 +128,6 @@ void SceneTutorial::Init() {
 	meshList[GEO_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CUBE]->material.kShininess = 1.0f;
-
-	meshList[GEO_SLIME] = MeshBuilder::GenerateOBJ("slime", "OBJ/slime.obj");
-	meshList[GEO_SLIME]->textureID = LoadTGA("Image/slime.tga");
 
 	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
 	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/fG6.tga");
@@ -333,14 +326,7 @@ void SceneTutorial::Render() {
 	RenderSkybox();
 
 	//RenderMesh(meshList[GEO_AXES], false);
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-
+	
 
 	modelStack.PushMatrix();
 	modelStack.Translate(20, 4, -10);
@@ -348,10 +334,7 @@ void SceneTutorial::Render() {
 	modelStack.Scale(.8f, .8f, .8f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
-
-
-
-
+	
 
 	// Character Transform
 	modelStack.PushMatrix();

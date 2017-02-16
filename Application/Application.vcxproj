@@ -84,16 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\AnimMetabee.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Assignment03.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
-    <ClCompile Include="Source\CharacterAnimator.cpp" />
-    <ClCompile Include="Source\CharacterManager.cpp" />
-    <ClCompile Include="Source\CharacterRenderer.cpp" />
     <ClCompile Include="Source\Door.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -106,6 +102,7 @@
     <ClCompile Include="Source\ObjectCollider.cpp" />
     <ClCompile Include="Source\ObjectInteractor.cpp" />
     <ClCompile Include="Source\PlayerDataManager.cpp" />
+    <ClCompile Include="Source\PlayerStats.cpp" />
     <ClCompile Include="Source\PowerUP.cpp" />
     <ClCompile Include="Source\Ring.cpp" />
     <ClCompile Include="Source\Rock.cpp" />
@@ -122,19 +119,14 @@
     <ClCompile Include="Source\Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\AnimMetabee.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Assignment03.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Camera2.h" />
     <ClInclude Include="Source\Camera3.h" />
-    <ClInclude Include="Source\CharacterAnimator.h" />
-    <ClInclude Include="Source\CharacterManager.h" />
-    <ClInclude Include="Source\CharacterRenderer.h" />
     <ClInclude Include="Source\Door.h" />
     <ClInclude Include="Source\Geometry.h" />
-    <ClInclude Include="Source\IAnimation.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />
@@ -147,6 +139,7 @@
     <ClInclude Include="Source\ObjectCollider.h" />
     <ClInclude Include="Source\ObjectInteractor.h" />
     <ClInclude Include="Source\PlayerDataManager.h" />
+    <ClInclude Include="Source\PlayerStats.h" />
     <ClInclude Include="Source\PowerUp.h" />
     <ClInclude Include="Source\Ring.h" />
     <ClInclude Include="Source\Rock.h" />
@@ -162,6 +155,9 @@
     <ClInclude Include="Source\UIManager.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

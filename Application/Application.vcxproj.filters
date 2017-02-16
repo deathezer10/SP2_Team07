@@ -15,18 +15,6 @@
     <Filter Include="Header Files\Scene">
       <UniqueIdentifier>{e1e35b8e-9f9e-4dd2-af63-66cfb674fafb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Character">
-      <UniqueIdentifier>{3c0e87c1-1940-4fc9-9364-4d4eaf5c975f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Character">
-      <UniqueIdentifier>{16748e3c-01f2-4575-a789-f74d546aa69e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Character\Animation">
-      <UniqueIdentifier>{7a065078-2c4b-4f5b-b758-7195fae16be9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Character\Animation">
-      <UniqueIdentifier>{ed2ecfc4-f4f8-4b62-bb51-e03a8b865b29}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\User Interface">
       <UniqueIdentifier>{866ba9c4-bc11-405c-a047-339a2442daf8}</UniqueIdentifier>
     </Filter>
@@ -82,18 +70,6 @@
     </ClCompile>
     <ClCompile Include="Source\Utility.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharacterManager.cpp">
-      <Filter>Source Files\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharacterRenderer.cpp">
-      <Filter>Source Files\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CharacterAnimator.cpp">
-      <Filter>Source Files\Character\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\AnimMetabee.cpp">
-      <Filter>Source Files\Character\Animation</Filter>
     </ClCompile>
     <ClCompile Include="Source\LoadTGA.cpp">
       <Filter>Source Files</Filter>
@@ -167,6 +143,9 @@
     <ClCompile Include="Source\ObjectCollider.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayerStats.cpp">
+      <Filter>Source Files\PlayerData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -202,23 +181,8 @@
     <ClInclude Include="Source\Utility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CharacterManager.h">
-      <Filter>Header Files\Character</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Geometry.h">
       <Filter>Header Files\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharacterRenderer.h">
-      <Filter>Header Files\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CharacterAnimator.h">
-      <Filter>Header Files\Character\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\IAnimation.h">
-      <Filter>Header Files\Character\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\AnimMetabee.h">
-      <Filter>Header Files\Character\Animation</Filter>
     </ClInclude>
     <ClInclude Include="Source\LoadTGA.h">
       <Filter>Header Files</Filter>
@@ -289,5 +253,11 @@
     <ClInclude Include="Source\NPC.h">
       <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlayerStats.h">
+      <Filter>Header Files\PlayerData</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

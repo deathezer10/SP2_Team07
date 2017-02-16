@@ -22,12 +22,8 @@ public:
 	const float skyboxSize = 1001.0f; // Distance of each skybox textures from the origin
 	const float skyboxBound = 1000.f; // Clamps position of the Camera to this value
 
-	Vector3& getTarget() { return target; };
-	Vector3& getUp() { return up; };
-	Vector3& getRight(){ return right; };
-	Vector3& getPosition() { return position; };
-	Vector3& getView(){ return view; };
 	Vector3& getRight() { return right; };
+	Vector3& getView(){ return view; };
 	float& getYaw() { return yaw; };
 	float& getPitch() { return pitch; };
 	float& getRoll() { return roll; };
@@ -38,11 +34,12 @@ public:
 	double& getMouseMovedX() { return mouseMovedX; };
 	double& getMouseMovedY() { return mouseMovedY; };
 
+	// Disable mouse controls
 	void disableMouse() { isMouseEnabled = false; };
+
+	// Enable mouse controls
 	void enableMouse() { isMouseEnabled = true; };
-
-	void ResetCursorVariables();
-
+	
 	// Player Box Collider
 	const float bboxWidth = 2;
 	const float bboxHeight = 1;
@@ -72,7 +69,7 @@ private:
 	float velocityBrakingRate = 20.0f;
 	float velocityMax = 100;
 	float velocityMin = -10;
-	bool wasMovingForward = true;
+	bool wasMovingForward = true; // Was the camera accelerating?
 
 	// Enable Mouse Horizontal Control
 	bool mouseYawEnabled = false;
@@ -84,6 +81,9 @@ private:
 	// Distance the Cursor moved from the current and last frame. Used to determine mouse sensitivity
 	float mouseMovedDistanceX;
 	float mouseMovedDistanceY;
+
+	// Reset the helper variables of this class back to default
+	void ResetCursorVariables();
 
 	// Updates the direction in which the cursor has moved
 	void updateCursor(double dt);

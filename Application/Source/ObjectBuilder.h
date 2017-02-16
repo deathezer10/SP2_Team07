@@ -3,13 +3,10 @@
 
 #include "ObjectInteractor.h"
 
-
-
 typedef ObjectInteractor::OBJ_TYPE td_OBJ_TYPE;
 
-class Assignment03; // forward declaration
 
-// Provide abstraction for creating interatable Objects in the Scene
+// Provide abstraction for creating interactable Objects in the Scene
 class ObjectBuilder {
 
 public:
@@ -26,10 +23,6 @@ public:
 	void renderObjects();
 
 	ObjectInteractor objInteractor;
-
-private:
-	Assignment03* _scene;
-
-
+	
 };
 #endif

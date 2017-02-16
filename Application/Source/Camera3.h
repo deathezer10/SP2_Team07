@@ -66,9 +66,9 @@ private:
 
 	// Current speed of the camera
 	float currentVelocity = 1;
-	float velocityAccelerationRate = 1.0f;
-	float velocityDecelerationRate = 2.0f;
-	float velocityMax = 50;
+	float velocityAccelerationRate = 3.0f;
+	float velocityDecelerationRate = 5.0f;
+	float velocityMax = 100;
 	float velocityMin = -10;
 	bool wasMovingForward = true;
 

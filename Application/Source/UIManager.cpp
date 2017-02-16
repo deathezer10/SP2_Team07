@@ -7,6 +7,7 @@
 
 #include "UIManager.h"
 #include "Assignment03.h"
+#include "Scene.h"
 
 
 
@@ -16,7 +17,7 @@ UIManager::UIManager(Scene* scene) {
 	_scene = scene;
 
 	textMesh = &(_scene->meshList[Scene::GEO_TEXT]);
-	
+
 	anchor_offset[ANCHOR_BOT_LEFT] = 0;
 	anchor_offset[ANCHOR_BOT_RIGHT] = 0;
 	anchor_offset[ANCHOR_TOP_LEFT] = (Application::_windowHeight / 10) - 2;
@@ -62,7 +63,7 @@ void UIManager::dequeueText() {
 }
 
 void UIManager::renderTextOnScreen(Text text) {
-	
+
 	if (!textMesh || (*textMesh)->textureID <= 0) //Proper error check
 		return;
 
@@ -175,6 +176,28 @@ void UIManager::renderTextOnScreen(Text text) {
 	_scene->modelStack.PopMatrix();
 
 	glEnable(GL_DEPTH_TEST);
+}
+
+void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale) {
+	// glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -100, 100); //size of screen UI
+	_scene->projectionStack.PushMatrix();
+	_scene->projectionStack.LoadMatrix(ortho);
+	_scene->viewStack.PushMatrix();
+	_scene->viewStack.LoadIdentity(); //No need camera for ortho mode
+	_scene->modelStack.PushMatrix();
+	_scene->modelStack.LoadIdentity();
+	_scene->modelStack.Translate((float)x, (float)y, 1);
+	_scene->modelStack.Rotate(rotate.x, 1, 0, 0);
+	_scene->modelStack.Rotate(rotate.y, 0, 1, 0);
+	_scene->modelStack.Rotate(rotate.z, 0, 0, 1);
+	_scene->modelStack.Scale(scale.x, scale.y, scale.z);
+	_scene->RenderMesh(mesh, false); //UI should not have light
+	_scene->projectionStack.PopMatrix();
+	_scene->viewStack.PopMatrix();
+	_scene->modelStack.PopMatrix();
+	// glEnable(GL_DEPTH_TEST);
 }
 
 

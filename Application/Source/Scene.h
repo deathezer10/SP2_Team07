@@ -36,6 +36,16 @@ public:
 		GEO_TABLE,
 		GEO_CHAIR,
 		GEO_SPACESHIP,
+
+		// Space fighter mesh
+		GEO_FG6,
+		GEO_SF1,
+		GEO_DF6,
+		GEO_A10,
+		GEO_XF2,
+		GEO_XF4,
+		GEO_D01,
+
 		GEO_SLIME,
 		GEO_ROCK1,
 		GEO_TDUMMY,

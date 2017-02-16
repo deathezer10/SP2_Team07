@@ -7,7 +7,7 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "UIManager.h"
-
+#include "Assignment03.h"
 #include "PlayerDataManager.h"
 
 #include <vector>
@@ -42,11 +42,11 @@ private:
 
 	Light light[1];
 
-	
+
 
 	void RenderSkybox();
 
-	
+
 
 	PlayerData* pData;
 
@@ -59,7 +59,7 @@ private:
 	int row = 0;
 	bool CanPress;
 
-
+	Vector3 rotShip;
 
 };
 

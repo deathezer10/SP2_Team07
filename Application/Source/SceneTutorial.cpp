@@ -10,6 +10,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "Tdummy.h"
 #include <sstream>
 
 
@@ -118,7 +119,7 @@ void SceneTutorial::Init() {
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
 
-	
+
 	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
@@ -143,6 +144,9 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
 	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/fG6.tga");
+
+	meshList[GEO_TDUMMY] = MeshBuilder::GenerateOBJ("enemy", "OBJ/drone.obj");
+	meshList[GEO_TDUMMY]->textureID = LoadTGA("Image/drone.tga");
 
 	meshList[GEO_REGEN] = MeshBuilder::GenerateOBJ("regen", "OBJ/regen.obj");
 	meshList[GEO_REGEN]->textureID = LoadTGA("Image/regen.tga");
@@ -206,12 +210,15 @@ void SceneTutorial::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	//const size_t rockAmount = 50;
+	const size_t rockAmount = 500;
+	const int randRange = 250;
 
 	//// Create interactable rocks
-	//for (size_t i = 0; i < rockAmount; i++) {
-	//	objBuilder.createObject(new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20))));
-	//}
+	for (size_t i = 0; i < rockAmount; i++) {
+		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(false);
+		objBuilder.createObject(gg);
+	}
 
 	//const size_t slimeAmount = 10;
 
@@ -224,6 +231,7 @@ void SceneTutorial::Init() {
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 
 	//objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
+
 
 
 }
@@ -301,18 +309,18 @@ void SceneTutorial::Update(double dt) {
 		break;
 
 	case 1:
-		if (objectspawned==false)
-			{//power up spawning
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
-				objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
-				objectspawned = true;
-			}
-				break;
+		if (objectspawned == false)
+		{//power up spawning
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
+			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
+			objectspawned = true;
 		}
+		break;
+	}
 }
 
 void SceneTutorial::Render() {
@@ -377,7 +385,7 @@ void SceneTutorial::Render() {
 	modelStack.PopMatrix();
 
 
-	
+
 
 
 	// Character Transform
@@ -410,7 +418,7 @@ void SceneTutorial::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 	std::ostringstream velocity;
 	velocity << "Current Velocity: " << camera.getCurrentVelocity();
-	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
 	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
@@ -435,7 +443,7 @@ void SceneTutorial::Render() {
 	}
 
 
-	
+
 
 	std::ostringstream godmode;
 	godmode << "Godmode: Enabled";

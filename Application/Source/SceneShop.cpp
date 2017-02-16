@@ -12,6 +12,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "Assignment03.h"
+#include "UIManager.h"
 #include <sstream>
 
 
@@ -120,6 +121,21 @@ void SceneShop::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
+	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/crate.obj");
+	meshList[GEO_CRATE]->textureID = LoadTGA("Image/crate.tga");
+
+	//OBJ SPACESHIP
+	meshList[GEO_FG6] = MeshBuilder::GenerateOBJ("crate", "OBJ/fG6.obj");
+	meshList[GEO_FG6]->textureID = LoadTGA("Image/fG6.tga");
+
+	meshList[GEO_SF1] = MeshBuilder::GenerateOBJ("crate", "OBJ/sf1.obj");
+	meshList[GEO_SF1]->textureID = LoadTGA("Image/sf1.tga");
+
+	meshList[GEO_DF6] = MeshBuilder::GenerateOBJ("crate", "OBJ/df6.obj");
+	meshList[GEO_DF6]->textureID = LoadTGA("Image/df6.tga");
+
+	meshList[GEO_A10] = MeshBuilder::GenerateOBJ("crate", "OBJ/a10.obj");
+	meshList[GEO_A10]->textureID = LoadTGA("Image/a10.tga");
 
 	// Lighting 1
 	light[0].position.Set(4, 4, 0);
@@ -234,7 +250,7 @@ void SceneShop::Update(double dt) {
 	{
 		CanPress = true;
 	}
-	if (Application::IsKeyPressed(VK_RETURN)&& CanPress) {
+	if (Application::IsKeyPressed(VK_RETURN) && CanPress) {
 
 		switch (_menuSelected) {
 		case 0:
@@ -244,110 +260,110 @@ void SceneShop::Update(double dt) {
 			{
 				pData->FG6_Bullet_damage++;
 				pData->currency -= 5;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 1)
 			{
 				pData->SF1_Bullet_damage++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 2)
 			{
 				pData->DF6_Bullet_damage++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 3)
 			{
 				pData->A10_Bullet_damage++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			break;
 		case 2:
 			if (column == 0)
 			{
 				pData->FG6_Bullet_speed++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 1)
 			{
 				pData->SF1_Bullet_speed++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 2)
 			{
 				pData->DF6_Bullet_speed++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 3)
 			{
 				pData->A10_Bullet_speed++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			break;
 		case 3:
 			if (column == 0)
 			{
 				pData->FG6_Bullet_ROF++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 1)
 			{
 				pData->SF1_Bullet_ROF++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 2)
 			{
 				pData->DF6_Bullet_ROF++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 3)
 			{
 				pData->A10_Bullet_ROF++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			break;
 		case 4:
 			if (column == 0)
 			{
 				pData->FG6_Shield_hp++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 1)
 			{
 				pData->SF1_Shield_hp++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 2)
 			{
 				pData->DF6_Shield_hp++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 3)
 			{
 				pData->A10_Shield_hp++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			break;
 		case 5:
 			if (column == 0)
 			{
 				pData->FG6_shield_recharge_rate++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 1)
 			{
 				pData->SF1_shield_recharge_rate++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 2)
 			{
 				pData->DF6_shield_recharge_rate++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			if (column == 3)
 			{
 				pData->A10_shield_recharge_rate++;
-				PlayerDataManager::getInstance()->SaveData();
+				PlayerDataManager::getInstance()->SaveData(column);
 			}
 			break;
 		case 6:
@@ -504,6 +520,32 @@ void SceneShop::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	rotShip.y += 45 * _dt;
+	int spaceShipX = Application::_windowWidth / 20;
+	int spaceShipY = Application::_windowHeight / 15;
+
+	Vector3 scaleShip(35, 35, 35);
+
+
+	modelStack.PushMatrix();
+	switch (column)
+	{
+	case 0:
+		textManager.RenderMeshOnScreen(meshList[GEO_FG6], spaceShipX, spaceShipY, rotShip, scaleShip);
+		break;
+	case 1:
+		textManager.RenderMeshOnScreen(meshList[GEO_SF1], spaceShipX, spaceShipY, rotShip, scaleShip);
+		break;
+	case 2:
+		textManager.RenderMeshOnScreen(meshList[GEO_DF6], spaceShipX, spaceShipY, rotShip, scaleShip);
+		break;
+	case 3:
+		textManager.RenderMeshOnScreen(meshList[GEO_A10], spaceShipX, spaceShipY, rotShip, scaleShip);
+		break;
+	}
+	
+	modelStack.PopMatrix();
+
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -575,6 +617,9 @@ void SceneShop::RenderSkybox() {
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();
+
+
+
 
 	modelStack.PopMatrix();
 

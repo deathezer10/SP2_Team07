@@ -9,7 +9,7 @@ using std::map;
 Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
 	type = Scene::GEO_NONE;
 
-	position.y -= 0.5f;
+	position.y -= 1.0f;
 
 	rotationZ = -scene->camera.getPitch();
 	rotationY = -scene->camera.getYaw() - 90;

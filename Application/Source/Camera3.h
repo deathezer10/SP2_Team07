@@ -24,6 +24,7 @@ public:
 
 	Vector3& getTarget() { return target; };
 	Vector3& getUp() { return up; };
+	Vector3& getRight(){ return right; };
 	Vector3& getPosition() { return position; };
 	Vector3& getView(){ return view; };
 	Vector3& getRight() { return right; };
@@ -66,8 +67,9 @@ private:
 
 	// Current speed of the camera
 	float currentVelocity = 1;
-	float velocityAccelerationRate = 3.0f;
+	float velocityAccelerationRate = 10.0f;
 	float velocityDecelerationRate = 5.0f;
+	float velocityBrakingRate = 20.0f;
 	float velocityMax = 100;
 	float velocityMin = -10;
 	bool wasMovingForward = true;

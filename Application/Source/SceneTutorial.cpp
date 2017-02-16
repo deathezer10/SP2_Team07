@@ -123,16 +123,9 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
-	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kShininess = 1.0f;
 
-	meshList[GEO_RING] = MeshBuilder::GenerateTorus("RING", Color(.12f, .18f, .32f), 30, 18, 2, 0.3f);
-	meshList[GEO_RING]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
-	meshList[GEO_RING]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_RING]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_RING]->material.kShininess = 1.0f;
+	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
+	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
 
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("powerup", Color(.12f, .18f, .32f));
 	meshList[GEO_CUBE]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
@@ -157,13 +150,7 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_BARRAGE] = MeshBuilder::GenerateOBJ("barrage", "OBJ/barrage.obj");
 	meshList[GEO_BARRAGE]->textureID = LoadTGA("Image/barrage.tga");
-
-	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/crate.obj");
-	meshList[GEO_CRATE]->textureID = LoadTGA("Image/crate.tga");
-
-	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("lamp", "OBJ/lamp.obj");
-	meshList[GEO_LAMP]->textureID = LoadTGA("Image/lamp.tga");
-
+	
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
 
@@ -190,7 +177,7 @@ void SceneTutorial::Init() {
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 10, -5);
 	light[1].color.Set(1.0f, 1.0f, 1.0f);
-	light[1].power = 2.0f;
+	light[1].power = 1.0f;
 
 
 	// Light 1
@@ -211,30 +198,25 @@ void SceneTutorial::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 500;
-	const int randRange = 250;
+	const size_t rockAmount = 250;
+	const float randRange = 250;
 
-	//// Create interactable rocks
+	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
 		gg->setCollision(false);
 		objBuilder.createObject(gg);
 	}
 
-	//const size_t slimeAmount = 10;
 
-	//// Create interactable rocks
+	//// Create interactable Rings
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
 	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-
-	//objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
-
-
-
+	
 }
 
 void SceneTutorial::Update(double dt) {
@@ -381,11 +363,12 @@ void SceneTutorial::Render() {
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 	objBuilder.renderObjects();
+	
 
 
 	// Debugging Text
 	std::ostringstream fps;
-	fps << "FPS: " << (1 / _dt);
+	fps << "FPS: " << (int)(1 / _dt);
 	textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 	std::ostringstream targ;
 	targ << "Target: " << camera.getTarget().toString();
@@ -426,9 +409,6 @@ void SceneTutorial::Render() {
 	}
 	
 	textManager.dequeueText();
-
-	RenderMeshOnScreen(meshList[GEO_CRATE], 5, 5, 1, 1);
-
 	textManager.reset();
 }
 

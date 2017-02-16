@@ -94,7 +94,7 @@ void Camera3::Update(double dt) {
 		ResetCursorVariables();
 	}
 
-	float CAMERA_SPEED = currentVelocity * (float)dt;
+	float CAMERA_SPEED = (float)dt;
 	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * (float)dt;
 	float rotationSpeed = 1.0f * (float)dt;
 
@@ -111,11 +111,6 @@ void Camera3::Update(double dt) {
 		}
 	}
 
-	position.x += view.x * CAMERA_SPEED;
-	position.y += view.y * CAMERA_SPEED;
-	position.z += view.z * CAMERA_SPEED;
-	target = position + view;
-
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
 		wasMovingForward = true;
@@ -123,12 +118,8 @@ void Camera3::Update(double dt) {
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
 		wasMovingForward = false;
-		currentVelocity -= velocityDecelerationRate * (float)dt;
-		CAMERA_SPEED /= 3;
-		position.x -= view.x * CAMERA_SPEED;
-		position.y -= view.y * CAMERA_SPEED;
-		position.z -= view.z * CAMERA_SPEED;
-		target = position + view;
+		currentVelocity -= velocityBrakingRate * (float)dt;
+		// TODO: Plane move forward on mvoe
 	}
 	else {
 		currentVelocity -= velocityDecelerationRate * (float)dt;
@@ -204,6 +195,15 @@ void Camera3::Update(double dt) {
 		view = rotation * view;
 		target = position + view;
 	}
+
+
+	CAMERA_SPEED *= currentVelocity;
+
+	// Move the Camera according to the velocity
+	position.x += view.x * CAMERA_SPEED;
+	position.y += view.y * CAMERA_SPEED;
+	position.z += view.z * CAMERA_SPEED;
+	target = position + view;
 
 	// Clamping max current velocity
 	if (Application::IsKeyPressed('S'))

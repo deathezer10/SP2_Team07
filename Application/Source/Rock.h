@@ -18,7 +18,6 @@ public:
 	const float _interactDistance = 10.0f;
 
 private:
-	float _defaultScale = 1;
 
 };
 #endif

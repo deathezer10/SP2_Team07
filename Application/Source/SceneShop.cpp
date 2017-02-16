@@ -121,9 +121,6 @@ void SceneShop::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
-	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/crate.obj");
-	meshList[GEO_CRATE]->textureID = LoadTGA("Image/crate.tga");
-
 	//OBJ SPACESHIP
 	meshList[GEO_FG6] = MeshBuilder::GenerateOBJ("crate", "OBJ/fG6.obj");
 	meshList[GEO_FG6]->textureID = LoadTGA("Image/fG6.tga");
@@ -520,7 +517,8 @@ void SceneShop::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	rotShip.y += 45 * _dt;
+
+	rotShip.y += 45 * (float)_dt;
 	int spaceShipX = Application::_windowWidth / 20;
 	int spaceShipY = Application::_windowHeight / 15;
 

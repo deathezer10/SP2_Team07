@@ -98,9 +98,6 @@ void Assignment03::Init() {
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
 
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball1", Color(1, 1, 1), 16, 16, 0.25f);
-	meshList[GEO_LIGHTBALL2] = MeshBuilder::GenerateSphere("lightball2", Color(0, 0, 1), 16, 16, 0.25f);
-
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -119,44 +116,17 @@ void Assignment03::Init() {
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
 
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0, 0, 0), 250.f, 250.f, 50); // Original: 250, 250, 50
-	meshList[GEO_FLOOR]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
-	meshList[GEO_FLOOR]->material.kDiffuse.Set(0.6f, 0.6f, 0.6f);
-	meshList[GEO_FLOOR]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_FLOOR]->material.kShininess = 0.5f;
-	meshList[GEO_FLOOR]->textureID = LoadTGA("Image/moonfloor.tga", true, true);
-
 	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
-	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_BULLET]->material.kShininess = 1.0f;
-
 
 	meshList[GEO_SLIME] = MeshBuilder::GenerateOBJ("slime", "OBJ/slime.obj");
 	meshList[GEO_SLIME]->textureID = LoadTGA("Image/slime.tga");
 
-	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/sf1.obj");
-	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/sf1.tga");
-
-	meshList[GEO_BUILDING] = MeshBuilder::GenerateOBJ("building", "OBJ/building.obj");
-	meshList[GEO_BUILDING]->textureID = LoadTGA("Image/building.tga");
-
-	meshList[GEO_TABLE] = MeshBuilder::GenerateOBJ("table", "OBJ/table.obj");
-	meshList[GEO_TABLE]->textureID = LoadTGA("Image/table.tga");
-
-	meshList[GEO_CHAIR] = MeshBuilder::GenerateOBJ("chair", "OBJ/chair.obj");
-	meshList[GEO_CHAIR]->textureID = LoadTGA("Image/chair.tga");
-
-	meshList[GEO_DOOR] = MeshBuilder::GenerateOBJ("door", "OBJ/door.obj");
-	meshList[GEO_DOOR]->textureID = LoadTGA("Image/door.tga");
+	meshList[GEO_FG6] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
+	meshList[GEO_FG6]->textureID = LoadTGA("Image/fG6.tga");
 
 	meshList[GEO_CRATE] = MeshBuilder::GenerateOBJ("crate", "OBJ/regen.obj");
 	meshList[GEO_CRATE]->textureID = LoadTGA("Image/regen.tga");
-
-	meshList[GEO_LAMP] = MeshBuilder::GenerateOBJ("lamp", "OBJ/lamp.obj");
-	meshList[GEO_LAMP]->textureID = LoadTGA("Image/lamp.tga");
 
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
@@ -183,8 +153,8 @@ void Assignment03::Init() {
 	// Lighting 2
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 10, -5);
-	light[1].color.Set(0, 0.0f, 1.0f);
-	light[1].power = 0.5f;
+	light[1].color.Set(1.0f, 1.0f, 1.0f);
+	light[1].power = 1.f;
 
 
 	// Light 1
@@ -205,24 +175,15 @@ void Assignment03::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 50;
+	const size_t rockAmount = 250;
+	const float randRange = 250;
 
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
-		Rock* myrock = new Rock(this, Vector3(Math::RandFloatMinMax(-20, 20), 0, Math::RandFloatMinMax(-20, 20)));
-		myrock->setCollision(false);
-		myrock->getCollider().setBoundingBoxSize(Vector3(2, 2, 2));
-		objBuilder.createObject(myrock);
+		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(false);
+		objBuilder.createObject(gg);
 	}
-
-	const size_t slimeAmount = 10;
-
-	// Create interactable rocks
-	for (size_t i = 0; i < slimeAmount; i++) {
-		objBuilder.createObject(new Slime(this, Vector3(Math::RandFloatMinMax(-50, 50), 0, Math::RandFloatMinMax(-50, 50))), td_OBJ_TYPE::TYPE_ENEMY);
-	}
-
-	objBuilder.createObject(new Door(this, Vector3(0, 0, -15)));
 
 
 }
@@ -264,7 +225,7 @@ void Assignment03::Update(double dt) {
 	std::ostringstream strFlashlight;
 	strFlashlight << "[Q] Flashlight: " << ((light[0].power) ? "On" : "Off");
 	textManager.queueRenderText(UIManager::Text(strFlashlight.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
-	
+
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -314,142 +275,7 @@ void Assignment03::Render() {
 	}
 
 	RenderSkybox();
-
-	RenderMesh(meshList[GEO_AXES], false);
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(light[0].position.x, light[0].position.y, light[0].position.z);
-	RenderMesh(meshList[GEO_LIGHTBALL], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	RenderMesh(meshList[GEO_FLOOR], true);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 4, -10);
-	modelStack.Rotate(30, 0, 1, 0);
-	modelStack.Scale(.8f, .8f, .8f);
-	RenderMesh(meshList[GEO_SPACESHIP], true);
-	modelStack.PopMatrix();
-
-
-	// Lamp
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 10);
-	modelStack.Rotate(-90, 0, 1, 0);
-	RenderMesh(meshList[GEO_LAMP], true);
-
-	{
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -20);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, -10);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 0);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 10);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-		modelStack.PushMatrix();
-		modelStack.Translate(0, 0, 20);
-		RenderMesh(meshList[GEO_LAMP], true);
-		modelStack.PopMatrix();
-
-	}
-
-	modelStack.PopMatrix();
-
-	// Building
-	modelStack.PushMatrix();
-	{
-		glDisable(GL_CULL_FACE); // Stop culling temporarily
-		modelStack.Translate(0, 0, -15);
-		modelStack.Scale(0.5f, 0.5f, 0.5f);
-		RenderMesh(meshList[GEO_BUILDING], true);
-		glEnable(GL_CULL_FACE); // Restore culling
-
-		// Table & Chairs
-		{
-			modelStack.PushMatrix();
-			modelStack.Scale(0.1f, 0.1f, 0.1f);
-			modelStack.Rotate(90, 0, 1, 0);
-			RenderMesh(meshList[GEO_TABLE], true);
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(-20, 0, 0);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(20, 0, 0);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, -35);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 35);
-				modelStack.Scale(25, 25, 25);
-				RenderMesh(meshList[GEO_CHAIR], true);
-				modelStack.PopMatrix();
-			}
-			modelStack.PopMatrix();
-		}
-
-		// Crates
-		{
-			modelStack.PushMatrix();
-			modelStack.Translate(8, 0, 0);
-			modelStack.Scale(0.4f, 0.4f, 0.4f);
-			RenderMesh(meshList[GEO_CRATE], true);
-
-			{
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, -5);
-				modelStack.Rotate(60, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 0, 5);
-				modelStack.Rotate(-45, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-
-				modelStack.PushMatrix();
-				modelStack.Translate(0, 4, 0);
-				modelStack.Rotate(45, 0, 1, 0);
-				RenderMesh(meshList[GEO_CRATE], true);
-				modelStack.PopMatrix();
-			}
-
-			modelStack.PopMatrix();
-		}
-
-	}
-	modelStack.PopMatrix();
-
-
-
+	
 	// Character Transform
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.target.x, camera.target.y - 0.5f, camera.target.z);
@@ -457,14 +283,13 @@ void Assignment03::Render() {
 	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
 	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
 	//modelStack.Scale(0.1f, 0.1f, 0.1f);
-	RenderMesh(meshList[GEO_SPACESHIP], true);
+	RenderMesh(meshList[GEO_FG6], true);
 	modelStack.PopMatrix();
-
 
 	objBuilder.renderObjects();
 
-
 	// Debugging Text
+
 	std::ostringstream fps;
 	fps << "FPS: " << (1 / _dt);
 	textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
@@ -490,11 +315,8 @@ void Assignment03::Render() {
 
 	textManager.renderTextOnScreen(UIManager::Text("<Quest>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text("Collect [10] Rocks back to the Space Bunker's Table", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	
+
 	textManager.dequeueText();
-
-	RenderMeshOnScreen(meshList[GEO_CRATE], 5, 5, 1, 1);
-
 	textManager.reset();
 }
 
@@ -552,28 +374,6 @@ void Assignment03::RenderSkybox() {
 	modelStack.PopMatrix();
 
 }
-
-void Assignment03::RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, float sizey) {
-	glDisable(GL_DEPTH_TEST);
-	Mtx44 ortho;
-	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -10, 10); //size of screen UI
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	modelStack.Translate((float)x, (float)y, 1);
-	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); //UI should not have light
-	projectionStack.PopMatrix();
-	viewStack.PopMatrix();
-	modelStack.PopMatrix();
-	glEnable(GL_DEPTH_TEST);
-
-}
-
-
 
 void Assignment03::Exit() {
 

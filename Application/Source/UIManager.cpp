@@ -10,8 +10,6 @@
 
 
 
-
-
 UIManager::UIManager(Scene* scene) {
 
 	_scene = scene;

@@ -29,15 +29,8 @@ public:
 private:
 	Light light[2];
 
-	void RenderCharacter();
-
-	void RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, float sizey);
 	void RenderSkybox();
-
-	const float shootCooldown = 0.05f; // Cooldown between each bullet shot
-
-	bool pendingReset = false;
-	float nextShootTime = 0;
+	
 
 };
 #endif

@@ -149,9 +149,6 @@
     <ClCompile Include="Source\SceneTutorial.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ObjectCollider.cpp">
-      <Filter>Source Files\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PowerUP.cpp">
       <Filter>Source Files\Object\Solid</Filter>
     </ClCompile>
@@ -166,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="Source\NPC.cpp">
       <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectCollider.cpp">
+      <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

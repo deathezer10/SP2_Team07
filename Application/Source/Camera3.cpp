@@ -168,9 +168,9 @@ void Camera3::Update(double dt) {
 	}
 
 	// Positional bounds check
-	position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
-	position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
-	position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
+	//position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
+	//position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
+	//position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
 
 	// Limit maximum Roll angle
 	roll = Math::Clamp(roll, -rollAngleLimit, rollAngleLimit);

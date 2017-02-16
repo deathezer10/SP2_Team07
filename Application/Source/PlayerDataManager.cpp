@@ -38,6 +38,7 @@ PlayerDataManager::PlayerDataManager() {
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
+		0,
 
 	};
 
@@ -97,16 +98,90 @@ void PlayerDataManager::LoadPlayerData() {
 
 		pData.currentFighter = v[27];
 
+		switch (pData.currentFighter){
+
+		case 0:
+			current_bullet_damage = v[7];
+			current_bullet_speed = v[8];
+			current_bullet_cooldown = v[9];
+			current_shield_capacity = v[10];
+			current_shield_recoveryRate = v[11];
+			break;
+
+		case 1:
+			current_bullet_damage = v[12];
+			current_bullet_speed = v[13];
+			current_bullet_cooldown = v[14];
+			current_shield_capacity = v[15];
+			current_shield_recoveryRate = v[16];
+			break;
+
+		case 2:
+			current_bullet_damage = v[17];
+			current_bullet_speed = v[18];
+			current_bullet_cooldown = v[19];
+			current_shield_capacity = v[20];
+			current_shield_recoveryRate = v[21];
+			break;
+
+		case 3:
+			current_bullet_damage = v[22];
+			current_bullet_speed = v[23];
+			current_bullet_cooldown = v[24];
+			current_shield_capacity = v[25];
+			current_shield_recoveryRate = v[26];
+			break;
+
+		}
+
 	}
 	else {
 		std::cout << "Load playerData failed, unable to open file to load" << std::endl;
 	}
 }
 
-void PlayerDataManager::SaveData() {
+void PlayerDataManager::SaveData(int currentFighter) {
+
+	switch (currentFighter){
+
+	case 0:
+		current_bullet_damage = pData.FG6_Bullet_damage;
+		current_bullet_speed = pData.FG6_Bullet_speed;
+		current_bullet_cooldown = pData.FG6_Bullet_ROF;
+		current_shield_capacity = pData.FG6_Shield_hp;
+		current_shield_recoveryRate = pData.FG6_shield_recharge_rate;
+		break;
+
+	case 1:
+		current_bullet_damage = pData.SF1_Bullet_damage;
+		current_bullet_speed = pData.SF1_Bullet_speed;
+		current_bullet_cooldown = pData.SF1_Bullet_ROF;
+		current_shield_capacity = pData.SF1_Shield_hp;
+		current_shield_recoveryRate = pData.SF1_shield_recharge_rate;
+		break;
+
+	case 2:
+		current_bullet_damage = pData.DF6_Bullet_damage;
+		current_bullet_speed = pData.DF6_Bullet_speed;
+		current_bullet_cooldown = pData.DF6_Bullet_ROF;
+		current_shield_capacity = pData.DF6_Shield_hp;
+		current_shield_recoveryRate = pData.DF6_shield_recharge_rate;
+		break;
+
+	case 3:
+		current_bullet_damage = pData.A10_Bullet_damage;
+		current_bullet_speed = pData.A10_Bullet_speed;
+		current_bullet_cooldown = pData.A10_Bullet_ROF;
+		current_shield_capacity = pData.A10_Shield_hp;
+		current_shield_recoveryRate = pData.A10_shield_recharge_rate;
+		break;
+
+	}
+
 	std::ofstream myfile("PlayerData", ios::trunc);// open file and replace old data with new
 	if (myfile.is_open()) {
 
+		//myfile << "" << '|' << pData. << "\n"; format template
 		myfile << "currency" << '|' << pData.currency << '\n';
 		myfile << "level01" << '|' << pData.level01_unlocked << '\n';
 		myfile << "level02" << '|' << pData.level02_unlocked << '\n';
@@ -114,7 +189,6 @@ void PlayerDataManager::SaveData() {
 		myfile << "SF-1" << '|' << pData.SF1 << '\n';
 		myfile << "DF-6" << '|' << pData.DF6 << '\n';
 		myfile << "A-10" << '|' << pData.A10 << '\n';
-		//myfile << "" << '|' << pData. << "\n"; format template
 
 		myfile << "FG6_bullet_damage" << '|' << pData.FG6_Bullet_damage << "\n";
 		myfile << "FG6_bullet_speed" << '|' << pData.FG6_Bullet_speed << "\n";
@@ -137,7 +211,7 @@ void PlayerDataManager::SaveData() {
 		myfile << "A10_bullet_damage" << '|' << pData.A10_Bullet_damage << "\n";
 		myfile << "A10_bullet_speed" << '|' << pData.A10_Bullet_speed << "\n";
 		myfile << "A10_Bullet_rof" << '|' << pData.A10_Bullet_ROF << "\n";
-		myfile << "A10_" << '|' << pData.A10_Shield_hp << "\n";
+		myfile << "A10_shield_level" << '|' << pData.A10_Shield_hp << "\n";
 		myfile << "A10_shield_recharge" << '|' << pData.A10_shield_recharge_rate << "\n";
 
 		myfile << "currentFighter" << '|' << pData.currentFighter << "\n";
@@ -148,11 +222,38 @@ void PlayerDataManager::SaveData() {
 	}
 
 	// Update player Stats according to changes
-	// TODO UPDATE STATE ACCORDINGLY
+	ResetPlayerStat();
+
+	std::cout << "Save playerData failed, unable to open file to save" << std::endl;
 
 }
 
 
 void PlayerDataManager::ResetPlayerStat() {
-	// TODO RESET STATE
+	pStatData = {
+
+		Ship_Stats[(3 * pData.currentFighter)], // Base Speed
+		Ship_Stats[(3 * pData.currentFighter) + 1], // Base Damage
+		Ship_Stats[(3 * pData.currentFighter) + 2], // Base Shield
+
+		// Initial Stats
+		Ship_Stats[(3 * pData.currentFighter) + 1] + (current_bullet_damage * multiplier_bullet_damage), // Bullet Damage
+		base_bullet_speed + (current_bullet_speed * multiplier_bullet_speed), // Bullet Speed 
+		base_bullet_cooldown + (current_bullet_cooldown * multiplier_bullet_cooldown), // Bullet Cooldown
+		Ship_Stats[(3 * pData.currentFighter) + 2] + (current_shield_capacity * multiplier_shield_capacity), // Shield Capacity
+		base_shield_recoveryrate + (current_shield_recoveryRate * multiplier_shield_recoveryRate), // Shield Recovery
+
+		// Current Stats
+		Ship_Stats[(3 * pData.currentFighter) + 1] + (current_bullet_damage * multiplier_bullet_damage), // Bullet Damage
+		base_bullet_speed + (current_bullet_speed * multiplier_bullet_speed), // Bullet Speed 
+		base_bullet_cooldown + (current_bullet_cooldown * multiplier_bullet_cooldown), // Bullet Cooldown
+		Ship_Stats[(3 * pData.currentFighter) + 2] + (current_shield_capacity * multiplier_shield_capacity), // Shield Capacity
+		base_shield_recoveryrate + (current_shield_recoveryRate * multiplier_shield_recoveryRate), // Shield Recovery
+
+		pData.currentFighter,
+		default_health,
+		default_shield
+
+
+	};
 }

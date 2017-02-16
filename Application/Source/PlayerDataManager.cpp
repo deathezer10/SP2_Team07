@@ -138,6 +138,9 @@ void PlayerDataManager::LoadPlayerData() {
 	else {
 		std::cout << "Load playerData failed, unable to open file to load" << std::endl;
 	}
+
+	ResetPlayerStat();
+
 }
 
 void PlayerDataManager::SaveData(int currentFighter) {
@@ -223,9 +226,6 @@ void PlayerDataManager::SaveData(int currentFighter) {
 
 	// Update player Stats according to changes
 	ResetPlayerStat();
-
-	std::cout << "Save playerData failed, unable to open file to save" << std::endl;
-
 }
 
 

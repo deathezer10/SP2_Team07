@@ -37,7 +37,6 @@ void Slime::checkInteract() {
 	// Collided with player
 	if ((position - _scene->camera.getPosition()).Length() <= _interactDistance && _scene->_elapsedTime >= _NextDamageTime) {
 		_scene->textManager.queueRenderText(UIManager::Text("Ouch!", Color(1, 0, 0), UIManager::ANCHOR_CENTER_CENTER));
-		_scene->charManager.reduceHealth(_AttackDamage);
 		_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
 
 	}

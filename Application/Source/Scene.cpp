@@ -5,7 +5,6 @@
 #include "GLFW\glfw3.h"
 
 Scene::Scene() :
-charManager(this),
 textManager(this),
 camera(this){
 }

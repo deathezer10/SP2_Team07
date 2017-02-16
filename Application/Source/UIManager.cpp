@@ -5,9 +5,9 @@
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 
-#include "UIManager.h"
-#include "Assignment03.h"
 #include "Scene.h"
+#include "UIManager.h"
+
 
 
 
@@ -78,13 +78,13 @@ void UIManager::renderTextOnScreen(Text text) {
 	_scene->modelStack.PushMatrix();
 	_scene->modelStack.LoadIdentity(); //Reset modelStack
 
-	glUniform1i(_scene->m_parameters[U_TEXT_ENABLED], 1);
-	glUniform3fv(_scene->m_parameters[U_TEXT_COLOR], 1, &text.color.r);
-	glUniform1i(_scene->m_parameters[U_LIGHTENABLED], 0);
-	glUniform1i(_scene->m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
+	glUniform1i(_scene->m_parameters[Scene::U_TEXT_ENABLED], 1);
+	glUniform3fv(_scene->m_parameters[Scene::U_TEXT_COLOR], 1, &text.color.r);
+	glUniform1i(_scene->m_parameters[Scene::U_LIGHTENABLED], 0);
+	glUniform1i(_scene->m_parameters[Scene::U_COLOR_TEXTURE_ENABLED], 1);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, (*textMesh)->textureID);
-	glUniform1i(_scene->m_parameters[U_COLOR_TEXTURE], 0);
+	glUniform1i(_scene->m_parameters[Scene::U_COLOR_TEXTURE], 0);
 
 	// Width of the entire string
 	float totalWidth = 0;
@@ -159,13 +159,13 @@ void UIManager::renderTextOnScreen(Text text) {
 		prevWidth = currentFontWidth[text.value[i]] / 32.0f;
 
 		Mtx44 MVP = _scene->projectionStack.Top() * _scene->viewStack.Top() * _scene->modelStack.Top() * textStack.Top();
-		glUniformMatrix4fv(_scene->m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
+		glUniformMatrix4fv(_scene->m_parameters[Scene::U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
 		(*textMesh)->Render((unsigned)text.value[i] * 6, 6);
 	}
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	glUniform1i(_scene->m_parameters[U_TEXT_ENABLED], 0);
+	glUniform1i(_scene->m_parameters[Scene::U_TEXT_ENABLED], 0);
 
 	for (unsigned i = 0; i < stackCount; ++i) {
 		textStack.PopMatrix();

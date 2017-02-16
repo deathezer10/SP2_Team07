@@ -12,7 +12,7 @@
 
 
 // forward declaration
-class Assignment03;
+class Scene;
 
 
 // Provides functions to display of HUDs
@@ -65,13 +65,11 @@ public:
 
 	// Prints all the pending Text onto the screen
 	void dequeueText();
-
-
+	
 	//Render models onto the screen
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale);
 
 private:
-
 	Scene* _scene;
 
 	std::vector<unsigned> currentFontWidth;

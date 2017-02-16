@@ -1,7 +1,6 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "CharacterManager.h"
 #include "UIManager.h"
 #include "ObjectBuilder.h"
 #include "Camera3.h"
@@ -37,7 +36,7 @@ public:
 		GEO_CHAIR,
 		GEO_SPACESHIP,
 
-		// Space fighter mesh
+		// Space Fighter Meshes
 		GEO_FG6,
 		GEO_SF1,
 		GEO_DF6,
@@ -124,7 +123,6 @@ public:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 
-	CharacterManager charManager;
 	UIManager textManager;
 	ObjectBuilder objBuilder;
 	Camera3 camera;

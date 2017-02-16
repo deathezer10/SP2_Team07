@@ -247,7 +247,6 @@ void Assignment03::Update(double dt) {
 
 
 	camera.Update(dt);
-	charManager.getAnimator().getAnimMetabee().ProcessAnimation((float)dt);
 	objBuilder.objInteractor.updateInteraction();
 
 	static bool canPress = true;
@@ -265,32 +264,7 @@ void Assignment03::Update(double dt) {
 	std::ostringstream strFlashlight;
 	strFlashlight << "[Q] Flashlight: " << ((light[0].power) ? "On" : "Off");
 	textManager.queueRenderText(UIManager::Text(strFlashlight.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
-
-	std::ostringstream strHealth;
-	strHealth << "Health: " << charManager.getHealth();
-
-	textManager.queueRenderText(UIManager::Text(strHealth.str(), (charManager.getHealth() <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-
-	// Transforms for the hand animation when shooting
-	float* shoulderRotX = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightShoulderX];
-	float* shoulderRotY = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightShoulderY];
-	float* armRotX = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightArmX];
-	float* armRotY = &charManager.getAnimator().getAnimMetabee().transform_rotate_list[AnimMetabee::MTB_TRANSFORM_ROT::ROT_RightArmY];
-
-
-
-	static bool canGodmodePress = true;
-
-	// Godmode key
-	if (!Application::IsKeyPressed('C')) {
-		canGodmodePress = true;
-	}
-
-	if (Application::IsKeyPressed('C') && canGodmodePress) {
-		charManager.setGodMode(!charManager.isGodmodeEnabled());
-		canGodmodePress = false;
-	}
-
+	
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -516,24 +490,7 @@ void Assignment03::Render() {
 
 	textManager.renderTextOnScreen(UIManager::Text("<Quest>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text("Collect [10] Rocks back to the Space Bunker's Table", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-
-	std::ostringstream score;
-	score << "Rocks remaining: " << (10 - charManager.getCurrentScore());
-
-	textManager.renderTextOnScreen(UIManager::Text(score.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_RIGHT));
-
-	std::ostringstream slimes;
-	slimes << "Slimes Remaining: " << Slime::slimeCount;
-
-	textManager.renderTextOnScreen(UIManager::Text(slimes.str(), (Slime::slimeCount <= 0) ? Color(1, 1, 1) : Color(0, 1, 0), UIManager::ANCHOR_TOP_RIGHT));
-
-	std::ostringstream godmode;
-	godmode << "Godmode: Enabled";
-
-	if (charManager.isGodmodeEnabled())
-		textManager.renderTextOnScreen(UIManager::Text(godmode.str(), Color(0, 0, 1), UIManager::ANCHOR_CENTER_CENTER));
-
-
+	
 	textManager.dequeueText();
 
 	RenderMeshOnScreen(meshList[GEO_CRATE], 5, 5, 1, 1);
@@ -617,106 +574,6 @@ void Assignment03::RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, flo
 }
 
 
-
-void Assignment03::RenderCharacter() {
-
-	// Metabee
-	charManager.getAnimator().getAnimMetabee().popChest();
-	charManager.getRenderer().renderMtbChest(charManager.getAnimator().getAnimMetabee());
-
-	// Head
-	/*
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 2.25f, 0);
-
-	charManager.getAnimator().getAnimMetabee().popHead();
-	charManager.getRenderer().renderMtbHead();
-	modelStack.PopMatrix();
-	*/
-
-	// Abdomen
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.75f, 0);
-	charManager.getAnimator().getAnimMetabee().popAbdomen();
-	charManager.getRenderer().renderMtbAbdomen();
-	modelStack.PopMatrix();
-
-	// Left Arm
-	modelStack.PushMatrix();
-	modelStack.Translate(-1.75f, 0.5f, 0);
-	charManager.getAnimator().getAnimMetabee().popLeftShoulder();
-	charManager.getRenderer().renderMtbLeftShoulder(charManager.getAnimator().getAnimMetabee());
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popLeftArm();
-	charManager.getRenderer().renderMtbLeftArm();
-
-	// Bullets
-	modelStack.PushMatrix();
-	charManager.getAnimator().getAnimMetabee().popLeftBullet();
-	charManager.getRenderer().renderMtbLeftBullet();
-	modelStack.PopMatrix();
-
-	// Sword
-	modelStack.PushMatrix();
-	modelStack.Translate(0.25f, -1.75f, 0.25f);
-	modelStack.Rotate(90, 1, 0, 0);
-	charManager.getAnimator().getAnimMetabee().popSword();
-	if (charManager.getAnimator().getAnimMetabee().isSwordOut()) { // Only render sword if it's "out"
-		charManager.getRenderer().renderMtbSword();
-	}
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-
-	// Left Leg
-	modelStack.PushMatrix();
-	modelStack.Translate(-0.5f, -2.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popLeftThigh();
-	charManager.getRenderer().renderMtbLeftThigh();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popLeftFoot();
-	charManager.getRenderer().renderMtbLeftFoot();
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-
-	// Right Leg
-	modelStack.PushMatrix();
-	modelStack.Translate(0.5f, -2.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popRightThigh();
-	charManager.getRenderer().renderMtbLeftThigh();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popRightFoot();
-	charManager.getRenderer().renderMtbLeftFoot();
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-
-	// Right Arm
-	modelStack.PushMatrix();
-	modelStack.Translate(1.75f, 0.5f, 0);
-	modelStack.Mirror(1, 0, 0); // Flip the Arm
-	glCullFace(GL_FRONT); // Stop culling temporarily
-	charManager.getAnimator().getAnimMetabee().popRightShoulder();
-	charManager.getRenderer().renderMtbLeftShoulder(charManager.getAnimator().getAnimMetabee());
-
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1.25f, 0);
-	charManager.getAnimator().getAnimMetabee().popRightArm();
-	charManager.getRenderer().renderMtbLeftArm();
-	glCullFace(GL_BACK); // restore culling
-	modelStack.PopMatrix();
-	modelStack.PopMatrix();
-
-}
 
 void Assignment03::Exit() {
 

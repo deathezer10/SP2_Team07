@@ -147,6 +147,15 @@ void SceneTutorial::Init() {
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
 
+	meshList[GEO_ROCK2] = MeshBuilder::GenerateOBJ("rock2", "OBJ/Rock2.obj");
+	meshList[GEO_ROCK2]->textureID = LoadTGA("Image/Rock2.tga");
+
+	meshList[GEO_ROCK3] = MeshBuilder::GenerateOBJ("rock3", "OBJ/Rock3.obj");
+	meshList[GEO_ROCK3]->textureID = LoadTGA("Image/Rock3.tga");
+
+	meshList[GEO_ROCK4] = MeshBuilder::GenerateOBJ("rock4", "OBJ/Rock4.obj");
+	meshList[GEO_ROCK4]->textureID = LoadTGA("Image/Rock4.tga");
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");

@@ -14,7 +14,6 @@ public:
 
 	virtual void checkInteract();
 	virtual void interact();
-
 	const float _interactDistance = 10.0f;
 
 private:

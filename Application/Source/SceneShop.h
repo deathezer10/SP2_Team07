@@ -25,7 +25,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-	
+
 
 
 private:
@@ -42,9 +42,9 @@ private:
 	bool canChangeMenuBack = false;
 
 	Light light[1];
-	
+
 	void RenderSkybox();
-	
+
 	PlayerSaveData* pData;
 
 	Application* _app;
@@ -59,7 +59,7 @@ private:
 	Color enabledColour;
 
 	Vector3 rotShip;
-
+	
 };
 
 #endif

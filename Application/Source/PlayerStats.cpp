@@ -45,7 +45,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 
 	}
 
-	pStat.base_speed = Ship_Stats[(3 * currentFighter)];
+	pStat.base_speed = (float)Ship_Stats[(3 * currentFighter)];
 	pStat.base_damage = Ship_Stats[(3 * currentFighter) + 1];
 	pStat.base_shield = Ship_Stats[(3 * currentFighter) + 2];
 

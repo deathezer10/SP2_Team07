@@ -96,14 +96,14 @@ void PlayerDataManager::LoadPlayerData() {
 	}
 	else {
 		std::cout << "Load playerData failed, creating a new file" << std::endl;
-		SaveData(0);
+		SaveData();
 	}
 
 	ResetPlayerStats();
 
 }
 
-void PlayerDataManager::SaveData(int currentFighter) {
+void PlayerDataManager::SaveData() {
 
 	// Convert the loaded data into appropriate values
 
@@ -152,6 +152,28 @@ void PlayerDataManager::SaveData(int currentFighter) {
 
 	// Update player Stats according to changes
 	ResetPlayerStats();
+}
+
+
+ bool PlayerDataManager::isFighterUnlocked(int value){
+	switch (value){
+	case 0:
+		return true;
+		break;
+
+	case 1:
+		return (pSaveData.SF1);
+		break;
+
+	case 2:
+		return (pSaveData.DF6);
+		break;
+
+	case 3:
+		return (pSaveData.A10);
+		break;
+	}
+	return false;
 }
 
 

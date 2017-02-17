@@ -60,8 +60,7 @@ public:
 	static PlayerDataManager* getInstance();
 
 	// Flushes the PlayerData file and write pData into it
-	// Args 0: Current Space Fighter that the player is using
-	void SaveData(int currentFighter);
+	void SaveData();
 
 	// Load the PlayerData file and store it into a vector
 	void LoadPlayerData();
@@ -71,6 +70,9 @@ public:
 
 	// Get information about player purchased Upgrades
 	PlayerSaveData* getPlayerData() { return &pSaveData; };
+
+	// Returns true if the Fighter is unlocked
+	bool isFighterUnlocked(int value);
 
 	// Get information about player current stats
 	PlayerStat* PlayerDataManager::getPlayerStats() { return &pStat.getStatData(); }

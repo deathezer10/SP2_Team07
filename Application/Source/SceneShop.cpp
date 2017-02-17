@@ -251,6 +251,18 @@ void SceneShop::Update(double dt) {
 
 		switch (_menuSelected) {
 		case 0:
+			if (column == 1)
+			{
+				pData->SF1 = 1;
+			}
+			if (column == 2)
+			{
+				pData->DF6 = 1;
+			}
+			if (column == 3)
+			{
+				pData->A10 = 1;
+			}
 			break;
 		case 1:
 			if (column == 0 && pData->currency > 5)
@@ -259,17 +271,17 @@ void SceneShop::Update(double dt) {
 				pData->currency -= 5;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 1)
+			if (column == 1 && pData->SF1 ==1)
 			{
 				pData->SF1_Bullet_damage++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 2)
+			if (column == 2 && pData->DF6 == 1)
 			{
 				pData->DF6_Bullet_damage++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 3)
+			if (column == 3 && pData->A10 == 1)
 			{
 				pData->A10_Bullet_damage++;
 				PlayerDataManager::getInstance()->SaveData(column);
@@ -281,17 +293,17 @@ void SceneShop::Update(double dt) {
 				pData->FG6_Bullet_speed++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 1)
+			if (column == 1 && pData->SF1 == 1)
 			{
 				pData->SF1_Bullet_speed++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 2)
+			if (column == 2 && pData->DF6 == 1)
 			{
 				pData->DF6_Bullet_speed++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 3)
+			if (column == 3 && pData->A10 == 1)
 			{
 				pData->A10_Bullet_speed++;
 				PlayerDataManager::getInstance()->SaveData(column);
@@ -303,17 +315,17 @@ void SceneShop::Update(double dt) {
 				pData->FG6_Bullet_ROF++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 1)
+			if (column == 1 && pData->SF1 == 1)
 			{
 				pData->SF1_Bullet_ROF++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 2)
+			if (column == 2 && pData->DF6 == 1)
 			{
 				pData->DF6_Bullet_ROF++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 3)
+			if (column == 3 && pData->A10 == 1)
 			{
 				pData->A10_Bullet_ROF++;
 				PlayerDataManager::getInstance()->SaveData(column);
@@ -325,17 +337,17 @@ void SceneShop::Update(double dt) {
 				pData->FG6_Shield_hp++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 1)
+			if (column == 1 && pData->SF1 == 1)
 			{
 				pData->SF1_Shield_hp++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 2)
+			if (column == 2 && pData->DF6 == 1)
 			{
 				pData->DF6_Shield_hp++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 3)
+			if (column == 3 && pData->A10 == 1)
 			{
 				pData->A10_Shield_hp++;
 				PlayerDataManager::getInstance()->SaveData(column);
@@ -347,17 +359,17 @@ void SceneShop::Update(double dt) {
 				pData->FG6_shield_recharge_rate++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 1)
+			if (column == 1 && pData->SF1 == 1)
 			{
 				pData->SF1_shield_recharge_rate++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 2)
+			if (column == 2 && pData->DF6 == 1)
 			{
 				pData->DF6_shield_recharge_rate++;
 				PlayerDataManager::getInstance()->SaveData(column);
 			}
-			if (column == 3)
+			if (column == 3 && pData->A10 == 1)
 			{
 				pData->A10_shield_recharge_rate++;
 				PlayerDataManager::getInstance()->SaveData(column);
@@ -409,7 +421,7 @@ void SceneShop::Render() {
 
 
 	std::string newLine = "";
-	std::string title = "Welcome to the item shop";
+	std::string title = "Welcome to the Upgrade Shop";
 	//name
 	std::string option1 = "NAME";
 	//Upgrades
@@ -425,107 +437,97 @@ void SceneShop::Render() {
 	std::string option8 = "Money: $";
 	option8 += std::to_string(pData->currency);
 
-	option1 = (_menuSelected == 0) ? ">Selected Ship: " : "Selected Ship: ";
+	if (column == 0)
+	{
+	option1 = (_menuSelected == 0) ? ">Fighter: " : " Fighter: ";
+	enabledColour = Color(0, 1, 0);
+	}
+
+	//If ship not unlocked
+	if (column == 1 && pData->SF1 ==0)
+	{
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		enabledColour = Color(1, 0, 0);
+	}
+	if (column == 2 && pData->DF6 == 0)
+	{
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		enabledColour = Color(1, 0, 0);
+
+	}
+	if (column == 3 && pData->A10 == 0)
+	{
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		enabledColour = Color(1, 0, 0);
+	}
+	//if ship is unlocked
+	if (column == 1 && pData->SF1 == 1)
+	{
+		option1 = (_menuSelected == 0) ? ">Fighter: " : "Fighter: ";
+		enabledColour = Color(0, 1, 0);
+	}
+	if (column == 2 && pData->DF6 == 1)
+	{
+		option1 = (_menuSelected == 0) ? ">Fighter: " : "Fighter: ";
+		enabledColour = Color(0, 1, 0);
+	}
+	if (column == 3 && pData->A10 == 1)
+	{
+		option1 = (_menuSelected == 0) ? ">Fighter: " : "Fighter: ";
+		enabledColour = Color(0, 1, 0);
+	}
+	
 	option1 += ShipType[column];
-	option2 = (_menuSelected == 1) ? ">Bullet Damage: " : "Bullet Damage: ";
+	option2 = (_menuSelected == 1) ? ">Bullet Damage ($500): " : "Bullet Damage ($500): ";
+	option3 = (_menuSelected == 2) ? ">Bullet Speed ($200): " : "Bullet Speed ($200): ";
+	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire ($500): " : "Bullet Rate of Fire ($500): ";
+	option5 = (_menuSelected == 4) ? ">Shield Hp ($250): " : "Shield Hp ($250): ";
+	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate ($500): " : "Shield Recharge Rate ($500): ";
+	option7 = (_menuSelected == 6) ? ">Back" : "Back";
+
 	if (column == 0)
 	{
 		option2 += std::to_string(pData->FG6_Bullet_damage);
-	}
-	if (column == 1)
-	{
-		option2 += std::to_string(pData->SF1_Bullet_damage);
-	}
-	if (column == 2)
-	{
-		option2 += std::to_string(pData->DF6_Bullet_damage);
-	}
-	if (column == 3)
-	{
-		option2 += std::to_string(pData->A10_Bullet_damage);
-	}
-
-	option3 = (_menuSelected == 2) ? ">Bullet Speed: " : "Bullet Speed: ";
-	if (column == 0)
-	{
 		option3 += std::to_string(pData->FG6_Bullet_speed);
-	}
-	if (column == 1)
-	{
-		option3 += std::to_string(pData->SF1_Bullet_speed);
-	}
-	if (column == 2)
-	{
-		option3 += std::to_string(pData->DF6_Bullet_speed);
-	}
-	if (column == 3)
-	{
-		option3 += std::to_string(pData->A10_Bullet_speed);
-	}
-	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire:" : "Bullet Rate of Fire: ";
-	if (column == 0)
-	{
 		option4 += std::to_string(pData->FG6_Bullet_ROF);
-	}
-	if (column == 1)
-	{
-		option4 += std::to_string(pData->SF1_Bullet_ROF);
-	}
-	if (column == 2)
-	{
-		option4 += std::to_string(pData->DF6_Bullet_ROF);
-	}
-	if (column == 3)
-	{
-		option4 += std::to_string(pData->A10_Bullet_ROF);
-	}
-	option5 = (_menuSelected == 4) ? ">Shield Hp: " : "Shield Hp: ";
-	if (column == 0)
-	{
 		option5 += std::to_string(pData->FG6_Shield_hp);
-	}
-	if (column == 1)
-	{
-		option5 += std::to_string(pData->SF1_Shield_hp);
-	}
-	if (column == 2)
-	{
-		option5 += std::to_string(pData->DF6_Shield_hp);
-	}
-	if (column == 3)
-	{
-		option5 += std::to_string(pData->A10_Shield_hp);
-	}
-	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate:" : "Shield Recharge Rate: ";
-	if (column == 0)
-	{
 		option6 += std::to_string(pData->FG6_shield_recharge_rate);
 	}
-	if (column == 1)
+	else if (column == 1)
 	{
+		option2 += std::to_string(pData->SF1_Bullet_damage);
+		option3 += std::to_string(pData->SF1_Bullet_speed);
+		option4 += std::to_string(pData->SF1_Bullet_ROF);
+		option5 += std::to_string(pData->SF1_Shield_hp);
 		option6 += std::to_string(pData->SF1_shield_recharge_rate);
 	}
-	if (column == 2)
+	else if (column == 2)
 	{
+		option2 += std::to_string(pData->DF6_Bullet_damage);
+		option3 += std::to_string(pData->DF6_Bullet_speed);
+		option4 += std::to_string(pData->DF6_Bullet_ROF);
+		option5 += std::to_string(pData->DF6_Shield_hp);
 		option6 += std::to_string(pData->DF6_shield_recharge_rate);
 	}
-	if (column == 3)
+	else if (column == 3)
 	{
+		option2 += std::to_string(pData->A10_Bullet_damage);
+		option3 += std::to_string(pData->A10_Bullet_speed);
+		option4 += std::to_string(pData->A10_Bullet_ROF);
+		option5 += std::to_string(pData->A10_Shield_hp);
 		option6 += std::to_string(pData->A10_shield_recharge_rate);
 	}
-	option7 = (_menuSelected == 6) ? ">Back" : "Back";
 
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-	rotShip.y += 45 * (float)_dt;
+	rotShip.y += 45 * (float)_dt;   
 	int spaceShipX = Application::_windowWidth / 20;
 	int spaceShipY = Application::_windowHeight / 15;
 
 	Vector3 scaleShip(35, 35, 35);
-
 
 	modelStack.PushMatrix();
 	switch (column)
@@ -543,12 +545,12 @@ void SceneShop::Render() {
 		textManager.RenderMeshOnScreen(meshList[GEO_A10], spaceShipX, spaceShipY, rotShip, scaleShip);
 		break;
 	}
-	
+
 	modelStack.PopMatrix();
 
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(option1,enabledColour, UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -570,9 +572,9 @@ void SceneShop::Render() {
 void SceneShop::RenderSkybox() {
 
 	modelStack.PushMatrix();
-	
+
 	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-	
+
 	modelStack.PushMatrix();
 	modelStack.Translate(0, 0, -1000);
 	modelStack.Rotate(90, 1, 0, 0);

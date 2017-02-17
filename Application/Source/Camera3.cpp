@@ -1,7 +1,9 @@
 #include "Application.h"
 #include "Camera3.h"
-#include <GLFW\glfw3.h>
 #include "Scene.h"
+#include "PlayerDataManager.h"
+
+#include <GLFW\glfw3.h>
 
 
 
@@ -48,6 +50,8 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 	mouseMovedY = 0;
 
 	glfwSetMouseButtonCallback(glfwGetCurrentContext(), cbMouseEvent);
+
+	velocityAccelerationRate = &PlayerDataManager::getInstance()->getPlayerStats()->base_speed;
 
 	Reset();
 	ResetCursorVariables();
@@ -114,7 +118,7 @@ void Camera3::Update(double dt) {
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
 		wasMovingForward = true;
-		currentVelocity += velocityAccelerationRate * (float)dt;
+		currentVelocity += *velocityAccelerationRate * (float)dt;
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
 		wasMovingForward = false;
@@ -222,7 +226,7 @@ void Camera3::shootBullet() {
 
 		if (_elapsedTime >= _nextShootTime) {
 			_scene->objBuilder.createObject(new Bullet(_scene, position));
-			_nextShootTime = _elapsedTime + 0.3;
+			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 		}
 	}
 

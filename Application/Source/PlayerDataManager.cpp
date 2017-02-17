@@ -95,7 +95,8 @@ void PlayerDataManager::LoadPlayerData() {
 
 	}
 	else {
-		std::cout << "Load playerData failed, unable to open file to load" << std::endl;
+		std::cout << "Load playerData failed, creating a new file" << std::endl;
+		SaveData(0);
 	}
 
 	ResetPlayerStats();

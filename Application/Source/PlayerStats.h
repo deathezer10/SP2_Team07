@@ -3,7 +3,7 @@
 
 struct PlayerStat {
 
-	int base_speed;
+	float base_speed;
 	int base_damage;
 	int base_shield;
 
@@ -78,9 +78,9 @@ private:
 
 	// Cooldown time, dont forget there's a minimum value for these 
 	// Formula: (baseCD - (subtracter * upgradeLevel)) + minimum
-	const float base_cd_bullet_rof = 1;
-	const float substracter_cd_bullet_rof = 0.2f;
-	const float minimum_bullet_cooldown = 0.25f;
+	const float base_cd_bullet_rof = 0.50f;
+	const float substracter_cd_bullet_rof = 0.10f;
+	const float minimum_bullet_cooldown = 0.10f;
 	
 	const float base_cd_shield_recovery = 10;
 	const float substracter_cd_shield_recovery = 2.5f;

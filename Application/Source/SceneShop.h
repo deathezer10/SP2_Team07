@@ -25,6 +25,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	
 
 
 private:
@@ -54,6 +55,8 @@ private:
 	int column = 0;
 	int row = 0;
 	bool CanPress;
+
+	Color enabledColour;
 
 	Vector3 rotShip;
 

@@ -64,7 +64,7 @@ private:
 
 	// Current speed of the camera
 	float currentVelocity = 1;
-	float velocityAccelerationRate = 10.0f;
+	float* velocityAccelerationRate;
 	float velocityDecelerationRate = 5.0f;
 	float velocityBrakingRate = 20.0f;
 	float velocityMax = 100;

@@ -6,6 +6,7 @@
 PowerUp::PowerUp(Scene* scene, Vector3 pos,int powerType) : Object(scene, pos) {
 	type = Scene::GEO_NONE;
 	powertype = powerType;
+	scale = 3;
 };
 void PowerUp::checkInteract()
 {
@@ -60,20 +61,20 @@ void PowerUp::render() {
 	{
 	case 0:
 	{
-		_scene->RenderMesh(_scene->meshList[Scene::GEO_SPEED], true);
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_SPEED], false);
 
 		break;
 	}
 	case 1:
 	{
 		
-		_scene->RenderMesh(_scene->meshList[Scene::GEO_BARRAGE], true);
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_BARRAGE], false);
 
 		break;
 	}
 	case 2:
 	{
-		_scene->RenderMesh(_scene->meshList[Scene::GEO_REGEN], true);
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_REGEN], false);
 
 		break;
 	}

@@ -30,7 +30,7 @@ void Ring::checkInteract()
 		NearestRingPos = &position;
 	}
 
-
+	// Interacted
 	if ((position - _scene->camera.position).Length() < _interactDistance)
 	{
 		_scene->objBuilder.destroyObject(this);

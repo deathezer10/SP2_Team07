@@ -22,6 +22,8 @@ SceneTutorial::~SceneTutorial() {}
 
 void SceneTutorial::Init() {
 
+	pData = PlayerDataManager::getInstance()->getPlayerData();
+
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -129,8 +131,29 @@ void SceneTutorial::Init() {
 	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CUBE]->material.kShininess = 1.0f;
 
-	meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
-	meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/fG6.tga");
+	switch (pData->currentFighter){
+
+	case 0:
+		meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
+		meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/fG6.tga");
+		break;
+
+	case 1:
+		meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/sf1.obj");
+		meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/sf1.tga");
+		break;
+
+	case 2:
+		meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/df6.obj");
+		meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/df6.tga");
+		break;
+
+	case 3:
+		meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/a10.obj");
+		meshList[GEO_SPACESHIP]->textureID = LoadTGA("Image/a10.tga");
+		break;
+
+	}
 
 	meshList[GEO_TDUMMY] = MeshBuilder::GenerateOBJ("enemy", "OBJ/drone.obj");
 	meshList[GEO_TDUMMY]->textureID = LoadTGA("Image/drone.tga");
@@ -243,26 +266,16 @@ void SceneTutorial::Update(double dt) {
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
 
-	static bool canPress = true;
-
-	if (!Application::IsKeyPressed('Q'))
-		canPress = true;
-
-	// Light on
-	if (canPress && Application::IsKeyPressed('Q')) {
-		light[0].power = (light[0].power > 0) ? 0.0f : 2.0f; // Toggle Power between 0 and 2
-		glUniform1f(m_parameters[U_LIGHT0_POWER], light[0].power);
-		canPress = false;
-	}
-
-	std::ostringstream strFlashlight;
-	strFlashlight << "[Q] Flashlight: " << ((light[0].power) ? "On" : "Off");
-	textManager.queueRenderText(UIManager::Text(strFlashlight.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
 
 	std::ostringstream strHealth;
 	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
-
 	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
+
+	std::ostringstream strShield;
+	strShield << "Shield: " << PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
+	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
+
+	auto gg = PlayerDataManager::getInstance()->getPlayerStats();
 
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
@@ -271,6 +284,8 @@ void SceneTutorial::Update(double dt) {
 	switch (currentObjective){
 
 	case 0:
+		textManager.queueRenderText(UIManager::Text("Accelerate towards the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		// TODO:: Collect Ring, Power-Up, AI
 		break;
 
 	case 1:
@@ -352,48 +367,45 @@ void SceneTutorial::Render() {
 	objBuilder.renderObjects();
 
 
+	static bool canDebugPress = false;
 
-	// Debugging Text
-	std::ostringstream fps;
-	fps << "FPS: " << (int)(1 / _dt);
-	textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	std::ostringstream targ;
-	targ << "Target: " << camera.getTarget().toString();
-	textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	std::ostringstream upz;
-	upz << "Up: " << camera.getUp().toString();
-	textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	std::ostringstream pitch;
-	pitch << "Pitch: " << camera.getPitch();
-	textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	std::ostringstream yaw;
-	yaw << "Yaw: " << camera.getYaw();
-	textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	if (!Application::IsKeyPressed('C')){
+		canDebugPress = true;
+	}
+
+	if (Application::IsKeyPressed('C') && canDebugPress){
+		canDebugPress = false;
+		showDebugInfo = !showDebugInfo;
+	}
+
+	if (showDebugInfo){
+		// Debugging Text
+		std::ostringstream fps;
+		fps << "FPS: " << (int)(1 / _dt);
+		textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream targ;
+		targ << "Target: " << camera.getTarget().toString();
+		textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream upz;
+		upz << "Up: " << camera.getUp().toString();
+		textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream pitch;
+		pitch << "Pitch: " << camera.getPitch();
+		textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream yaw;
+		yaw << "Yaw: " << camera.getYaw();
+		textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	}
+
 	std::ostringstream velocity;
-	velocity << "Current Velocity: " << camera.getCurrentVelocity();
-	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+	velocity << "Current Velocity: " << (int)camera.getCurrentVelocity();
+	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
 
 	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-	std::ostringstream objective;
-
-	switch (currentObjective){
-
-	case 0:
-		objective << "Collect [" << Ring::RingCount << "] Ring";
-		textManager.renderTextOnScreen(UIManager::Text{ objective.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_CENTER });
-		break;
-
-	case 1:
-		objective << "Collect Power Ups";
-		textManager.renderTextOnScreen(UIManager::Text{ objective.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_CENTER });
-
-		break;
-
-	}
 
 	textManager.dequeueText();
 	textManager.reset();

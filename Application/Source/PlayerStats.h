@@ -70,11 +70,12 @@ private:
 	const int minimum_bullet_damage = 20;
 	const int minimum_bullet_speed = 10;
 	const int minimum_shield_capacity = 25;
+	const int minimum_base_speed = 5;
 
 	// Multiplier for each Upgrades level
 	const int multiplier_bullet_damage = 10;
 	const int multiplier_bullet_speed = 10;
-	const int multiplier_shield_capacity = 50;
+	const int multiplier_shield_capacity = 30;
 
 	// Cooldown time, dont forget there's a minimum value for these 
 	// Formula: (baseCD - (subtracter * upgradeLevel)) + minimum

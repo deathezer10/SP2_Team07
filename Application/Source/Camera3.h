@@ -67,7 +67,7 @@ private:
 	float* velocityAccelerationRate;
 	float velocityDecelerationRate = 5.0f;
 	float velocityBrakingRate = 20.0f;
-	float velocityMax = 100;
+	float velocityMax = 200;
 	float velocityMin = -10;
 	bool wasMovingForward = true; // Was the camera accelerating?
 

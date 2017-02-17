@@ -72,9 +72,16 @@ void PlayerStats::ConvertToPlayerStats() {
 	// Stats Formula
 	pStat.initial_bullet_damage = ((pStat.base_damage + pStat.initial_bullet_damage) * multiplier_bullet_damage) + minimum_bullet_damage;
 	pStat.initial_bullet_speed = (pStat.initial_bullet_speed * multiplier_bullet_speed) + minimum_bullet_speed;
-	pStat.initial_bullet_cooldown = base_cd_bullet_rof - (pStat.initial_bullet_cooldown * substracter_cd_bullet_rof) + minimum_bullet_cooldown;
+	pStat.initial_bullet_cooldown = base_cd_bullet_rof - (pStat.initial_bullet_cooldown * substracter_cd_bullet_rof);
 	pStat.initial_shield_capacity = ((pStat.base_shield + pStat.initial_shield_capacity) * multiplier_shield_capacity) + minimum_shield_capacity;
 	pStat.initial_shield_recoveryRate = base_cd_shield_recovery - (pStat.initial_shield_recoveryRate * substracter_cd_shield_recovery) + minimum_shield_recoveryRate;
+
+	// Dont let it fall below zero
+	if (pStat.initial_bullet_cooldown < minimum_bullet_cooldown)
+		pStat.initial_bullet_cooldown = minimum_bullet_cooldown;
+
+	if (pStat.initial_shield_recoveryRate < minimum_shield_recoveryRate)
+		pStat.initial_shield_recoveryRate = minimum_shield_recoveryRate;
 
 	// Dump all initial stats to current stats
 	pStat.current_bullet_damage = pStat.initial_bullet_damage;
@@ -86,6 +93,6 @@ void PlayerStats::ConvertToPlayerStats() {
 	// Life Values
 	pStat.current_health = default_health;
 	pStat.current_shield = default_shield + pStat.initial_shield_capacity;
-	pStat.base_speed *= multiplier_base_speed;
+	pStat.base_speed = (pStat.base_speed * multiplier_base_speed) + minimum_base_speed;
 
 }

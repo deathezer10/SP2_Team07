@@ -9,6 +9,11 @@
 
 #include <vector>
 
+
+
+class PlayerDataManager;
+
+
 class SceneTutorial : public Scene {
 	
 public:
@@ -27,8 +32,11 @@ private:
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, float sizey);
 	void RenderSkybox();
 	
+	bool showDebugInfo = false;
 	bool objectspawned = false;
 	int currentObjective = 0;
+
+	PlayerSaveData* pData;
 
 };
 

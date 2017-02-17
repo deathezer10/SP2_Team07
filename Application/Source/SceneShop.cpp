@@ -19,6 +19,7 @@
 const std::string ShipType[4] = { "FG-6", "SF-1", "DF-6", "Trident-A10" };
 
 // Bullet Dmg, Spd, ROF, Shield HP, Recharge
+const int ShipPrice[3] = { 2000, 2000, 2000 };
 const int UpgradePrice[5] = { 300, 200, 500, 400, 300 };
 
 
@@ -256,127 +257,149 @@ void SceneShop::Update(double dt) {
 
 		switch (_menuSelected) {
 		case 0:
-			if (column == 1)
+			if (column == 1 && pData->currency >= ShipPrice[0] && pData->SF1 == false)
 			{
 				pData->SF1 = 1;
+				pData->currency -= ShipPrice[0];
 			}
-			if (column == 2)
+			if (column == 2 && pData->currency >= ShipPrice[1] && pData->DF6 == false)
 			{
 				pData->DF6 = 1;
+				pData->currency -= ShipPrice[1];
 			}
-			if (column == 3)
+			if (column == 3 && pData->currency >= ShipPrice[2] && pData->A10 == false)
 			{
 				pData->A10 = 1;
+				pData->currency -= ShipPrice[2];
 			}
 			break;
 		case 1:
-			if (column == 0 && pData->currency > 5)
+			if (column == 0 && pData->currency >= UpgradePrice[0] && pData->FG6_Bullet_damage < maxUpgradeLevel)
 			{
 				pData->FG6_Bullet_damage++;
-				pData->currency -= 5;
+				pData->currency -= UpgradePrice[0];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 1 && pData->SF1 == 1)
+			if (column == 1 && pData->SF1 == 1 && pData->currency >= UpgradePrice[0] && pData->SF1_Bullet_damage < maxUpgradeLevel)
 			{
 				pData->SF1_Bullet_damage++;
+				pData->currency -= UpgradePrice[0];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 2 && pData->DF6 == 1)
+			if (column == 2 && pData->DF6 == 1 && pData->currency >= UpgradePrice[0] && pData->DF6_Bullet_damage < maxUpgradeLevel)
 			{
 				pData->DF6_Bullet_damage++;
+				pData->currency -= UpgradePrice[0];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 3 && pData->A10 == 1)
+			if (column == 3 && pData->A10 == 1 && pData->currency >= UpgradePrice[0] && pData->A10_Bullet_damage < maxUpgradeLevel)
 			{
 				pData->A10_Bullet_damage++;
+				pData->currency -= UpgradePrice[0];
 				PlayerDataManager::getInstance()->SaveData();
 			}
 			break;
 		case 2:
-			if (column == 0)
+			if (column == 0 && pData->currency >= UpgradePrice[1] && pData->FG6_Bullet_speed < maxUpgradeLevel)
 			{
 				pData->FG6_Bullet_speed++;
+				pData->currency -= UpgradePrice[1];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 1 && pData->SF1 == 1)
+			if (column == 1 && pData->SF1 == 1 && pData->currency >= UpgradePrice[1] && pData->SF1_Bullet_speed < maxUpgradeLevel)
 			{
 				pData->SF1_Bullet_speed++;
+				pData->currency -= UpgradePrice[1];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 2 && pData->DF6 == 1)
+			if (column == 2 && pData->DF6 == 1 && pData->currency >= UpgradePrice[1] && pData->DF6_Bullet_speed < maxUpgradeLevel)
 			{
 				pData->DF6_Bullet_speed++;
+				pData->currency -= UpgradePrice[1];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 3 && pData->A10 == 1)
+			if (column == 3 && pData->A10 == 1 && pData->currency >= UpgradePrice[1] && pData->A10_Bullet_speed < maxUpgradeLevel)
 			{
 				pData->A10_Bullet_speed++;
+				pData->currency -= UpgradePrice[1];
 				PlayerDataManager::getInstance()->SaveData();
 			}
 			break;
 		case 3:
-			if (column == 0)
+			if (column == 0 && pData->currency >= UpgradePrice[2] && pData->FG6_Bullet_ROF < maxUpgradeLevel)
 			{
 				pData->FG6_Bullet_ROF++;
+				pData->currency -= UpgradePrice[2];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 1 && pData->SF1 == 1)
+			if (column == 1 && pData->SF1 == 1 && pData->currency >= UpgradePrice[2] && pData->SF1_Bullet_ROF < maxUpgradeLevel)
 			{
 				pData->SF1_Bullet_ROF++;
+				pData->currency -= UpgradePrice[2];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 2 && pData->DF6 == 1)
+			if (column == 2 && pData->DF6 == 1 && pData->currency >= UpgradePrice[2] && pData->DF6_Bullet_ROF < maxUpgradeLevel)
 			{
 				pData->DF6_Bullet_ROF++;
+				pData->currency -= UpgradePrice[2];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 3 && pData->A10 == 1)
+			if (column == 3 && pData->A10 == 1 && pData->currency >= UpgradePrice[2] && pData->A10_Bullet_ROF < maxUpgradeLevel)
 			{
 				pData->A10_Bullet_ROF++;
+				pData->currency -= UpgradePrice[2];
 				PlayerDataManager::getInstance()->SaveData();
 			}
 			break;
 		case 4:
-			if (column == 0)
+			if (column == 0 && pData->currency >= UpgradePrice[3] && pData->FG6_Shield_hp < maxUpgradeLevel)
 			{
 				pData->FG6_Shield_hp++;
+				pData->currency -= UpgradePrice[3];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 1 && pData->SF1 == 1)
+			if (column == 1 && pData->SF1 == 1 && pData->currency >= UpgradePrice[3] && pData->SF1_Shield_hp < maxUpgradeLevel)
 			{
 				pData->SF1_Shield_hp++;
+				pData->currency -= UpgradePrice[3];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 2 && pData->DF6 == 1)
+			if (column == 2 && pData->DF6 == 1 && pData->currency >= UpgradePrice[3] && pData->DF6_Shield_hp < maxUpgradeLevel)
 			{
 				pData->DF6_Shield_hp++;
+				pData->currency -= UpgradePrice[3];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 3 && pData->A10 == 1)
+			if (column == 3 && pData->A10 == 1 && pData->currency >= UpgradePrice[3] && pData->A10_Shield_hp < maxUpgradeLevel)
 			{
 				pData->A10_Shield_hp++;
+				pData->currency -= UpgradePrice[3];
 				PlayerDataManager::getInstance()->SaveData();
 			}
 			break;
 		case 5:
-			if (column == 0)
+			if (column == 0 && pData->currency >= UpgradePrice[4] && pData->FG6_shield_recharge_rate < maxUpgradeLevel)
 			{
 				pData->FG6_shield_recharge_rate++;
+				pData->currency -= UpgradePrice[4];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 1 && pData->SF1 == 1)
+			if (column == 1 && pData->SF1 == 1 && pData->currency >= UpgradePrice[4] && pData->SF1_shield_recharge_rate < maxUpgradeLevel)
 			{
 				pData->SF1_shield_recharge_rate++;
+				pData->currency -= UpgradePrice[4];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 2 && pData->DF6 == 1)
+			if (column == 2 && pData->DF6 == 1 && pData->currency >= UpgradePrice[4] && pData->DF6_shield_recharge_rate < maxUpgradeLevel)
 			{
 				pData->DF6_shield_recharge_rate++;
+				pData->currency -= UpgradePrice[4];
 				PlayerDataManager::getInstance()->SaveData();
 			}
-			if (column == 3 && pData->A10 == 1)
+			if (column == 3 && pData->A10 == 1 && pData->currency >= UpgradePrice[4] && pData->A10_shield_recharge_rate < maxUpgradeLevel)
 			{
 				pData->A10_shield_recharge_rate++;
+				pData->currency -= UpgradePrice[4];
 				PlayerDataManager::getInstance()->SaveData();
 			}
 			break;
@@ -458,18 +481,18 @@ void SceneShop::Render() {
 	//If ship not unlocked
 	if (column == 1 && pData->SF1 == 0)
 	{
-		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter) Price: $" + std::to_string(ShipPrice[0]) + " : " : "(Locked Fighter) Price: $" + std::to_string(ShipPrice[0]) + " : ";
 		enabledColour = Color(1, 0, 0);
 	}
 	if (column == 2 && pData->DF6 == 0)
 	{
-		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter) Price: $" + std::to_string(ShipPrice[1]) + " : " : "(Locked Fighter) Price: $" + std::to_string(ShipPrice[1]) + " : ";
 		enabledColour = Color(1, 0, 0);
 
 	}
 	if (column == 3 && pData->A10 == 0)
 	{
-		option1 = (_menuSelected == 0) ? ">(Locked Fighter): " : "(Locked Fighter): ";
+		option1 = (_menuSelected == 0) ? ">(Locked Fighter) Price: $" + std::to_string(ShipPrice[2]) + " : " : "(Locked Fighter) Price: $" + std::to_string(ShipPrice[2]) + " : ";
 		enabledColour = Color(1, 0, 0);
 	}
 	//if ship is unlocked
@@ -490,11 +513,11 @@ void SceneShop::Render() {
 	}
 
 	option1 += ShipType[column];
-	option2 = (_menuSelected == 1) ? ">Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): " : "Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): ";
-	option3 = (_menuSelected == 2) ? ">Bullet Speed ($" + std::to_string(UpgradePrice[0]) + "): " : "Bullet Speed ($" + std::to_string(UpgradePrice[0]) + "): ";
-	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire ($" + std::to_string(UpgradePrice[0]) + "): " : "Bullet Rate of Fire ($" + std::to_string(UpgradePrice[0]) + "): ";
-	option5 = (_menuSelected == 4) ? ">Shield HP ($" + std::to_string(UpgradePrice[0]) + "): " : "Shield HP ($" + std::to_string(UpgradePrice[0]) + "): ";
-	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate ($" + std::to_string(UpgradePrice[0]) + "): " : "Shield Recharge Rate ($" + std::to_string(UpgradePrice[0]) + "): ";
+	option2 = (_menuSelected == 1) ? ">Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): Level " : "Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): Level ";
+	option3 = (_menuSelected == 2) ? ">Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level" : "Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level ";
+	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire ($" + std::to_string(UpgradePrice[2]) + "): Level " : "Bullet Rate of Fire ($" + std::to_string(UpgradePrice[2]) + "): Level ";
+	option5 = (_menuSelected == 4) ? ">Shield HP ($" + std::to_string(UpgradePrice[3]) + "): Level " : "Shield HP ($" + std::to_string(UpgradePrice[3]) + "): Level ";
+	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level " : "Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level ";
 	option7 = (_menuSelected == 6) ? ">Back" : "Back";
 
 	if (column == 0)

@@ -55,6 +55,7 @@ private:
 	int column = 0;
 	int row = 0;
 	bool CanPress;
+	const int maxUpgradeLevel = 5;
 
 	Color enabledColour;
 

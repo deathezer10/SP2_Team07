@@ -3,18 +3,33 @@
 #include "Ring.h"
 
 int Ring::RingCount = 0;
+Vector3* Ring::NearestRingPos = nullptr;
+
 
 Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	type = Scene::GEO_RING;
-	RingCount=6;
-	
+	scale = 10;
+	_interactDistance = scale;
+	RingCount = 6;
+
 };
+
 void Ring::checkInteract()
 {
 
+	if (NearestRingPos == nullptr){
+		NearestRingPos = &position;
+	}
 
-	Vector3 distance = (position - _scene->camera.position);
-	rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x))+90;
+	Vector3 CurrentRingToCamera = (position - _scene->camera.position);
+	Vector3 NearestRingToCamera = (*NearestRingPos) - _scene->camera.position;
+
+
+	if (NearestRingToCamera.Length() > CurrentRingToCamera.Length())
+	{
+		NearestRingPos = &position;
+	}
+
 
 	if ((position - _scene->camera.position).Length() < _interactDistance)
 	{

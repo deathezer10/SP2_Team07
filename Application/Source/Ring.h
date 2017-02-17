@@ -15,10 +15,10 @@ public:
 	virtual void checkInteract();
 	virtual void interact();
 	static int RingCount;
-	const float _interactDistance = 2.0f;
+	static Vector3* NearestRingPos;
+	float _interactDistance = 2.0f;
 
 private:
-	float _defaultScale = 1;
 
 };
 #endif

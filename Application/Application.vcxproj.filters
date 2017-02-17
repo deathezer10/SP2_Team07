@@ -45,6 +45,12 @@
     <Filter Include="Source Files\Object\NPC">
       <UniqueIdentifier>{5f157378-f0e1-419c-97d8-192efbf5f7b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Navigation">
+      <UniqueIdentifier>{402727b4-241f-4140-89e7-7eb87d81edd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Navigation">
+      <UniqueIdentifier>{dff04f0a-8a3a-47c4-b6e7-73ac45e7efdb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -145,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="Source\PlayerStats.cpp">
       <Filter>Source Files\PlayerData</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GuideArrow.cpp">
+      <Filter>Source Files\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +264,9 @@
     </ClInclude>
     <ClInclude Include="Source\PlayerStats.h">
       <Filter>Header Files\PlayerData</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GuideArrow.h">
+      <Filter>Header Files\Navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

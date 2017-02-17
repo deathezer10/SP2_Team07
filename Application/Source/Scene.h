@@ -57,6 +57,9 @@ public:
 		GEO_SPEED,
 		GEO_BARRAGE,
 		GEO_REGEN,
+		GEO_WAYPOINT,
+
+
 		NUM_GEOMETRY
 	};
 

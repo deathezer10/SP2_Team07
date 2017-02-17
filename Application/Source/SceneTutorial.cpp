@@ -90,7 +90,7 @@ void SceneTutorial::Init() {
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 
 	// Init Camera
-	camera.Init(Vector3(0, 2, 0), Vector3(0, 2, 10), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f); // far clipping
@@ -98,7 +98,7 @@ void SceneTutorial::Init() {
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-	
+
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -116,7 +116,7 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
-	
+
 	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 
@@ -143,7 +143,7 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_BARRAGE] = MeshBuilder::GenerateOBJ("barrage", "OBJ/barrage.obj");
 	meshList[GEO_BARRAGE]->textureID = LoadTGA("Image/barrage.tga");
-	
+
 	meshList[GEO_ROCK1] = MeshBuilder::GenerateOBJ("rock1", "OBJ/rock1.obj");
 	meshList[GEO_ROCK1]->textureID = LoadTGA("Image/rock1.tga");
 
@@ -155,6 +155,9 @@ void SceneTutorial::Init() {
 
 	meshList[GEO_ROCK4] = MeshBuilder::GenerateOBJ("rock4", "OBJ/Rock4.obj");
 	meshList[GEO_ROCK4]->textureID = LoadTGA("Image/Rock4.tga");
+
+	meshList[GEO_WAYPOINT] = MeshBuilder::GenerateOBJ("rock4", "OBJ/waypoint.obj");
+	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
@@ -204,21 +207,16 @@ void SceneTutorial::Init() {
 	const float randRange = 250;
 
 	// Create interactable rocks
-	for (size_t i = 0; i < rockAmount; i++) {
-		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-		gg->setCollision(false);
-		objBuilder.createObject(gg);
-	}
+	//for (size_t i = 0; i < rockAmount; i++) {
+	//	Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+	//	gg->setCollision(false);
+	//	objBuilder.createObject(gg);
+	//}
 
 
 	//// Create interactable Rings
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	objBuilder.createObject(new Ring(this, Vector3(Math::RandFloatMinMax(-50, 50), Math::RandFloatMinMax(10, 20), Math::RandFloatMinMax(-50, 50))));
-	
+	objBuilder.createObject(new Ring(this, Vector3(0, 0, 100)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
 }
 
 void SceneTutorial::Update(double dt) {
@@ -265,7 +263,7 @@ void SceneTutorial::Update(double dt) {
 	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
 
 	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-	
+
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -334,16 +332,13 @@ void SceneTutorial::Render() {
 
 	RenderSkybox();
 
-	//RenderMesh(meshList[GEO_AXES], false);
-	
-
 	modelStack.PushMatrix();
 	modelStack.Translate(20, 4, -10);
 	modelStack.Rotate(30, 0, 1, 0);
 	modelStack.Scale(.8f, .8f, .8f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
-	
+
 
 	// Character Transform
 	modelStack.PushMatrix();
@@ -355,7 +350,7 @@ void SceneTutorial::Render() {
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 	objBuilder.renderObjects();
-	
+
 
 
 	// Debugging Text
@@ -399,7 +394,7 @@ void SceneTutorial::Render() {
 		break;
 
 	}
-	
+
 	textManager.dequeueText();
 	textManager.reset();
 }

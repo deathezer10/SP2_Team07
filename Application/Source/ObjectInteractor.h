@@ -20,7 +20,8 @@ class ObjectInteractor {
 public:
 	enum OBJ_TYPE {
 		TYPE_SOLID = 0,
-		TYPE_ENEMY
+		TYPE_ENEMY,
+		TYPE_OBJECTIVE
 	};
 
 	ObjectInteractor();

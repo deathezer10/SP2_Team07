@@ -33,12 +33,6 @@
     <Filter Include="Source Files\Object\Solid">
       <UniqueIdentifier>{e1f7fade-3496-4628-a383-6bc0d0ef8e9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PlayerData">
-      <UniqueIdentifier>{74716512-d02e-456e-8566-f2d2353cd4c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PlayerData">
-      <UniqueIdentifier>{881fead1-5b9c-4da3-b3ab-7881de8f28e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Object\NPC">
       <UniqueIdentifier>{652e6301-6ab4-43ca-beb3-f921c10d216f}</UniqueIdentifier>
     </Filter>
@@ -50,6 +44,24 @@
     </Filter>
     <Filter Include="Source Files\Navigation">
       <UniqueIdentifier>{dff04f0a-8a3a-47c4-b6e7-73ac45e7efdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{881fead1-5b9c-4da3-b3ab-7881de8f28e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player\Skills">
+      <UniqueIdentifier>{685bd003-976a-44ba-ab9e-c87ace964779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player\Data">
+      <UniqueIdentifier>{7f3c8215-324b-45a0-80b9-1291e89529ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{74716512-d02e-456e-8566-f2d2353cd4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Skills">
+      <UniqueIdentifier>{e6ed641b-04f7-4380-9515-a541d74131bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Data">
+      <UniqueIdentifier>{92b54d71-3462-41b9-95a7-41de1cdac2c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +131,6 @@
     <ClCompile Include="Source\SceneShop.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlayerDataManager.cpp">
-      <Filter>Source Files\PlayerData</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -149,11 +158,17 @@
     <ClCompile Include="Source\ObjectCollider.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlayerStats.cpp">
-      <Filter>Source Files\PlayerData</Filter>
-    </ClCompile>
     <ClCompile Include="Source\GuideArrow.cpp">
       <Filter>Source Files\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerStats.cpp">
+      <Filter>Source Files\Player\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerDataManager.cpp">
+      <Filter>Source Files\Player\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkillManager.cpp">
+      <Filter>Source Files\Player\Skills</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -235,9 +250,6 @@
     <ClInclude Include="Source\SceneShop.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PlayerDataManager.h">
-      <Filter>Header Files\PlayerData</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Ring.h">
       <Filter>Header Files\Object\Solid</Filter>
     </ClInclude>
@@ -262,11 +274,17 @@
     <ClInclude Include="Source\NPC.h">
       <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\PlayerStats.h">
-      <Filter>Header Files\PlayerData</Filter>
-    </ClInclude>
     <ClInclude Include="Source\GuideArrow.h">
       <Filter>Header Files\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerStats.h">
+      <Filter>Header Files\Player\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerDataManager.h">
+      <Filter>Header Files\Player\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SkillManager.h">
+      <Filter>Header Files\Player\Skills</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

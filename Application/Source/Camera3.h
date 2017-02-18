@@ -45,22 +45,39 @@ public:
 	const float bboxHeight = 1;
 	const float bboxDepth = 2;
 
-	void setBarrage(float speed, float duration);
-	void setSpeedImpulse(float speed, float duration);
 	void setVelocity(float speed){ currentVelocity = speed; };
+	float getMaxVelocity() { return velocityMax; };
 
+	Vector3 playerView; // Player model offset, used for indicating that the player has moved
 
 private:
 	Scene* _scene;
-	Vector3 view;
+
+	Vector3 view;	
 	Vector3 right;
 	Vector3 defaultRight;
+
 	Collider collider;
+
+	float _dt;
+
+	// Offsets the player model when accelerating or decelerating
+	Vector3 viewOffset; // helper to offset player model
+	float viewOffsetMaxLength = 1.0f; // prevent the model from move forward too much
+	float viewOffsetMinLength = -0.25f; // prevent the model from move forward too much
+	float currentViewOffsetDistance = 0;
+	float viewOffsetIncreaseSpeed = 1.0f; // Speed in which the offset increases
+	float viewOffsetDecreaseSpeed = 1.5f; // Speed in which the offset decreases
 
 	// Current angle of camera rotation
 	float yaw = -90;
 	float pitch = 0;
 	float roll = 0; // Does not actually roll the camera
+
+	// Controls Toggle
+	bool canYaw = true;
+	bool canPitch = true;
+	bool canRoll = true;
 
 	// Current speed of the camera
 	float currentVelocity = 1;
@@ -100,14 +117,6 @@ private:
 	// Cursor's previous position
 	double lastX = 0;
 	double lastY = 0;
-
-	double _elapsedTime = 0;
-	double _nextShootTime = 0;
-	double _nextVelocityResetTime = 0;
-	double _nextBarrageResetTime = 0;
-
-	// Bullet shooting logic
-	void shootBullet();
 
 };
 #endif

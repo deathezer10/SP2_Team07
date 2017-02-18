@@ -1,10 +1,12 @@
 #include "Scene.h"
 
-
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 
+
+
 Scene::Scene() :
+skillManager(this),
 textManager(this),
 camera(this){
 }

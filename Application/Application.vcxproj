@@ -114,6 +114,7 @@
     <ClCompile Include="Source\SceneShop.cpp" />
     <ClCompile Include="Source\SceneTutorial.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SkillManager.cpp" />
     <ClCompile Include="Source\Slime.cpp" />
     <ClCompile Include="Source\Tdummy.cpp" />
     <ClCompile Include="Source\UIManager.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Source\SceneShop.h" />
     <ClInclude Include="Source\SceneTutorial.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\SkillManager.h" />
     <ClInclude Include="Source\Slime.h" />
     <ClInclude Include="Source\Tdummy.h" />
     <ClInclude Include="Source\UIManager.h" />

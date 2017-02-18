@@ -58,9 +58,6 @@ public:
 
 	void ResetPlayerStats(int currentFighter);
 
-private:
-	PlayerStat pStat;
-
 	// Default life values before upgrades are added
 	const int default_health = 100;
 	const int default_shield = 100;
@@ -82,10 +79,13 @@ private:
 	const float base_cd_bullet_rof = 0.50f;
 	const float substracter_cd_bullet_rof = 0.10f;
 	const float minimum_bullet_cooldown = 0.10f;
-	
+
 	const float base_cd_shield_recovery = 10;
 	const float substracter_cd_shield_recovery = 2.5f;
 	const float minimum_shield_recoveryRate = 5.0f;
+
+private:
+	PlayerStat pStat;
 
 
 };

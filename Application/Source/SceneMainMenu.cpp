@@ -235,6 +235,7 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
 				break;
 			case 4: // Back button
+				_insideSelected = 0;
 				isMenuOutside = true;
 				break;
 			}

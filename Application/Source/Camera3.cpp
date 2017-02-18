@@ -88,7 +88,7 @@ void Camera3::updateCursor(double dt) {
 
 void Camera3::Update(double dt) {
 
-	_elapsedTime += dt;
+	_dt = (float)dt;
 
 	// Cursor is shown, stop rotating the camera
 	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
@@ -98,17 +98,17 @@ void Camera3::Update(double dt) {
 		ResetCursorVariables();
 	}
 
-	float CAMERA_SPEED = (float)dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * (float)dt;
-	float rotationSpeed = 1.0f * (float)dt;
+	float CAMERA_SPEED = _dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * _dt;
+	float rotationSpeed = 1.0f * _dt;
 
 	// Bring roll back to zero
 	if ((!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') || ((mouseMovedX == 0) && mouseYawEnabled))) {
 		if (roll > 1) {
-			roll -= rollFalloffSpeed * (float)dt;
+			roll -= rollFalloffSpeed * _dt;
 		}
 		else if (roll < -1) {
-			roll += rollFalloffSpeed * (float)dt;
+			roll += rollFalloffSpeed * _dt;
 		}
 		else {
 			roll = 0;
@@ -118,20 +118,23 @@ void Camera3::Update(double dt) {
 	// Camera Forward / Backward / Left / Right
 	if (Application::IsKeyPressed('W')) { // Forward
 		wasMovingForward = true;
-		currentVelocity += *velocityAccelerationRate * (float)dt;
+		currentVelocity += *velocityAccelerationRate * _dt;
 	}
 	else if (Application::IsKeyPressed('S')) { // Backward
 		wasMovingForward = false;
-		currentVelocity -= velocityBrakingRate * (float)dt;
-		// TODO: Plane move forward on mvoe
+		currentVelocity -= velocityBrakingRate * _dt;
 	}
 	else {
-		currentVelocity -= velocityDecelerationRate * (float)dt;
+		currentVelocity -= velocityDecelerationRate * _dt;
 	}
 
 	if (Application::IsKeyPressed('A') || ((mouseMovedX < 0 && mouseYawEnabled) && !Application::IsKeyPressed('D'))) { // Left
 		yaw -= CAMERA_LEFT_RIGHT_SPEED;
 		roll -= CAMERA_LEFT_RIGHT_SPEED;
+
+		if (roll > 0) {
+			roll -= CAMERA_LEFT_RIGHT_SPEED * 2;
+		}
 
 		Mtx44 rotation;
 		rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
@@ -143,6 +146,10 @@ void Camera3::Update(double dt) {
 	else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && (mouseMovedX > 0 && mouseYawEnabled))) { // Right
 		yaw += CAMERA_LEFT_RIGHT_SPEED;
 		roll += CAMERA_LEFT_RIGHT_SPEED;
+
+		if (roll < 0) {
+			roll += CAMERA_LEFT_RIGHT_SPEED * 2;
+		}
 
 		Mtx44 rotation;
 		rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
@@ -200,7 +207,6 @@ void Camera3::Update(double dt) {
 		target = position + view;
 	}
 
-
 	CAMERA_SPEED *= currentVelocity;
 
 	// Move the Camera according to the velocity
@@ -216,20 +222,29 @@ void Camera3::Update(double dt) {
 		currentVelocity = Math::Clamp(currentVelocity, (wasMovingForward || currentVelocity > 0) ? 1.0f : -1.0f, velocityMax);
 	}
 
-	// Bullet logic
-	shootBullet();
-}
-
-void Camera3::shootBullet() {
-
-	if (Application::IsKeyPressed(MK_LBUTTON)) {
-
-		if (_elapsedTime >= _nextShootTime) {
-			_scene->objBuilder.createObject(new Bullet(_scene, position));
-			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
+	// Model Offset when moving
+	if (Application::IsKeyPressed('W')) {
+		if (currentViewOffsetDistance < viewOffsetMaxLength) {
+			currentViewOffsetDistance += (float)dt * viewOffsetIncreaseSpeed;
 		}
 	}
+	else if (Application::IsKeyPressed('S')) {
+		if (currentViewOffsetDistance > viewOffsetMinLength) {
+			currentViewOffsetDistance -= (float)dt * viewOffsetDecreaseSpeed;
+		}
+	}
+	else if (currentViewOffsetDistance > 0.05f) { // Move from front to back
+		currentViewOffsetDistance -= (float)dt * viewOffsetDecreaseSpeed;
+	}
+	else if (currentViewOffsetDistance < -0.05f) { // Move from back to front
+		currentViewOffsetDistance += (float)dt * viewOffsetIncreaseSpeed;
+	}
+	else {
+		currentViewOffsetDistance = 0; // Since float will never become fully zero
+	}
 
+	viewOffset = view * currentViewOffsetDistance;
+	playerView = target + viewOffset;
 }
 
 void Camera3::ResetCursorVariables() {
@@ -251,22 +266,3 @@ void Camera3::Reset() {
 	roll = 0.0f;
 }
 
-void Camera3::setBarrage(float speed, float duration) {
-
-	_nextBarrageResetTime = _elapsedTime + duration;
-
-	if (_elapsedTime >= _nextBarrageResetTime) {
-
-	}
-
-}
-
-void Camera3::setSpeedImpulse(float speed, float duration) {
-
-	_nextVelocityResetTime = _elapsedTime + duration;
-
-	if (_elapsedTime >= _nextVelocityResetTime) {
-
-	}
-
-}

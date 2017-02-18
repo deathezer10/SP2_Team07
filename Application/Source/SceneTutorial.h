@@ -37,6 +37,7 @@ private:
 	int currentObjective = 0;
 
 	PlayerSaveData* pData;
+	Vector3 waypointRot;
 
 };
 

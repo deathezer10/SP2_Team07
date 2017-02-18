@@ -10,14 +10,16 @@ Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	type = Scene::GEO_RING;
 	scale = 10;
 	_interactDistance = scale;
-	RingCount = 6;
+	++RingCount;
+}
 
-};
+Ring::~Ring() {
+	--RingCount;
+}
 
-void Ring::checkInteract()
-{
+void Ring::checkInteract() {
 
-	if (NearestRingPos == nullptr){
+	if (NearestRingPos == nullptr) {
 		NearestRingPos = &position;
 	}
 
@@ -25,18 +27,15 @@ void Ring::checkInteract()
 	Vector3 NearestRingToCamera = (*NearestRingPos) - _scene->camera.position;
 
 
-	if (NearestRingToCamera.Length() > CurrentRingToCamera.Length())
-	{
+	if (NearestRingToCamera.Length() > CurrentRingToCamera.Length()) {
 		NearestRingPos = &position;
 	}
 
 	// Interacted
-	if ((position - _scene->camera.position).Length() < _interactDistance)
-	{
+	if ((position - _scene->camera.position).Length() < _interactDistance) {
 		_scene->objBuilder.destroyObject(this);
 		return;
 	}
 }
-void Ring::interact()
-{
+void Ring::interact() {
 }

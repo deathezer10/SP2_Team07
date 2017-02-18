@@ -10,15 +10,14 @@ class Ring : public Object {
 
 public:
 	Ring(Scene* scene, Vector3 pos);
-	~Ring() { RingCount--; };
+	~Ring();
+
+	static int RingCount;
+	static Vector3* NearestRingPos;
 
 	virtual void checkInteract();
 	virtual void interact();
-	static int RingCount;
-	static Vector3* NearestRingPos;
-	float _interactDistance = 2.0f;
-
-private:
+	float _interactDistance;
 
 };
 #endif

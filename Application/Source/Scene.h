@@ -1,9 +1,11 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "SkillManager.h"
 #include "UIManager.h"
 #include "ObjectBuilder.h"
 #include "Camera3.h"
+
 
 class Scene {
 
@@ -129,6 +131,7 @@ public:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 
+	SkillManager skillManager;
 	UIManager textManager;
 	ObjectBuilder objBuilder;
 	Camera3 camera;

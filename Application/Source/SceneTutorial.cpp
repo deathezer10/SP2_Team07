@@ -16,6 +16,7 @@
 
 
 SceneTutorial::SceneTutorial() {
+	waypointRot = Vector3(0, 0, 0);
 }
 
 SceneTutorial::~SceneTutorial() {}
@@ -131,7 +132,7 @@ void SceneTutorial::Init() {
 	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
 	meshList[GEO_CUBE]->material.kShininess = 1.0f;
 
-	switch (pData->currentFighter){
+	switch (pData->currentFighter) {
 
 	case 0:
 		meshList[GEO_SPACESHIP] = MeshBuilder::GenerateOBJ("spaceship", "OBJ/fG6.obj");
@@ -226,18 +227,17 @@ void SceneTutorial::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 250;
-	const float randRange = 250;
+	//const size_t rockAmount = 250;
+	//const float randRange = 250;
 
-	// Create interactable rocks
+	//// Create interactable rocks
 	//for (size_t i = 0; i < rockAmount; i++) {
-	//	Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-	//	gg->setCollision(false);
-	//	objBuilder.createObject(gg);
+	//	Ring* gg = new Ring(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+	//	objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
 	//}
 
 
-	//// Create interactable Rings
+	// Create interactable Rings
 	objBuilder.createObject(new Ring(this, Vector3(0, 0, 100)), td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 }
@@ -259,12 +259,11 @@ void SceneTutorial::Update(double dt) {
 	if (Application::IsKeyPressed(VK_F4)) {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
 	}
-	if (Ring::RingCount == 0 && currentObjective == 0)
-	{
-		++currentObjective;
-	}
+
+
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
+	skillManager.processSkills(dt);
 
 
 	std::ostringstream strHealth;
@@ -275,22 +274,31 @@ void SceneTutorial::Update(double dt) {
 	strShield << "Shield: " << PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
 	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
 
-	auto gg = PlayerDataManager::getInstance()->getPlayerStats();
 
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
-	switch (currentObjective){
+	std::ostringstream ringDist;
+	std::ostringstream ringCount;
+
+	switch (currentObjective) {
 
 	case 0:
 		textManager.queueRenderText(UIManager::Text("Accelerate towards the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		// TODO:: Collect Ring, Power-Up, AI
+
+		ringCount << "Ring left: " << Ring::RingCount;
+		textManager.queueRenderText(UIManager::Text(ringCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		if (Ring::RingCount > 0) {
+			ringDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+			textManager.queueRenderText(UIManager::Text(ringDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		}
+
 		break;
 
 	case 1:
-		if (objectspawned == false)
-		{//power up spawning
+		if (objectspawned == false) {//power up spawning
 			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
 			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
 			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
@@ -301,6 +309,23 @@ void SceneTutorial::Update(double dt) {
 		}
 		break;
 	}
+
+	// Waypoint
+	Vector3	cameraToRing = (*Ring::NearestRingPos) - (camera.position);
+
+	if (cameraToRing.z < 0) {
+		waypointRot.y = Math::RadianToDegree(atan2(cameraToRing.z, cameraToRing.x)) + (-camera.getYaw());
+		waypointRot.x = -(Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z))) - camera.getPitch();
+	}
+	else {
+		waypointRot.y = Math::RadianToDegree(atan2(cameraToRing.x, cameraToRing.z)) + camera.getYaw() + 90;
+		waypointRot.x = Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z)) - camera.getPitch();
+	}
+
+	if (Application::IsKeyPressed('G')) {
+		skillManager.activateSpeedBoost(5);
+	}
+
 }
 
 void SceneTutorial::Render() {
@@ -309,8 +334,8 @@ void SceneTutorial::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+					 camera.target.x, camera.target.y, camera.target.z,
+					 camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -354,10 +379,13 @@ void SceneTutorial::Render() {
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 
+	Vector3 scaleMatrix(5, 5, 5);
+	textManager.RenderMeshOnScreen(meshList[GEO_WAYPOINT], Application::_windowWidth / 20, Application::_windowHeight / 12, waypointRot, scaleMatrix);
+
 
 	// Character Transform
 	modelStack.PushMatrix();
-	modelStack.Translate(camera.target.x, camera.target.y - 0.5f, camera.target.z);
+	modelStack.Translate(camera.playerView.x, camera.playerView.y - 0.5f, camera.playerView.z);
 	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
 	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
 	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
@@ -369,16 +397,16 @@ void SceneTutorial::Render() {
 
 	static bool canDebugPress = false;
 
-	if (!Application::IsKeyPressed('C')){
+	if (!Application::IsKeyPressed('C')) {
 		canDebugPress = true;
 	}
 
-	if (Application::IsKeyPressed('C') && canDebugPress){
+	if (Application::IsKeyPressed('C') && canDebugPress) {
 		canDebugPress = false;
 		showDebugInfo = !showDebugInfo;
 	}
 
-	if (showDebugInfo){
+	if (showDebugInfo) {
 		// Debugging Text
 		std::ostringstream fps;
 		fps << "FPS: " << (int)(1 / _dt);
@@ -398,7 +426,7 @@ void SceneTutorial::Render() {
 	}
 
 	std::ostringstream velocity;
-	velocity << "Current Velocity: " << (int)camera.getCurrentVelocity();
+	velocity << "Speed: " << (int)camera.getCurrentVelocity() << "m/s";
 	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
 
 	// Crosshair

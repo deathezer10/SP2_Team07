@@ -14,9 +14,9 @@ Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos + scene->camera.ge
 	rotationZ = -scene->camera.getPitch();
 	rotationY = -scene->camera.getYaw() - 90;
 
-	_bulletSpeed += scene->camera.getCurrentVelocity();
-	_direction = scene->camera.getView().Normalized();
-	_startingPosition = pos + (_direction);
+	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
+	_direction = scene->camera.getView();
+	_startingPosition = pos + _direction;
 
 }
 

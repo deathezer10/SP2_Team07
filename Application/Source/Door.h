@@ -11,8 +11,7 @@ public:
 	Door(Scene* scene, Vector3 pos);
 	~Door() {};
 
-	virtual void checkInteract();
-	virtual void interact();
+	virtual bool checkInteract();
 
 private:
 	const float _interactDistance = 12.5f;

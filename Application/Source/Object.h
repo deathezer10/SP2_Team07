@@ -20,8 +20,14 @@ public:
 
 	virtual ~Object() {};
 
-	virtual void checkInteract() = 0;
-	virtual void interact() = 0;
+	// Process interaction logic every frame, returns true if Object is flagged for deletion
+	virtual bool checkInteract() = 0;
+
+	// Called when there's an collision with another Object
+	// Arg0: Unit Vector of the opposing Object to this Object
+	virtual void collisionHit(Vector3& hitPos) = 0;
+
+	// Render this Object's mesh, can be overriden to render multiple meshes instead
 	virtual void render();
 
 	Vector3 position;

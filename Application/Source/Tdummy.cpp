@@ -13,7 +13,7 @@ Tdummy::Tdummy(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	TdummyCount++;
 };
 
-void Tdummy::checkInteract() {
+bool Tdummy::checkInteract() {
 
 	// Move Tdummy towards player using the unit vector
 	Vector3 distance = (position - _scene->camera.position);
@@ -50,9 +50,9 @@ void Tdummy::checkInteract() {
 
 	if (currentHP <= 0) {
 		_scene->objBuilder.destroyObject(this);
-		return;
+		return true;
 	}
 
-}
 
-void Tdummy::interact() {}
+	return false;
+}

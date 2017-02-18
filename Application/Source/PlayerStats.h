@@ -61,7 +61,7 @@ public:
 	// Default life values before upgrades are added
 	const int default_health = 100;
 	const int default_shield = 100;
-	const int multiplier_base_speed = 10; // Different Space Fighter Acceleration per level
+	const int multiplier_base_speed = 5; // Different Space Fighter Acceleration per level
 
 	// Minimum Stats
 	const int minimum_bullet_damage = 20;

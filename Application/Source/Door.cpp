@@ -14,7 +14,7 @@ Door::Door(Scene* scene, Vector3 pos) : Object(scene, pos) {
 
 
 
-void Door::checkInteract() {
+bool Door::checkInteract() {
 
 	// KeyUp detector
 	if (!Application::IsKeyPressed('F'))
@@ -47,6 +47,6 @@ void Door::checkInteract() {
 		}
 
 	}
-}
 
-void Door::interact() {}
+	return false;
+}

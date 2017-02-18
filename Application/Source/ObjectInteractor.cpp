@@ -21,16 +21,14 @@ void ObjectInteractor::updateInteraction() {
 
 		Object* temp = objIterator->second;
 
-		if (temp->isCollidable()) {
-			Vector3 gg;
-			if (temp->getCollider().checkCollision(temp->_scene->camera.getCollider(), &gg)) {
-				gg.Normalize();
-				temp->_scene->camera.position += gg;
-				temp->_scene->camera.target += gg;
+		if (temp->checkInteract() == false && temp->isCollidable()) { // Process collision
+			Vector3 hitpos;
+			if (temp->getCollider().checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
+				hitpos.Normalize();
+				temp->_scene->camera.setVelocity(-1);
+				temp->collisionHit(hitpos);
 			}
 		}
-
-		temp->checkInteract();
 
 		if (!_iteratorUpdated) {
 			++objIterator;
@@ -39,9 +37,7 @@ void ObjectInteractor::updateInteraction() {
 			// skip increment since vector.erase() already returned the value of the next valid iterator
 			_iteratorUpdated = false;
 		}
-
 	}
-
 }
 
 

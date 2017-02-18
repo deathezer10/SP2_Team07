@@ -12,8 +12,7 @@ public:
 	Tdummy(Scene* scene, Vector3 pos);
 	~Tdummy() { TdummyCount--; };
 
-	virtual void checkInteract();
-	virtual void interact();
+	virtual bool checkInteract();
 
 	const float _interactDistance = 2.5f;
 

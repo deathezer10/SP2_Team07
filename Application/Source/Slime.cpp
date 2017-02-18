@@ -13,7 +13,7 @@ Slime::Slime(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	slimeCount++;
 };
 
-void Slime::checkInteract() {
+bool Slime::checkInteract() {
 
 	// Move slime towards player using the unit vector
 	Vector3 distance = (position - _scene->camera.position);
@@ -31,7 +31,7 @@ void Slime::checkInteract() {
 
 	if (currentHP <= 0) {
 		_scene->objBuilder.destroyObject(this);
-		return;
+		return true;
 	}
 
 	// Collided with player
@@ -41,6 +41,5 @@ void Slime::checkInteract() {
 
 	}
 
+	return false;
 }
-
-void Slime::interact() {}

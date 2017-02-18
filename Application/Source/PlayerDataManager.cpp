@@ -155,8 +155,8 @@ void PlayerDataManager::SaveData() {
 }
 
 
- bool PlayerDataManager::isFighterUnlocked(int value){
-	switch (value){
+bool PlayerDataManager::isFighterUnlocked(int value) {
+	switch (value) {
 	case 0:
 		return true;
 		break;
@@ -176,6 +176,20 @@ void PlayerDataManager::SaveData() {
 	return false;
 }
 
+
+void PlayerDataManager::damagePlayer(int amount) {
+
+	if (pStat.getStatData().current_shield > 0) {
+		pStat.getStatData().current_shield -= amount;
+	}
+	else {
+		pStat.getStatData().current_health -= amount;
+	}
+
+	if (pStat.getStatData().current_shield < 0)
+		pStat.getStatData().current_shield = 0;
+
+}
 
 void PlayerDataManager::ResetPlayerStats() {
 	pStat.ResetPlayerStats(pSaveData.currentFighter);

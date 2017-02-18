@@ -7,7 +7,7 @@
 
 
 
-Camera3::Camera3(Scene* scene) : _scene(scene), collider(&position, bboxWidth, bboxHeight, bboxDepth) {
+Camera3::Camera3(Scene* scene) : _scene(scene), collider(&playerView, bboxWidth, bboxHeight, bboxDepth) {
 }
 
 Camera3::~Camera3() {

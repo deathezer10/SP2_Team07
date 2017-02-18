@@ -17,7 +17,7 @@ Ring::~Ring() {
 	--RingCount;
 }
 
-void Ring::checkInteract() {
+bool Ring::checkInteract() {
 
 	if (NearestRingPos == nullptr) {
 		NearestRingPos = &position;
@@ -34,8 +34,10 @@ void Ring::checkInteract() {
 	// Interacted
 	if ((position - _scene->camera.position).Length() < _interactDistance) {
 		_scene->objBuilder.destroyObject(this);
-		return;
+		return true;
 	}
+
+	return false;
 }
-void Ring::interact() {
+void Ring::collisionHit(Vector3& hitPos) {
 }

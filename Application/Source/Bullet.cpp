@@ -20,14 +20,14 @@ Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos + scene->camera.ge
 
 }
 
-void Bullet::checkInteract() {
+bool Bullet::checkInteract() {
 
 	position += _direction * _bulletSpeed * _scene->_dt;
 
 	// Remove bullet once reached max distance
 	if ((_startingPosition - position).Length() >= _bulletMaxDistance) {
 		_scene->objBuilder.destroyObject(this);
-		return;
+		return true;
 	}
 
 	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
@@ -48,15 +48,15 @@ void Bullet::checkInteract() {
 			npc->reduceHealth(5);
 			npc->reduceVelocity(10);
 			_scene->objBuilder.destroyObject(this);
-			return;
+			return true;
 		}
-
 
 	}
 
+	return false;
 }
 
-void Bullet::interact() {
+void Bullet::collisionHit(Vector3& hitPos) {
 
 }
 

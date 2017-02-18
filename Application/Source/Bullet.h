@@ -12,8 +12,8 @@ public:
 	Bullet(Scene* scene, Vector3 pos);
     ~Bullet() {};
 		
-	virtual void checkInteract();
-    virtual void interact();
+	virtual bool checkInteract();
+	virtual void collisionHit(Vector3& hitPos);
     virtual void render();
 
 private:

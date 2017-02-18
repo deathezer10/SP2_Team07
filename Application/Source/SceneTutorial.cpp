@@ -227,14 +227,15 @@ void SceneTutorial::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	//const size_t rockAmount = 250;
-	//const float randRange = 250;
+	const size_t rockAmount = 250;
+	const float randRange = 250;
 
-	//// Create interactable rocks
-	//for (size_t i = 0; i < rockAmount; i++) {
-	//	Ring* gg = new Ring(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-	//	objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
-	//}
+	// Create interactable rocks
+	for (size_t i = 0; i < rockAmount; i++) {
+		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(true);
+		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
+	}
 
 
 	// Create interactable Rings

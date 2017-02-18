@@ -12,8 +12,7 @@ public:
 	Slime(Scene* scene, Vector3 pos);
 	~Slime() { slimeCount--; };
 
-	virtual void checkInteract();
-	virtual void interact();
+	virtual bool checkInteract();
 
 	float currentHP = 5;
 

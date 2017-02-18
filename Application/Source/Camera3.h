@@ -63,7 +63,7 @@ private:
 
 	// Offsets the player model when accelerating or decelerating
 	Vector3 viewOffset; // helper to offset player model
-	float viewOffsetMaxLength = 1.0f; // prevent the model from move forward too much
+	float viewOffsetMaxLength = 0.5f; // prevent the model from move forward too much
 	float viewOffsetMinLength = -0.25f; // prevent the model from move forward too much
 	float currentViewOffsetDistance = 0;
 	float viewOffsetIncreaseSpeed = 1.0f; // Speed in which the offset increases
@@ -83,9 +83,9 @@ private:
 	float currentVelocity = 1;
 	float* velocityAccelerationRate;
 	float velocityDecelerationRate = 5.0f;
-	float velocityBrakingRate = 20.0f;
+	float velocityBrakingRate = 15.0f;
 	float velocityMax = 200;
-	float velocityMin = -10;
+	float velocityMin = -5;
 	bool wasMovingForward = true; // Was the camera accelerating?
 
 	// Enable Mouse Horizontal Control

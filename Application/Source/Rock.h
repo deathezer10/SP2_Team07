@@ -12,8 +12,9 @@ public:
 	Rock(Scene* scene, Vector3 pos);
 	~Rock() {};
 
-	virtual void checkInteract();
-	virtual void interact();
+	virtual bool checkInteract();
+	virtual void collisionHit(Vector3& hitPos);
+
 	const float _interactDistance = 10.0f;
 
 private:

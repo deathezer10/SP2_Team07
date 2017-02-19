@@ -88,6 +88,7 @@ void SceneMainMenu::Init() {
 
 	// Init Camera
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	camera.allowMovement(false);
 	camera.disableMouse();
 
 	Mtx44 projection;

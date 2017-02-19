@@ -12,14 +12,20 @@ public:
 	int getCurrentHealth() { return currentHP; };
 	float getCurrentVelocity() { return _currentVelocity; };
 
+	// Set the Health without any bounds checking
 	void setHealth(int value);
+
+	// Damage the NPC with proper bounds checking
 	void reduceHealth(int value);
 
+	// No bounds checking
 	void setVelocity(float value);
+
+	// No bounds checking
 	void reduceVelocity(float value);
 
 protected:
-	int currentHP = 50;
+	int currentHP;
 	float _currentVelocity = 0;
 
 

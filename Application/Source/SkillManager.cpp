@@ -11,6 +11,7 @@ void SkillManager::processSkills(double dt) {
 		return;
 
 	processPowerUp();
+	processPassiveSkill();
 
 	if (Application::IsKeyPressed(MK_LBUTTON)) {
 
@@ -19,6 +20,36 @@ void SkillManager::processSkills(double dt) {
 			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 		}
 	}
+
+}
+
+void SkillManager::processPassiveSkill() {
+
+	PlayerStat* pStat = PlayerDataManager::getInstance()->getPlayerStats();
+
+	// Shield Regeneration Logic
+	if (pStat->current_shield < pStat->initial_shield_capacity && isShieldRecovering == false) {
+		_nextShieldRecoverTime = _elapsedTime + pStat->current_shield_recoveryRate; // Set cooldown time
+		shieldLastDamagedAmount = pStat->current_shield;
+		isShieldRecovering = true;
+	}
+	else if (isShieldRecovering == true && _elapsedTime >= _nextShieldRecoverTime) {
+		pStat->current_shield += shieldRecoveryAmount * _scene->_dt; // Regenerate this amount every second
+		shieldLastDamagedAmount += shieldRecoveryAmount * _scene->_dt;
+
+		// Shield is full now, clamp to max value and break out
+		if (pStat->current_shield >= pStat->initial_shield_capacity) {
+			pStat->current_shield = pStat->initial_shield_capacity;
+			isShieldRecovering = false;
+		}
+	}
+
+	// Player got damaged again, reset the counter
+	if (pStat->current_shield < shieldLastDamagedAmount) {
+		shieldLastDamagedAmount = pStat->current_shield;
+		_nextShieldRecoverTime = _elapsedTime + pStat->current_shield_recoveryRate; // Set cooldown time
+	}
+	// End of Shield Regeneration Logic
 
 }
 

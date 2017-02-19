@@ -1,0 +1,28 @@
+currency|94499
+level01|1
+level02|0
+level03|0
+SF-1|0
+DF-6|0
+A-10|1
+FG6_bullet_damage|0
+FG6_bullet_speed|0
+FG6_Bullet_rof|0
+FG6_shield_level|0
+FG6_shield_recharge |5
+SF1_bullet_damage|0
+SF1_bullet_speed|0
+SF1_Bullet_rof|0
+SF1_shield_level|0
+SF1_shield_recharge |0
+DF6_bullet_damage|0
+DF6_bullet_speed|0
+DF6_Bullet_rof|0
+DF6_shield_level|0
+DF6_shield_recharge |0
+A10_bullet_damage|0
+A10_bullet_speed|0
+A10_Bullet_rof|0
+A10_shield_level|5
+A10_shield_recharge|0
+currentFighter|0

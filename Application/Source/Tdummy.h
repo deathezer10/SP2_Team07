@@ -5,7 +5,6 @@
 #include "NPC.h"
 
 
-// Enemy Slime that moves towards player and damages him upon contact
 class Tdummy : public NPC {
 
 public:
@@ -13,10 +12,12 @@ public:
 	~Tdummy() { TdummyCount--; };
 
 	virtual bool checkInteract();
+	virtual void collisionHit(Vector3& hitPos);
 
-	const float _interactDistance = 2.5f;
+	 float _interactDistance;
 
 	static unsigned TdummyCount;
+	static Vector3* NearestTdummyPos;
 
 private:
 	float _currentaceleration = 60.0f;

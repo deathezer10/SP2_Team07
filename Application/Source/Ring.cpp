@@ -8,13 +8,9 @@ Vector3* Ring::NearestRingPos = nullptr;
 
 Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	type = Scene::GEO_RING;
-	scale = 10;
+	scale = 20;
 	_interactDistance = scale;
 	++RingCount;
-}
-
-Ring::~Ring() {
-	--RingCount;
 }
 
 bool Ring::checkInteract() {

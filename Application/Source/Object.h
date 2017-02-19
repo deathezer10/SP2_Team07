@@ -38,14 +38,19 @@ public:
 	unsigned type;
 
 	Collider& getCollider() { return collider; }
+
+	// Is the Collider Enabled?
 	bool& isCollidable() { return collidable; }
+
+	// Toggle Collision checking for this Object
 	void setCollision(bool enabled) { collidable = enabled; }
 
 	Scene* _scene;
 
 protected:
 	Collider collider;
-	bool isInteracted = false;
 	bool collidable;
+	bool isLightingEnabled = true;
+
 };
 #endif

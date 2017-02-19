@@ -3,17 +3,23 @@
 #include "PowerUp.h"
 #include "PlayerDataManager.h"
 
-PowerUp::PowerUp(Scene* scene, Vector3 pos, int powerType) : Object(scene, pos) {
+PowerUp::PowerUp(Scene* scene, Vector3 pos, PowerType pType) : Object(scene, pos) {
 	type = Scene::GEO_NONE;
-	powertype = powerType;
+	powertype = pType;
 	scale = 3;
+
+	rotationZ = 45;
+
 }
 
 
 bool PowerUp::checkInteract() {
+
+	rotationY += 30 * _scene->_dt;
+
 	if ((position - _scene->camera.position).Length() < _interactDistance) {
 		switch (powertype) {
-		case 0:
+		case POWER_SPEEDBOOST:
 		{
 			//Increases player speed to maximum for 5 seconds
 			_scene->skillManager.activateSpeedBoost(5);
@@ -22,7 +28,7 @@ bool PowerUp::checkInteract() {
 			break;
 
 		}
-		case 1:
+		case POWER_BARRAGE:
 		{
 			//Reduces the cooldown time between each bullet by 50% for 10 seconds
 			_scene->skillManager.activateBarrage(((float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed / 2), 10);
@@ -30,7 +36,7 @@ bool PowerUp::checkInteract() {
 			return true;
 			break;
 		}
-		case 2:
+		case POWER_REGEN:
 		{
 			//Restore the Fighter’s Shield &amp; base HP to full upon picking it up
 			PlayerDataManager::getInstance()->getPlayerStats()->current_health = 100;
@@ -59,15 +65,15 @@ void PowerUp::render() {
 
 	switch (powertype) {
 
-	case 0:
+	case POWER_SPEEDBOOST:
 		_scene->RenderMesh(_scene->meshList[Scene::GEO_SPEED], false);
 		break;
 
-	case 1:
+	case POWER_BARRAGE:
 		_scene->RenderMesh(_scene->meshList[Scene::GEO_BARRAGE], false);
 		break;
 
-	case 2:
+	case POWER_REGEN:
 		_scene->RenderMesh(_scene->meshList[Scene::GEO_REGEN], false);
 		break;
 

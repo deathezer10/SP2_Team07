@@ -2,16 +2,11 @@
 #define SceneTutorial_H
 
 #include "Scene.h"
-#include "Camera3.h"
-#include "Mesh.h"
-#include "MatrixStack.h"
 #include "Light.h"
 
-#include <vector>
 
 
-
-class PlayerDataManager;
+struct PlayerSaveData;
 
 
 class SceneTutorial : public Scene {
@@ -28,16 +23,13 @@ public:
 private:
 	Light light[2];
 	
-	void RenderMesh(Mesh *mesh, bool enableLight);
-	void RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, float sizey);
 	void RenderSkybox();
 	
 	bool showDebugInfo = false;
-	bool objectspawned = false;
+
 	int currentObjective = 0;
 
 	PlayerSaveData* pData;
-	Vector3 waypointRot;
 
 };
 

@@ -75,7 +75,7 @@ public:
 	bool isFighterUnlocked(int value);
 
 	// Get information about player current stats
-	PlayerStat* PlayerDataManager::getPlayerStats() { return &pStat.getStatData(); }
+	PlayerStat* getPlayerStats() { return pStat.getStatData(); }
 
 	// Reduces the player's Shield (if available) or Health
 	void damagePlayer(int amount);

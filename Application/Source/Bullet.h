@@ -17,9 +17,9 @@ public:
     virtual void render();
 
 private:
-    const float _interactDistance = 1.f;
-    float _bulletSpeed = 50.f;
-	const float _bulletMaxDistance = 100.0f;
+    const float _interactDistance = 5.f;
+    float _bulletSpeed;
+	const float _bulletMaxDistance = 300.0f;
 	
 	Vector3 _startingPosition;
 	Vector3 _direction;

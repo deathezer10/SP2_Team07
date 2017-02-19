@@ -34,11 +34,16 @@ public:
 	double& getMouseMovedX() { return mouseMovedX; };
 	double& getMouseMovedY() { return mouseMovedY; };
 
+	// Enable mouse controls
+	void enableMouse() { isMouseEnabled = true; };
+
 	// Disable mouse controls
 	void disableMouse() { isMouseEnabled = false; };
 
-	// Enable mouse controls
-	void enableMouse() { isMouseEnabled = true; };
+	void allowMovement(bool toggle) { canMove = toggle; };
+	void allowYaw(bool toggle) { canYaw = toggle; };
+	void allowPitch(bool toggle) { canPitch = toggle; };
+	void allowRoll(bool toggle) { canRoll = toggle; };
 	
 	// Player Box Collider
 	const float bboxWidth = 2;
@@ -78,6 +83,7 @@ private:
 	bool canYaw = true;
 	bool canPitch = true;
 	bool canRoll = true;
+	bool canMove = true;
 
 	// Current speed of the camera
 	float currentVelocity = 1;

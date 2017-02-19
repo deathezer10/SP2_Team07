@@ -2,19 +2,13 @@
 #define SCENE_GAMEOVER_H
 
 #include "Scene.h"
-#include "Camera3.h"
-#include "Mesh.h"
-#include "MatrixStack.h"
 #include "Light.h"
-#include "UIManager.h"
 
-#include <vector>
-
-class Application;
+using std::string;
 
 // This is a Game Menu Scene and not a GameOver Scene, was too late to refactor the Class name
 class SceneGameover : public Scene {
-	
+
 public:
 	enum TYPE_MENU {
 
@@ -22,9 +16,9 @@ public:
 		MENU_GAMEOVER,
 		MENU_VICTORY
 
-	};
+	};	
 
-	SceneGameover(TYPE_MENU type);
+	SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene);
 	~SceneGameover();
 
 	virtual void Init();
@@ -34,21 +28,14 @@ public:
 
 
 private:
-	double _dt;
-
-	float translateX;
-	float scaleAll;
-
-	const float camera_width = 75;
-	const float camera_height = 75;
-		
 	Light light[1];
-	
+
 	void RenderSkybox();
-	
-	
+
+	TYPE_SCENE _previousScene;
 	TYPE_MENU _menuType;
 	unsigned _menuSelected;
+	string _title;
 
 };
 

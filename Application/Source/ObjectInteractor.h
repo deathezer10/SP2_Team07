@@ -29,10 +29,10 @@ public:
 
 	std::multimap<OBJ_TYPE, Object*> _objects;
 
-	// Process interactions for all Object
+	// Process interactions for all Object, should be called during Update()
 	void updateInteraction();
 
-	// Updates the current iterator, used when a element is deleted from the vector
+	// Updates the current iterator, used when an element is deleted from the container to prevent other iterators from being invalidated
 	void validateIterator(std::multimap<OBJ_TYPE, Object*>::iterator it);
 
 private:

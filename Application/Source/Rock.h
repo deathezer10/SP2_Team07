@@ -10,7 +10,9 @@ class Rock : public Object {
 	
 public:
 	Rock(Scene* scene, Vector3 pos);
-	~Rock() {};
+	~Rock() { --RockCount; };
+
+	static unsigned RockCount;
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);

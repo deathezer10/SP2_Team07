@@ -3,8 +3,11 @@
 #include "Rock.h"
 #include "PlayerDataManager.h"
 
+unsigned Rock::RockCount = 0;
+
 Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 
+	++RockCount;
 	rotationY = Math::RandFloatMinMax(0, 360);
 	const int sizeOffset = 3;
 	scale = 5;
@@ -42,7 +45,7 @@ bool Rock::checkInteract() {
 
 void Rock::collisionHit(Vector3& hitPos) {
 
-	PlayerDataManager::getInstance()->damagePlayer(25);
+	PlayerDataManager::getInstance()->damagePlayer(100);
 	_scene->objBuilder.destroyObject(this);
 	return;
 

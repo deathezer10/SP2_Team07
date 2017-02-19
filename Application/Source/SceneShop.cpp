@@ -514,7 +514,7 @@ void SceneShop::Render() {
 
 	option1 += ShipType[column];
 	option2 = (_menuSelected == 1) ? ">Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): Level " : "Bullet Damage ($" + std::to_string(UpgradePrice[0]) + "): Level ";
-	option3 = (_menuSelected == 2) ? ">Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level" : "Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level ";
+	option3 = (_menuSelected == 2) ? ">Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level " : "Bullet Speed ($" + std::to_string(UpgradePrice[1]) + "): Level ";
 	option4 = (_menuSelected == 3) ? ">Bullet Rate of Fire ($" + std::to_string(UpgradePrice[2]) + "): Level " : "Bullet Rate of Fire ($" + std::to_string(UpgradePrice[2]) + "): Level ";
 	option5 = (_menuSelected == 4) ? ">Shield HP ($" + std::to_string(UpgradePrice[3]) + "): Level " : "Shield HP ($" + std::to_string(UpgradePrice[3]) + "): Level ";
 	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level " : "Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level ";

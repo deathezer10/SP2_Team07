@@ -3,18 +3,22 @@
 #include "Scene.h"
 #include "Bullet.h"
 #include "NPC.h"
+#include "PlayerDataManager.h"
 
-using std::map;
+
+using std::multimap;
 
 Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
 	type = Scene::GEO_NONE;
+
+	_bulletSpeed = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed;
+	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
 
 	position.y -= 1.0f;
 
 	rotationZ = -scene->camera.getPitch();
 	rotationY = -scene->camera.getYaw() - 90;
 
-	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
 	_direction = scene->camera.getView();
 	_startingPosition = pos + _direction;
 
@@ -30,9 +34,10 @@ bool Bullet::checkInteract() {
 		return true;
 	}
 
+	// Retrieve all values that from key 'Enemy'
 	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
 
-	for (map<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+	for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
 		Object* temp = it->second;
 
@@ -45,8 +50,9 @@ bool Bullet::checkInteract() {
 
 			// Damage the enemy and then remove this bullet
 			//npc->position += pushAway;
-			npc->reduceHealth(5);
-			npc->reduceVelocity(10);
+			npc->reduceHealth(PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage);
+			npc->reduceVelocity((float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage);
+			npc->scale -= 2.0f;
 			_scene->objBuilder.destroyObject(this);
 			return true;
 		}

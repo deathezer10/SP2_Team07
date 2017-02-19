@@ -3,20 +3,23 @@
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 
-#include "Mtx44.h"
 #include "shader.hpp"
 
 #include "PlayerDataManager.h"
-#include "SceneTutorial.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "Tdummy.h"
+
+#include "SceneTutorial.h"
+#include "SceneManager.h"
+#include "SceneMainMenu.h"
+#include "SceneGameOver.h"
+
 #include <sstream>
 
 
 SceneTutorial::SceneTutorial() {
-	waypointRot = Vector3(0, 0, 0);
 }
 
 SceneTutorial::~SceneTutorial() {}
@@ -24,6 +27,8 @@ SceneTutorial::~SceneTutorial() {}
 void SceneTutorial::Init() {
 
 	pData = PlayerDataManager::getInstance()->getPlayerData();
+
+	PlayerStat* gg = PlayerDataManager::getInstance()->getPlayerStats();
 
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -230,16 +235,21 @@ void SceneTutorial::Init() {
 	const size_t rockAmount = 250;
 	const float randRange = 250;
 
-	// Create interactable rocks
-	for (size_t i = 0; i < rockAmount; i++) {
-		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-		gg->setCollision(true);
-		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
-	}
+	//// Create interactable rocks
+	//for (size_t i = 0; i < rockAmount; i++) {
+	//	Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+	//	gg->setCollision(true);
+	//	objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
+	//}
 
 
 	// Create interactable Rings
-	objBuilder.createObject(new Ring(this, Vector3(0, 0, 100)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+	objBuilder.createObject(new Ring(this, Vector3(0, 5, 100)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+	// Disable controls at start of tutorial
+	camera.allowYaw(false);
+	camera.allowPitch(false);
+	skillManager.disableSkills();
 
 }
 
@@ -272,7 +282,7 @@ void SceneTutorial::Update(double dt) {
 	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	std::ostringstream strShield;
-	strShield << "Shield: " << PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
+	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
 	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
 
 
@@ -280,52 +290,199 @@ void SceneTutorial::Update(double dt) {
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
-	std::ostringstream ringDist;
-	std::ostringstream ringCount;
+	std::ostringstream objDist;
+	std::ostringstream objCount;
+	
 
+	// Objective Logic
 	switch (currentObjective) {
 
-	case 0:
-		textManager.queueRenderText(UIManager::Text("Accelerate towards the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	case 0: // Accelerate to collect ring
+		waypoint.RotateTowards(*Ring::NearestRingPos);
 
-		ringCount << "Ring left: " << Ring::RingCount;
-		textManager.queueRenderText(UIManager::Text(ringCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
-		if (Ring::RingCount > 0) {
-			ringDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-			textManager.queueRenderText(UIManager::Text(ringDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		objCount << "Ring(s) left: " << Ring::RingCount;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Transition to next objective
+		if (Ring::RingCount == 0) {
+			camera.setVelocity(1);
+			camera.allowYaw(true);
+
+			objBuilder.createObject(new Ring(this, Vector3(25, 5, 200)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+			objBuilder.createObject(new Ring(this, Vector3(-25, 5, 300)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+			++currentObjective;
+		}
+		break;
+
+	case 1: // Yaw left/right to rotate fighter
+		waypoint.RotateTowards(*Ring::NearestRingPos);
+
+		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "Ring(s) left: " << Ring::RingCount;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Transition to next objective
+		if (Ring::RingCount == 0) {
+			camera.setVelocity(1);
+			camera.allowPitch(true);
+
+			objBuilder.createObject(new Ring(this, Vector3(-25, 20, 500)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+			objBuilder.createObject(new Ring(this, Vector3(-25, -20, 400)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+			++currentObjective;
+		}
+		break;
+
+	case 2: // mouse up/down to pitch
+		waypoint.RotateTowards(*Ring::NearestRingPos);
+
+		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Up/Down] to rotate Up/Down", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "Ring(s) left: " << Ring::RingCount;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Transition to next objective
+		if (Ring::RingCount == 0) {
+			camera.setVelocity(1);
+			skillManager.enableSkills();
+
+			objBuilder.createObject(new Tdummy(this, Vector3(-25, 0, 600)), td_OBJ_TYPE::TYPE_ENEMY);
+			objBuilder.createObject(new Tdummy(this, Vector3(25, -20, 650)), td_OBJ_TYPE::TYPE_ENEMY);
+			objBuilder.createObject(new Tdummy(this, Vector3(0, -25, 600)), td_OBJ_TYPE::TYPE_ENEMY);
+			objBuilder.createObject(new Tdummy(this, Vector3(0, 20, 650)), td_OBJ_TYPE::TYPE_ENEMY);
+			++currentObjective;
+		}
+		break;
+
+	case 3: // Eliminate all training dummies
+		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
+
+		textManager.queueRenderText(UIManager::Text("Eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Left-Click to Shoot", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "Training Dummy(s) left: " << Tdummy::TdummyCount;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Transition to next objective
+		if (Tdummy::TdummyCount == 0) {
+			camera.setVelocity(1);
+			camera.Reset();
+			skillManager.disableSkills();
+
+			Rock* rock = new Rock(this, Vector3(0, 0, 100));
+			rock->setCollision(true);
+			objBuilder.createObject(rock, ObjectInteractor::TYPE_OBJECTIVE);
+			++currentObjective;
 		}
 
 		break;
 
-	case 1:
-		if (objectspawned == false) {//power up spawning
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 0));
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 1));
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
-			objBuilder.createObject(new PowerUp(this, Vector3(Math::RandFloatMinMax(-50, 50), 3, Math::RandFloatMinMax(-50, 50)), 2));
-			objectspawned = true;
+	case 4: // Crash into the asteroid
+		waypoint.RotateTowards(Vector3(0, 0, 100));
+
+		textManager.queueRenderText(UIManager::Text("Asteroids can kill you! Try crashing into it!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objDist << "Distance: " << (int)(Vector3(0, 0, 100) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Transition to next objective
+		if (Rock::RockCount == 0) {
+			camera.setVelocity(1);
+			skillManager.enableSkills();
+
+			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 150), PowerUp::POWER_REGEN));
+
+			PlayerDataManager::getInstance()->getPlayerStats()->current_shield = 0;
+			PlayerDataManager::getInstance()->getPlayerStats()->current_health = 10;
+
+			++currentObjective;
+		}
+
+		break;
+
+	case 5: // Recover your HP
+		waypoint.RotateTowards(Vector3(0, 0, 150));
+
+		textManager.queueRenderText(UIManager::Text("Ouch! That hurts.. Pick up the <Repair Kit> to recover Full HP!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objDist << "Distance: " << (int)(Vector3(0, 0, 150) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Player recovered, change objective!
+		if (PlayerDataManager::getInstance()->getPlayerStats()->current_health >= 100) {
+			camera.setVelocity(1);
+
+			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 175), PowerUp::POWER_BARRAGE));
+
+			for (int i = -5; i <= 5; ++i) {
+				objBuilder.createObject(new Tdummy(this, Vector3(i * (float)10, 0, 300)), td_OBJ_TYPE::TYPE_ENEMY);
+			}
+
+			++currentObjective;
 		}
 		break;
+
+	case 6: // Barrage all dummies
+		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
+
+		textManager.queueRenderText(UIManager::Text("Pick up the <Barrage> Power-Up and eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Dummies eliminated
+		if (Tdummy::TdummyCount == 0) {
+
+			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 250), PowerUp::POWER_SPEEDBOOST));
+			objBuilder.createObject(new Ring(this, Vector3(0, 0, 1000)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+			++currentObjective;
+		}
+		break;
+
+	case 7: // Spped Boost to the End
+		waypoint.RotateTowards(*Ring::NearestRingPos);
+
+		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up the <Speed Boost> and sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		// Objective Complete!
+		if (Ring::RingCount == 0) {
+
+			// Unlock level 1
+			if (PlayerDataManager::getInstance()->getPlayerData()->level01_unlocked == false) {
+				PlayerDataManager::getInstance()->getPlayerData()->level01_unlocked = true;
+				PlayerDataManager::getInstance()->SaveData();
+			}
+
+			SceneManager::getInstance()->changeScene(new SceneGameover("You have completed the Tutorial!", SceneGameover::TYPE_MENU::MENU_VICTORY, TYPE_SCENE::SCENE_TUTORIAL));
+			return;
+		}
+		break;
+
 	}
 
-	// Waypoint
-	Vector3	cameraToRing = (*Ring::NearestRingPos) - (camera.position);
-
-	if (cameraToRing.z < 0) {
-		waypointRot.y = Math::RadianToDegree(atan2(cameraToRing.z, cameraToRing.x)) + (-camera.getYaw());
-		waypointRot.x = -(Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z))) - camera.getPitch();
-	}
-	else {
-		waypointRot.y = Math::RadianToDegree(atan2(cameraToRing.x, cameraToRing.z)) + camera.getYaw() + 90;
-		waypointRot.x = Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z)) - camera.getPitch();
-	}
-
-	if (Application::IsKeyPressed('G')) {
-		skillManager.activateSpeedBoost(5);
-	}
 
 }
 
@@ -373,16 +530,7 @@ void SceneTutorial::Render() {
 
 	RenderSkybox();
 
-	modelStack.PushMatrix();
-	modelStack.Translate(20, 4, -10);
-	modelStack.Rotate(30, 0, 1, 0);
-	modelStack.Scale(.8f, .8f, .8f);
-	RenderMesh(meshList[GEO_SPACESHIP], true);
-	modelStack.PopMatrix();
-
-	Vector3 scaleMatrix(5, 5, 5);
-	textManager.RenderMeshOnScreen(meshList[GEO_WAYPOINT], Application::_windowWidth / 20, Application::_windowHeight / 12, waypointRot, scaleMatrix);
-
+	waypoint.RenderArrow();
 
 	// Character Transform
 	modelStack.PushMatrix();
@@ -390,9 +538,10 @@ void SceneTutorial::Render() {
 	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
 	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
 	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
-	//modelStack.Scale(0.1f, 0.1f, 0.1f);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
+
+	// Render all interactable objects
 	objBuilder.renderObjects();
 
 
@@ -435,68 +584,9 @@ void SceneTutorial::Render() {
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-
+	// Render all pending text onto screen
 	textManager.dequeueText();
 	textManager.reset();
-}
-
-void SceneTutorial::RenderMesh(Mesh *mesh, bool enableLight) {
-	Mtx44 MVP, modelView, modelView_inverse_transpose;
-
-	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
-	modelView = viewStack.Top() * modelStack.Top();
-	glUniformMatrix4fv(m_parameters[U_MODELVIEW], 1, GL_FALSE, &modelView.a[0]);
-	if (enableLight) {
-		glUniform1i(m_parameters[U_LIGHTENABLED], 1);
-		modelView_inverse_transpose = modelView.GetInverse().GetTranspose();
-		glUniformMatrix4fv(m_parameters[U_MODELVIEW_INVERSE_TRANSPOSE], 1, GL_FALSE, &modelView_inverse_transpose.a[0]);
-
-		//load material
-		glUniform3fv(m_parameters[U_MATERIAL_AMBIENT], 1, &mesh->material.kAmbient.r);
-		glUniform3fv(m_parameters[U_MATERIAL_DIFFUSE], 1, &mesh->material.kDiffuse.r);
-		glUniform3fv(m_parameters[U_MATERIAL_SPECULAR], 1, &mesh->material.kSpecular.r);
-		glUniform1f(m_parameters[U_MATERIAL_SHININESS], mesh->material.kShininess);
-	}
-	else {
-		glUniform1i(m_parameters[U_LIGHTENABLED], 0);
-	}
-
-	if (mesh->textureID > 0) {
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 1);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
-		glUniform1i(m_parameters[U_COLOR_TEXTURE], 0);
-	}
-	else {
-		glUniform1i(m_parameters[U_COLOR_TEXTURE_ENABLED], 0);
-	}
-
-	mesh->Render(); //this line should only be called once
-
-	if (mesh->textureID > 0) {
-		glBindTexture(GL_TEXTURE_2D, 0);
-	}
-
-}
-
-void SceneTutorial::RenderMeshOnScreen(Mesh* mesh, int x, int y, float sizex, float sizey) {
-	glDisable(GL_DEPTH_TEST);
-	Mtx44 ortho;
-	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -10, 10); //size of screen UI
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
-	modelStack.PushMatrix();
-	modelStack.LoadIdentity();
-	modelStack.Translate((float)x, (float)y, 1);
-	modelStack.Scale(sizex, sizey, 1);
-	RenderMesh(mesh, false); //UI should not have light
-	projectionStack.PopMatrix();
-	viewStack.PopMatrix();
-	modelStack.PopMatrix();
-	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneTutorial::RenderSkybox() {

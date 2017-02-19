@@ -90,6 +90,12 @@ void Camera3::Update(double dt) {
 
 	_dt = (float)dt;
 
+	// All Controls are disabled!
+	if (canMove == false) {
+		setVelocity(0);
+		return;
+	}	
+
 	// Cursor is shown, stop rotating the camera
 	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
 		updateCursor(dt);
@@ -128,35 +134,37 @@ void Camera3::Update(double dt) {
 		currentVelocity -= velocityDecelerationRate * _dt;
 	}
 
-	if (Application::IsKeyPressed('A') || ((mouseMovedX < 0 && mouseYawEnabled) && !Application::IsKeyPressed('D'))) { // Left
-		yaw -= CAMERA_LEFT_RIGHT_SPEED;
-		roll -= CAMERA_LEFT_RIGHT_SPEED;
+	if (canYaw) {
+		if (Application::IsKeyPressed('A') || ((mouseMovedX < 0 && mouseYawEnabled) && !Application::IsKeyPressed('D'))) { // Left
+			yaw -= CAMERA_LEFT_RIGHT_SPEED;
+			roll -= CAMERA_LEFT_RIGHT_SPEED;
 
-		if (roll > 0) {
-			roll -= CAMERA_LEFT_RIGHT_SPEED * 2;
+			if (roll > 0) {
+				roll -= CAMERA_LEFT_RIGHT_SPEED * 2;
+			}
+
+			Mtx44 rotation;
+			rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+			view = (target - position).Normalized();
+			view = rotation * view;
+			target = position + view;
+			up = rotation * up;
 		}
+		else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && (mouseMovedX > 0 && mouseYawEnabled))) { // Right
+			yaw += CAMERA_LEFT_RIGHT_SPEED;
+			roll += CAMERA_LEFT_RIGHT_SPEED;
 
-		Mtx44 rotation;
-		rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
-		view = (target - position).Normalized();
-		view = rotation * view;
-		target = position + view;
-		up = rotation * up;
-	}
-	else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && (mouseMovedX > 0 && mouseYawEnabled))) { // Right
-		yaw += CAMERA_LEFT_RIGHT_SPEED;
-		roll += CAMERA_LEFT_RIGHT_SPEED;
+			if (roll < 0) {
+				roll += CAMERA_LEFT_RIGHT_SPEED * 2;
+			}
 
-		if (roll < 0) {
-			roll += CAMERA_LEFT_RIGHT_SPEED * 2;
+			Mtx44 rotation;
+			rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+			view = (target - position).Normalized();
+			view = rotation * view;
+			target = position + view;
+			up = rotation * up;
 		}
-
-		Mtx44 rotation;
-		rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
-		view = (target - position).Normalized();
-		view = rotation * view;
-		target = position + view;
-		up = rotation * up;
 	}
 
 	// Camera Move Up / Down
@@ -181,30 +189,31 @@ void Camera3::Update(double dt) {
 	view = (target - position).Normalized();
 	right = view.Cross(up).Normalized();
 
-	// It works :o
-	if (mouseMovedY > 0) { // Up
-		float angle = rotationSpeed * mouseMovedDistanceY;
-		pitch += angle;
+	if (canPitch) {
+		if (mouseMovedY > 0) { // Up
+			float angle = rotationSpeed * mouseMovedDistanceY;
+			pitch += angle;
 
-		Mtx44 rotation;
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		rotation.SetToRotation(angle, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
-	}
-	else if (mouseMovedY < 0) { // Down
-		float angle = -rotationSpeed * mouseMovedDistanceY;
-		pitch += angle;
+			Mtx44 rotation;
+			right.y = 0;
+			right.Normalize();
+			up = right.Cross(view).Normalized();
+			rotation.SetToRotation(angle, right.x, right.y, right.z);
+			view = rotation * view;
+			target = position + view;
+		}
+		else if (mouseMovedY < 0) { // Down
+			float angle = -rotationSpeed * mouseMovedDistanceY;
+			pitch += angle;
 
-		Mtx44 rotation;
-		right.y = 0;
-		right.Normalize();
-		up = right.Cross(view).Normalized();
-		rotation.SetToRotation(angle, right.x, right.y, right.z);
-		view = rotation * view;
-		target = position + view;
+			Mtx44 rotation;
+			right.y = 0;
+			right.Normalize();
+			up = right.Cross(view).Normalized();
+			rotation.SetToRotation(angle, right.x, right.y, right.z);
+			view = rotation * view;
+			target = position + view;
+		}
 	}
 
 	CAMERA_SPEED *= currentVelocity;
@@ -257,6 +266,7 @@ void Camera3::ResetCursorVariables() {
 
 void Camera3::Reset() {
 	view = defaultView;
+	target = defaultTarget;
 	position = defaultPosition;
 	up = defaultUp;
 	right = defaultRight;

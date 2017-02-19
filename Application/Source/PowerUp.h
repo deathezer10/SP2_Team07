@@ -9,7 +9,15 @@
 class PowerUp : public Object {
 
 public:
-	PowerUp(Scene* scene, Vector3 pos,int powerType);
+	enum PowerType {
+
+		POWER_REGEN = 0,
+		POWER_BARRAGE,
+		POWER_SPEEDBOOST
+
+	};
+
+	PowerUp(Scene* scene, Vector3 pos, PowerType pType);
 	~PowerUp() {};
 
 	virtual bool checkInteract();
@@ -20,7 +28,7 @@ public:
 
 private:
 	float _defaultScale = 1;
-	int powertype;
+	PowerType powertype;
 
 };
 #endif

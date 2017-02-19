@@ -10,18 +10,18 @@ struct PlayerStat {
 	int initial_bullet_damage;
 	int initial_bullet_speed;
 	float initial_bullet_cooldown;
-	int initial_shield_capacity;
+	float initial_shield_capacity;
 	float initial_shield_recoveryRate;
 
 	int current_bullet_damage;
 	int current_bullet_speed;
 	float current_bullet_cooldown;
-	int current_shield_capacity;
+	float current_shield_capacity;
 	float current_shield_recoveryRate;
 
 	int current_fighter;
 	int current_health;
-	int current_shield;
+	float current_shield;
 
 };
 
@@ -52,7 +52,7 @@ public:
 	PlayerStats();
 	~PlayerStats() {};
 
-	PlayerStat& getStatData() { return pStat; };
+	PlayerStat* getStatData() { return &pStat; };
 
 	void ConvertToPlayerStats();
 
@@ -60,23 +60,23 @@ public:
 
 	// Default life values before upgrades are added
 	const int default_health = 100;
-	const int default_shield = 100;
+	const int default_shield = 50;
 	const int multiplier_base_speed = 5; // Different Space Fighter Acceleration per level
 
 	// Minimum Stats
-	const int minimum_bullet_damage = 20;
-	const int minimum_bullet_speed = 10;
+	const int minimum_bullet_damage = 10;
+	const int minimum_bullet_speed = 50;
 	const int minimum_shield_capacity = 25;
 	const int minimum_base_speed = 5;
 
 	// Multiplier for each Upgrades level
-	const int multiplier_bullet_damage = 10;
-	const int multiplier_bullet_speed = 10;
-	const int multiplier_shield_capacity = 30;
+	const int multiplier_bullet_damage = 20;
+	const int multiplier_bullet_speed = 25;
+	const int multiplier_shield_capacity = 20;
 
 	// Cooldown time, dont forget there's a minimum value for these 
 	// Formula: (baseCD - (subtracter * upgradeLevel)) + minimum
-	const float base_cd_bullet_rof = 0.50f;
+	const float base_cd_bullet_rof = 0.75f;
 	const float substracter_cd_bullet_rof = 0.10f;
 	const float minimum_bullet_cooldown = 0.10f;
 

@@ -10,7 +10,7 @@ class Ring : public Object {
 
 public:
 	Ring(Scene* scene, Vector3 pos);
-	~Ring();
+	~Ring() { --RingCount; };
 
 	static int RingCount;
 	static Vector3* NearestRingPos;

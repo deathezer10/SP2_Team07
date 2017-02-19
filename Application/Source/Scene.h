@@ -1,10 +1,12 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "SkillManager.h"
-#include "UIManager.h"
-#include "ObjectBuilder.h"
+
 #include "Camera3.h"
+#include "WayPoint.h"
+#include "UIManager.h"
+#include "SkillManager.h"
+#include "ObjectBuilder.h"
 
 
 class Scene {
@@ -112,6 +114,15 @@ public:
 
 	};
 
+	enum TYPE_SCENE {
+
+		SCENE_TUTORIAL = 0,
+		SCENE_DOGFIGHT,
+		SCENE_PAYLOAD,
+		SCENE_BOSS,
+
+	};
+
 	Scene();
 	~Scene() {}
 
@@ -119,6 +130,9 @@ public:
 	virtual void Update(double dt) = 0;
 	virtual void Render() = 0;
 	virtual void Exit() = 0;
+
+	// Used for creating a 'new' Scene using TYPE_SCENE as the determinant. No initialization is done for the newly created Scene
+	Scene* createScene(TYPE_SCENE type);
 	
 	MS modelStack, viewStack, projectionStack;
 
@@ -135,6 +149,7 @@ public:
 	UIManager textManager;
 	ObjectBuilder objBuilder;
 	Camera3 camera;
+	WayPoint waypoint;
 
 	void RenderMesh(Mesh *mesh, bool enableLight);
 

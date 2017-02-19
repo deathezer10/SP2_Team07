@@ -2,15 +2,36 @@
 
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
-
+#include "SceneTutorial.h"
 
 
 Scene::Scene() :
-skillManager(this),
+camera(this),
+waypoint(this),
 textManager(this),
-camera(this){
+skillManager(this) {
 }
 
+
+Scene* Scene::createScene(TYPE_SCENE type) {
+
+	switch (type) {
+
+	case Scene::SCENE_TUTORIAL:
+		return new SceneTutorial();
+
+	case Scene::SCENE_DOGFIGHT:
+		
+
+	case Scene::SCENE_PAYLOAD:
+		
+
+	case Scene::SCENE_BOSS:
+	
+		break;
+	}
+
+}
 
 void Scene::RenderMesh(Mesh *mesh, bool enableLight) {
 	Mtx44 MVP, modelView, modelView_inverse_transpose;

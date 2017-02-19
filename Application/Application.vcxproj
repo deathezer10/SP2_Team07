@@ -91,7 +91,7 @@
     <ClCompile Include="Source\Camera2.cpp" />
     <ClCompile Include="Source\Camera3.cpp" />
     <ClCompile Include="Source\Door.cpp" />
-    <ClCompile Include="Source\GuideArrow.cpp" />
+    <ClCompile Include="Source\WayPoint.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -129,7 +129,7 @@
     <ClInclude Include="Source\Camera3.h" />
     <ClInclude Include="Source\Door.h" />
     <ClInclude Include="Source\Geometry.h" />
-    <ClInclude Include="Source\GuideArrow.h" />
+    <ClInclude Include="Source\WayPoint.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
     <ClInclude Include="Source\LoadTGA.h" />

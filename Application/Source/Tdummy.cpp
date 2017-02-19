@@ -4,16 +4,32 @@
 
 
 unsigned Tdummy::TdummyCount = 0;
+Vector3* Tdummy::NearestTdummyPos = nullptr;
 
 
 
 Tdummy::Tdummy(Scene* scene, Vector3 pos) : NPC(scene, pos) {
+	setHealth(100);
 	type = Scene::GEO_TDUMMY;
-	scale = 5.0f;
-	TdummyCount++;
+	scale = 10.0f;
+	_interactDistance = scale;
+	isLightingEnabled = false;
+	++TdummyCount;
 };
 
 bool Tdummy::checkInteract() {
+
+	if (NearestTdummyPos == nullptr) {
+		NearestTdummyPos = &position;
+	}
+
+	Vector3 thisToCamera = (position - _scene->camera.position);
+	Vector3 NearestDummyToCamera = (*NearestTdummyPos) - _scene->camera.position;
+
+
+	if (NearestDummyToCamera.Length() > thisToCamera.Length()) {
+		NearestTdummyPos = &position;
+	}
 
 	// Move Tdummy towards player using the unit vector
 	Vector3 distance = (position - _scene->camera.position);
@@ -55,4 +71,8 @@ bool Tdummy::checkInteract() {
 
 
 	return false;
+}
+
+void Tdummy::collisionHit(Vector3& hitPos) {
+
 }

@@ -177,20 +177,26 @@ bool PlayerDataManager::isFighterUnlocked(int value) {
 }
 
 
-void PlayerDataManager::damagePlayer(int amount) {
-
-	if (pStat.getStatData().current_shield > 0) {
-		pStat.getStatData().current_shield -= amount;
-	}
-	else {
-		pStat.getStatData().current_health -= amount;
-	}
-
-	if (pStat.getStatData().current_shield < 0)
-		pStat.getStatData().current_shield = 0;
-
-}
-
 void PlayerDataManager::ResetPlayerStats() {
 	pStat.ResetPlayerStats(pSaveData.currentFighter);
+}
+
+void PlayerDataManager::damagePlayer(int amount) {
+
+	// Minus shield first
+	if (pStat.getStatData()->current_shield > 0) {
+		pStat.getStatData()->current_shield -= amount;
+	}
+	else {
+		pStat.getStatData()->current_health -= amount;
+	}
+	
+	// Transfer remainder damage to Health
+	if (pStat.getStatData()->current_shield < 0) {
+		pStat.getStatData()->current_health += (int)pStat.getStatData()->current_shield;
+	}	
+
+	if (pStat.getStatData()->current_shield < 0)
+		pStat.getStatData()->current_shield = 0;
+
 }

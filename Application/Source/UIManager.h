@@ -52,12 +52,14 @@ public:
 	Mesh** textMesh;
 
 	// Queue the given Text so that it gets called during Render()
+	// Call this instead of renderTextOnScreen() if you want to render text inside Update()
 	void queueRenderText(Text text);
 
 	// Render the given Text to the screen
+	// Call queueRenderText() if you want to render a text when inside Update()
 	void renderTextOnScreen(Text text);
 
-	// Load the font widths of a '.csv' into a vector for proper character spacing of text
+	// Load the font widths of a '.csv' into a vector to allow proper character spacing of all text characters
 	bool LoadFontWidth(std::string fontPath);
 
 	// Reset all text positions to default to prevent them from flying away, must be called at end of Render()
@@ -66,7 +68,7 @@ public:
 	// Prints all the pending Text onto the screen
 	void dequeueText();
 	
-	//Render models onto the screen
+	//Render the mesh onto the screen with the given Screen Coordinates
 	void RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale);
 
 private:

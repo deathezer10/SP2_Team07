@@ -158,9 +158,6 @@
     <ClCompile Include="Source\ObjectCollider.cpp">
       <Filter>Source Files\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GuideArrow.cpp">
-      <Filter>Source Files\Navigation</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PlayerStats.cpp">
       <Filter>Source Files\Player\Data</Filter>
     </ClCompile>
@@ -169,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="Source\SkillManager.cpp">
       <Filter>Source Files\Player\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WayPoint.cpp">
+      <Filter>Source Files\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -274,9 +274,6 @@
     <ClInclude Include="Source\NPC.h">
       <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GuideArrow.h">
-      <Filter>Header Files\Navigation</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PlayerStats.h">
       <Filter>Header Files\Player\Data</Filter>
     </ClInclude>
@@ -285,6 +282,9 @@
     </ClInclude>
     <ClInclude Include="Source\SkillManager.h">
       <Filter>Header Files\Player\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WayPoint.h">
+      <Filter>Header Files\Navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,8 +8,11 @@
 
 using std::multimap;
 
-Bullet::Bullet(Scene* scene, Vector3 pos) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage, bool isEnemy) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
 	type = Scene::GEO_NONE;
+
+	_bulletDamage = damage;
+	_isEnemyBullet = isEnemy;
 
 	_bulletSpeed = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed;
 	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
@@ -34,27 +37,41 @@ bool Bullet::checkInteract() {
 		return true;
 	}
 
-	// Retrieve all values that from key 'Enemy'
-	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+	// Enemy Bullet
+	if (_isEnemyBullet == true){
 
-	for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
-
-		Object* temp = it->second;
-
-		// NPC bullet collision
-		if ((temp->position - position).Length() < _interactDistance) {
-
-			NPC* npc = dynamic_cast<NPC*>(temp);
-			Vector3 pushAway = (npc->position - _scene->camera.position).Normalized();
-			pushAway *= 5; // multiply the unit vector by 5 so we can push him further
-
-			// Damage the enemy and then remove this bullet
-			//npc->position += pushAway;
-			npc->reduceHealth(PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage);
-			npc->reduceVelocity((float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage);
-			npc->scale -= 2.0f;
+		if ((_scene->camera.playerView - position).Length() < _interactDistance){
+			PlayerDataManager::getInstance()->damagePlayer(_bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
+		}
+
+	}
+	else { // Player Bullet
+
+		// Retrieve all values that from key 'Enemy'
+		auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+
+		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+
+			Object* temp = it->second;
+
+			// NPC bullet collision
+			if ((temp->position - position).Length() < _interactDistance) {
+
+				NPC* npc = dynamic_cast<NPC*>(temp);
+				Vector3 pushAway = (npc->position - _scene->camera.position).Normalized();
+				pushAway *= 5; // multiply the unit vector by 5 so we can push him further
+
+				// Damage the enemy and then remove this bullet
+				//npc->position += pushAway;
+				npc->reduceHealth(_bulletDamage);
+				npc->reduceVelocity((float)_bulletDamage);
+				npc->scale -= 2.0f;
+				_scene->objBuilder.destroyObject(this);
+				return true;
+			}
+
 		}
 
 	}

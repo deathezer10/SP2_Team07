@@ -302,12 +302,12 @@ void SceneDogfight::Update(double dt) {
 	std::ostringstream objDist;
 	std::ostringstream objCount;
 
+	waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
 	// Objective Logic
 	switch (currentObjective) {
 
 	case 0: // Accelerate to collect ring
-		waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));

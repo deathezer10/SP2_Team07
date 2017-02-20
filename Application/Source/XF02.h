@@ -9,7 +9,7 @@ class XF02 : public NPC {
 
 public:
 	XF02(Scene* scene, Vector3 pos);
-	~XF02() { XF02Count--; };
+	~XF02() { --XF02Count; };
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);

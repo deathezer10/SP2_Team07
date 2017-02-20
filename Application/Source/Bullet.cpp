@@ -84,7 +84,7 @@ bool Bullet::checkInteract() {
 				//npc->position += pushAway;
 				npc->reduceHealth(_bulletDamage);
 				npc->reduceVelocity((float)_bulletDamage);
-				npc->scale -= 2.0f;
+		
 				_scene->objBuilder.destroyObject(this);
 				return true;
 			}

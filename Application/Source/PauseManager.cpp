@@ -47,6 +47,29 @@ void PauseManager::UpdatePauseMenu(float dt){
 	_currentOption = Math::Clamp<short>(_currentOption, 0, 3);
 
 
+	if (Application::IsKeyPressed(VK_RETURN)){
+		switch (_currentOption) {
+
+		case 0: // Resume
+			_paused = false;
+			break;
+
+		case 1: // Restart
+			SceneManager::getInstance()->changeScene(_scene->createScene(_scene->sceneType)); // Restart the scene
+			return;
+			break;
+
+		case 2: // Main Menu
+			SceneManager::getInstance()->changeScene(_scene->createScene(Scene::TYPE_SCENE::SCENE_MAINMENU));
+			break;
+
+		case 3: // Quit
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true);
+			break;
+
+		}
+	}
+
 }
 
 void PauseManager::RenderPauseMenu(){
@@ -92,31 +115,7 @@ void PauseManager::RenderPauseMenu(){
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ option3t, color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ option4t, color, UIManager::ANCHOR_CENTER_CENTER });
-
-
-	if (Application::IsKeyPressed(VK_RETURN)){
-		switch (_currentOption) {
-
-		case 0: // Resume
-			_paused = false;
-			break;
-
-		case 1: // Restart
-			SceneManager::getInstance()->changeScene(_scene->createScene(_scene->sceneType)); // Restart the scene
-			return;
-			break;
-
-		case 2: // Main Menu
-			SceneManager::getInstance()->changeScene(_scene->createScene(Scene::TYPE_SCENE::SCENE_MAINMENU));
-			break;
-
-		case 3: // Quit
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true);
-			break;
-
-		}
-	}
-
+	
 	_scene->textManager.reset();
 
 }

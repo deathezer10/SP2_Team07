@@ -65,7 +65,7 @@ public:
 
 	// Minimum Stats
 	const int minimum_bullet_damage = 10;
-	const int minimum_bullet_speed = 50;
+	const int minimum_bullet_speed = 350;
 	const int minimum_shield_capacity = 25;
 	const int minimum_base_speed = 5;
 
@@ -76,7 +76,7 @@ public:
 
 	// Cooldown time, dont forget there's a minimum value for these 
 	// Formula: (baseCD - (subtracter * upgradeLevel)) + minimum
-	const float base_cd_bullet_rof = 0.75f;
+	const float base_cd_bullet_rof = 0.55f;
 	const float substracter_cd_bullet_rof = 0.10f;
 	const float minimum_bullet_cooldown = 0.10f;
 

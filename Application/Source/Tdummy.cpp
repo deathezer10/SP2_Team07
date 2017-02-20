@@ -40,12 +40,12 @@ bool Tdummy::checkInteract() {
 
 
 	// Move the Tdummy
-	if (distance.Length() <= 30.0f) {
+	if (distance.Length() <= 40.0f) {
 		_currentVelocity += _currentaceleration*_scene->_dt;
 
 	}
-	else if (distance.Length() <= 20.0f) {
-		_currentVelocity = 60.0f;
+	else if (distance.Length() <= 30.0f) {
+		_currentVelocity = _scene->camera.getCurrentVelocity() + 20.0f;
 	}
 	else {
 		if (_currentVelocity > 0) {

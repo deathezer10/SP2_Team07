@@ -170,6 +170,12 @@
     <ClCompile Include="Source\WayPoint.cpp">
       <Filter>Source Files\Navigation</Filter>
     </ClCompile>
+    <ClCompile Include="Source\SceneDogfight.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\XF02.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -285,6 +291,12 @@
     </ClInclude>
     <ClInclude Include="Source\WayPoint.h">
       <Filter>Header Files\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneDogfight.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\XF02.h">
+      <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

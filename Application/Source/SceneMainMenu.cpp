@@ -9,6 +9,7 @@
 #include "SceneMainMenu.h"
 #include "SceneShop.h"
 #include "SceneTutorial.h"
+#include "SceneDogfight.h"
 
 #include "MeshBuilder.h"
 #include "Utility.h"
@@ -227,7 +228,7 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new SceneTutorial()); // Change Scene
 				break;
 			case 1: // Dog fight
-				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				SceneManager::getInstance()->changeScene(new SceneDogfight()); // Change Scene
 				break;
 			case 2: // Payload
 				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene

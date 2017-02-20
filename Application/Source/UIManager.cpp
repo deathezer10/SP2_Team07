@@ -8,6 +8,9 @@
 #include "Scene.h"
 #include "UIManager.h"
 
+#include <sstream>
+
+using std::ostringstream;
 
 
 UIManager::UIManager(Scene* scene) {
@@ -174,6 +177,46 @@ void UIManager::renderTextOnScreen(Text text) {
 	_scene->modelStack.PopMatrix();
 
 	glEnable(GL_DEPTH_TEST);
+}
+
+void UIManager::renderPlayerHUD(){
+
+	static bool canDebugPress = false;
+
+	if (!Application::IsKeyPressed('C')) {
+		canDebugPress = true;
+	}
+
+	if (Application::IsKeyPressed('C') && canDebugPress) {
+		canDebugPress = false;
+		showDebugInfo = !showDebugInfo;
+	}
+
+	if (showDebugInfo) {
+		// Debugging Text
+		std::ostringstream fps;
+		fps << "FPS: " << (int)(1 / _scene->_dt);
+		renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream targ;
+		targ << "Target: " << _scene->camera.getTarget().toString();
+		renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream upz;
+		upz << "Up: " << _scene->camera.getUp().toString();
+		renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream pitch;
+		pitch << "Pitch: " << _scene->camera.getPitch();
+		renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		std::ostringstream yaw;
+		yaw << "Yaw: " << _scene->camera.getYaw();
+		renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+	}
+
+	std::ostringstream velocity;
+	velocity << "Speed: " << (int)_scene->camera.getCurrentVelocity() << "m/s";
+	renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
+
+	// Crosshair
+	renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 }
 
 void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale) {

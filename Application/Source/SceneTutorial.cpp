@@ -188,6 +188,8 @@ void SceneTutorial::Init() {
 	meshList[GEO_WAYPOINT] = MeshBuilder::GenerateOBJ("rock4", "OBJ/waypoint.obj");
 	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
+	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
@@ -562,42 +564,8 @@ void SceneTutorial::Render() {
 		return;
 	}
 
-	static bool canDebugPress = false;
 
-	if (!Application::IsKeyPressed('C')) {
-		canDebugPress = true;
-	}
-
-	if (Application::IsKeyPressed('C') && canDebugPress) {
-		canDebugPress = false;
-		showDebugInfo = !showDebugInfo;
-	}
-
-	if (showDebugInfo) {
-		// Debugging Text
-		std::ostringstream fps;
-		fps << "FPS: " << (int)(1 / _dt);
-		textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream targ;
-		targ << "Target: " << camera.getTarget().toString();
-		textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream upz;
-		upz << "Up: " << camera.getUp().toString();
-		textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream pitch;
-		pitch << "Pitch: " << camera.getPitch();
-		textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream yaw;
-		yaw << "Yaw: " << camera.getYaw();
-		textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	}
-
-	std::ostringstream velocity;
-	velocity << "Speed: " << (int)camera.getCurrentVelocity() << "m/s";
-	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
-
-	// Crosshair
-	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 

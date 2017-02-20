@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Scene.h"
 #include "SceneManager.h"
+#include "MeshBuilder.h"
 
 #include "GLFW\glfw3.h"
 
@@ -54,7 +55,7 @@ void PauseManager::RenderPauseMenu(){
 	if (_paused == false)
 		return;
 
-	const Color white(1, 1, 1);
+	const Color color(0, 0, 0);
 
 	string option1t = option1;
 	string option2t = option2;
@@ -81,15 +82,17 @@ void PauseManager::RenderPauseMenu(){
 
 	}
 
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ title, white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ option1t, white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ option2t, white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ option3t, white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", white, UIManager::ANCHOR_CENTER_CENTER });
-	_scene->textManager.renderTextOnScreen(UIManager::Text{ option4t, white, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.RenderMeshOnScreen(_scene->meshList[Scene::GEO_MENU_BACKGROUND], Application::_windowWidth / 20, Application::_windowHeight / 25, Vector3(90, 0, 0), Vector3(1, 1, 1));
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ title, color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ option1t, color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ option2t, color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ option3t, color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
+	_scene->textManager.renderTextOnScreen(UIManager::Text{ option4t, color, UIManager::ANCHOR_CENTER_CENTER });
+
 
 	if (Application::IsKeyPressed(VK_RETURN)){
 		switch (_currentOption) {

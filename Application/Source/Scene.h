@@ -32,6 +32,8 @@ public:
 
 		GEO_TEXT,
 
+		GEO_MENU_BACKGROUND,
+
 		// Scene Models
 		GEO_BUILDING,
 		GEO_DOOR,

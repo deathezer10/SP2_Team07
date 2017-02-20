@@ -15,7 +15,8 @@ public:
 		_scene(scene),
 		position(pos),
 		collidable(colisionEnabled),
-		collider(&position, boxWidth, boxHeight, boxDepth) {
+		collider(&position, boxWidth, boxHeight, boxDepth)
+	{
 	};
 
 	virtual ~Object() {};

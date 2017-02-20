@@ -105,7 +105,7 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = _dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 40.0f * _dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 90.0f * _dt;
 	float rotationSpeed = 1.0f * _dt;
 
 	// Bring roll back to zero

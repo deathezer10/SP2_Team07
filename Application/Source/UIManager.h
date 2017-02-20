@@ -62,6 +62,8 @@ public:
 	// Load the font widths of a '.csv' into a vector to allow proper character spacing of all text characters
 	bool LoadFontWidth(std::string fontPath);
 
+	void renderPlayerHUD();
+
 	// Reset all text positions to default to prevent them from flying away, must be called at end of Render()
 	void reset();
 
@@ -80,6 +82,8 @@ private:
 
 	// Pending Texts waiting to be printed
 	std::queue<Text> currentTextQueue;
+
+	bool showDebugInfo = false;
 
 };
 #endif

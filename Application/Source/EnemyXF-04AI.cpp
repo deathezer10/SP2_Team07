@@ -13,13 +13,15 @@ EnemyXF_04AI::EnemyXF_04AI(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(100);
 	type = Scene::GEO_XF4;
 	scale = 5.0f;
-	//rotationZ = 90;
+	// rotationZ = 90;
 	_interactDistance = scale;
 	isLightingEnabled = false;
 	++EnemyXF_04AICount;
 };
 
 bool EnemyXF_04AI::checkInteract() {
+
+	RotateTowards(_scene->camera.playerView);
 
 	if (NearestEnemyXF_04AIPos == nullptr) {
 		NearestEnemyXF_04AIPos = &position;
@@ -43,7 +45,7 @@ bool EnemyXF_04AI::checkInteract() {
 	rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x)) + 90;
 
 
-	// Move the EnemyXF_04AI towards the cargo
+	// Move the EnemyXF_04AI towards the cargo  
 	if (distance.Length() >= 40.0f) {
 		//distance = *CargoShip::NearestCargoShipPos - position*_scene->_dt;
 		_currentVelocity += _currentdeceleration*_scene->_dt;
@@ -75,6 +77,22 @@ bool EnemyXF_04AI::checkInteract() {
 
 
 	return false;
+}
+
+void EnemyXF_04AI::RotateTowards(Vector3& target) {
+	
+	Vector3 distance = (position - target);
+
+	// Rotate the XF02 towards the player
+	if (distance.z > 0){
+		rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x));
+		rotationX = -(Math::RadianToDegree(atan2(distance.y, distance.z)));
+	}
+	else
+	{
+		rotationY = Math::RadianToDegree(atan2(distance.x, distance.z)) + 270;
+		rotationX = -Math::RadianToDegree(atan2(distance.y, distance.z)) + 180;
+	}
 }
 
 void EnemyXF_04AI::collisionHit(Vector3& hitPos) {

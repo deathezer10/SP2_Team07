@@ -25,10 +25,14 @@ private:
 
 
 	const float _MovementSpeed = 1.0f; // Movement speed
-	const float _AttackDamage = 0.0f; // Damage per attack
+	const float _AttackDamage = 10.0f; // Damage per attack
 	const float _DamageInterval = 0.0f; // Cooldown between each attacks
 
 	float _NextDamageTime = 0; // DamageInterval's helper variable
+
+
+	// Face the Arrow towards the target
+	void RotateTowards(Vector3& target);
 
 };
 

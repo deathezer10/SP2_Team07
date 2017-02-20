@@ -13,6 +13,7 @@ CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	type = Scene::GEO_CARGOSHIP;
 	scale = 5.0f;
 	NearestCargoShipPos=&position;
+	isLightingEnabled = false;
 };
 
 bool CargoShip::checkInteract() {

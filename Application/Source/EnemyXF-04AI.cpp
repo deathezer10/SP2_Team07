@@ -12,8 +12,8 @@ Vector3* EnemyXF_04AI::NearestEnemyXF_04AIPos = nullptr;
 EnemyXF_04AI::EnemyXF_04AI(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(100);
 	type = Scene::GEO_XF4;
-	scale = 10.0f;
-	rotationZ = 90;
+	scale = 5.0f;
+	//rotationZ = 90;
 	_interactDistance = scale;
 	isLightingEnabled = false;
 	++EnemyXF_04AICount;
@@ -45,21 +45,20 @@ bool EnemyXF_04AI::checkInteract() {
 
 	// Move the EnemyXF_04AI towards the cargo
 	if (distance.Length() >= 40.0f) {
-		distance = *CargoShip::NearestCargoShipPos - position*_scene->_dt;
+		//distance = *CargoShip::NearestCargoShipPos - position*_scene->_dt;
+		_currentVelocity += _currentdeceleration*_scene->_dt;
 	}
+	else if (distance.Length()<=10)
+	{
 	//AI shoots bullet when it is near the cargo
-	else if (distance.Length() <= 40.0f) {
+		_currentVelocity=0;
 		_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(rotationX, rotationY, rotationZ), unitDistance));
 	}
-	//if (distance2.Length() <= 50)
-	//{
-	//	//stop shooting and move away
-	//	_currentVelocity -= _currentdeceleration*_scene->_dt;
-	//} 
-	//else {
-	//	//continue shooting
-	//	_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(rotationX, rotationY, rotationZ), unitDistance));
-	//}
+	if (distance2.Length() <= 20)
+	{
+		//stop shooting and move away
+		_currentVelocity -= _currentdeceleration*_scene->_dt;
+	} 
 
 	float moveX = unitDistance.x * _currentVelocity * _scene->_dt;
 	float moveZ = unitDistance.z  * _currentVelocity * _scene->_dt;

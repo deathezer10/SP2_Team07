@@ -176,6 +176,15 @@
     <ClCompile Include="Source\XF02.cpp">
       <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CargoShip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneCargoShip.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyXF-04AI.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -297,6 +306,15 @@
     </ClInclude>
     <ClInclude Include="Source\XF02.h">
       <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CargoShip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyXF-04AI.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneCargoShip.h">
+      <Filter>Header Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

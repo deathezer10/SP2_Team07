@@ -55,6 +55,9 @@ public:
 
 	Vector3 playerView; // Player model offset, used for indicating that the player has moved
 
+	// Reset the helper variables of this class back to default
+	void ResetCursorVariables();
+
 private:
 	Scene* _scene;
 
@@ -104,9 +107,6 @@ private:
 	// Distance the Cursor moved from the current and last frame. Used to determine mouse sensitivity
 	float mouseMovedDistanceX;
 	float mouseMovedDistanceY;
-
-	// Reset the helper variables of this class back to default
-	void ResetCursorVariables();
 
 	// Updates the direction in which the cursor has moved
 	void updateCursor(double dt);

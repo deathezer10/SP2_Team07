@@ -20,7 +20,7 @@
 
 
 
-SceneMainMenu::SceneMainMenu()
+SceneMainMenu::SceneMainMenu() : Scene(SCENE_MAINMENU)
 {
 	_outsideSelected = 0;
 	_insideSelected = 0;

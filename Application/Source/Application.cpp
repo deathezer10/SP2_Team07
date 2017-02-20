@@ -68,7 +68,7 @@ void Application::Init()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL 
 
 	//Create a window and create its OpenGL context
-	m_window = glfwCreateWindow(_windowWidth, _windowHeight, "Computer Graphics", NULL, NULL);
+	m_window = glfwCreateWindow(_windowWidth, _windowHeight, "Space Fighter 27", NULL, NULL);
 	glfwSetWindowUserPointer(m_window, nullptr); // To retrieve the window handle in other classes
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 

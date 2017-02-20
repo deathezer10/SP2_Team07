@@ -3,33 +3,38 @@
 #include "GL\glew.h"
 #include "GLFW\glfw3.h"
 #include "SceneTutorial.h"
+#include "SceneMainMenu.h"
+#include "SceneShop.h"
+#include "SceneGameOver.h"
 
 
-Scene::Scene() :
+Scene::Scene(TYPE_SCENE type) :
+pauseManager(this),
 camera(this),
 waypoint(this),
 textManager(this),
-skillManager(this) {
+skillManager(this), sceneType(type) {
 }
 
 
 Scene* Scene::createScene(TYPE_SCENE type) {
 
-	switch (type) {
 
+	switch (type)
+	{
 	case Scene::SCENE_TUTORIAL:
 		return new SceneTutorial();
-
+	case Scene::SCENE_MAINMENU:
+		return new SceneMainMenu();
+	case Scene::SCENE_SHOP:
+		return new SceneShop();
 	case Scene::SCENE_DOGFIGHT:
-		
-
-	case Scene::SCENE_PAYLOAD:
-		
-
+	case Scene::SCENE_CARGOSHIP:
 	case Scene::SCENE_BOSS:
-	
 		break;
 	}
+
+	return nullptr;
 
 }
 

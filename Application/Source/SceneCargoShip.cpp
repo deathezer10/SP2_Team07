@@ -20,7 +20,7 @@
 #include <sstream>
 
 
-SceneCargoShip::SceneCargoShip() {
+SceneCargoShip::SceneCargoShip() : Scene(SCENE_CARGOSHIP) {
 }
 
 SceneCargoShip::~SceneCargoShip() {}

@@ -14,7 +14,7 @@
 #include <sstream>
 
 
-Assignment03::Assignment03() {
+Assignment03::Assignment03() : Scene(SCENE_MAINMENU){
 }
 
 Assignment03::~Assignment03() {}

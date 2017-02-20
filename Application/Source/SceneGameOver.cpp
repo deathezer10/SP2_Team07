@@ -16,7 +16,7 @@
 #include <sstream>
 
 
-SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene) {
+SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene) : Scene(SCENE_GAMEOVER_VICTORY){
 	_previousScene = previousScene;
 	_menuSelected = 0;
 	_menuType = type;

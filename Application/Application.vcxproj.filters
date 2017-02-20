@@ -185,6 +185,9 @@
     <ClCompile Include="Source\EnemyXF-04AI.cpp">
       <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PauseManager.cpp">
+      <Filter>Source Files\User Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -315,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="Source\SceneCargoShip.h">
       <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PauseManager.h">
+      <Filter>Header Files\User Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

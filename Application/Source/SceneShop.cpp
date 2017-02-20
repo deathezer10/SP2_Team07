@@ -23,7 +23,7 @@ const int ShipPrice[3] = { 2000, 2000, 2000 };
 const int UpgradePrice[5] = { 300, 200, 500, 400, 300 };
 
 
-SceneShop::SceneShop()
+SceneShop::SceneShop() : Scene(SCENE_SHOP)
 {
 	_menuSelected = 0;
 }

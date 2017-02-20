@@ -6,6 +6,7 @@
 #include "WayPoint.h"
 #include "UIManager.h"
 #include "SkillManager.h"
+#include "PauseManager.h"
 #include "ObjectBuilder.h"
 
 
@@ -48,6 +49,7 @@ public:
 		GEO_XF2,
 		GEO_XF4,
 		GEO_D01,
+		GEO_CARGOSHIP,
 
 		GEO_SLIME,
 		GEO_ROCK1,
@@ -116,14 +118,17 @@ public:
 
 	enum TYPE_SCENE {
 
-		SCENE_TUTORIAL = 0,
+		SCENE_TUTORIAL = 0,		
+		SCENE_MAINMENU,		
+		SCENE_SHOP,
+		SCENE_GAMEOVER_VICTORY,
 		SCENE_DOGFIGHT,
-		SCENE_PAYLOAD,
+		SCENE_CARGOSHIP,
 		SCENE_BOSS,
 
 	};
 
-	Scene();
+	Scene(TYPE_SCENE type);
 	~Scene() {}
 
 	virtual void Init() = 0;
@@ -133,11 +138,13 @@ public:
 
 	// Used for creating a 'new' Scene using TYPE_SCENE as the determinant. No initialization is done for the newly created Scene
 	Scene* createScene(TYPE_SCENE type);
-	
+
 	MS modelStack, viewStack, projectionStack;
 
 	Mesh* meshList[NUM_GEOMETRY];
-	
+
+	const TYPE_SCENE sceneType;
+
 	float _dt;
 	float _elapsedTime = 0;
 
@@ -145,6 +152,7 @@ public:
 	unsigned m_vertexArrayID;
 	unsigned m_programID;
 
+	PauseManager pauseManager;
 	SkillManager skillManager;
 	UIManager textManager;
 	ObjectBuilder objBuilder;

@@ -20,7 +20,7 @@
 #include <sstream>
 
 
-SceneDogfight::SceneDogfight() {
+SceneDogfight::SceneDogfight() : Scene(SCENE_DOGFIGHT){
 }
 
 SceneDogfight::~SceneDogfight() {}

@@ -19,7 +19,7 @@
 #include <sstream>
 
 
-SceneTutorial::SceneTutorial() {
+SceneTutorial::SceneTutorial() : Scene(SCENE_TUTORIAL) {
 }
 
 SceneTutorial::~SceneTutorial() {}
@@ -258,6 +258,12 @@ void SceneTutorial::Update(double dt) {
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
+	pauseManager.UpdatePauseMenu((float)dt);
+
+	if (pauseManager.isPaused()){
+		return;
+	}
+
 	if (Application::IsKeyPressed(VK_F1)) {
 		glEnable(GL_CULL_FACE);
 	}
@@ -292,7 +298,7 @@ void SceneTutorial::Update(double dt) {
 
 	std::ostringstream objDist;
 	std::ostringstream objCount;
-	
+
 
 	// Objective Logic
 	switch (currentObjective) {
@@ -452,7 +458,7 @@ void SceneTutorial::Update(double dt) {
 		// Dummies eliminated
 		if (Tdummy::TdummyCount == 0) {
 
-			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 250), PowerUp::POWER_SPEEDBOOST));
+			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 275), PowerUp::POWER_SPEEDBOOST));
 			objBuilder.createObject(new Ring(this, Vector3(0, 0, 1000)), td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 			++currentObjective;
@@ -460,7 +466,13 @@ void SceneTutorial::Update(double dt) {
 		break;
 
 	case 7: // Spped Boost to the End
-		waypoint.RotateTowards(*Ring::NearestRingPos);
+
+		if (camera.getCurrentVelocity() != camera.getMaxVelocity()){
+			waypoint.RotateTowards(Vector3(0, 0, 275));
+		}
+		else {
+			waypoint.RotateTowards(*Ring::NearestRingPos);
+		}
 
 		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up the <Speed Boost> and sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
@@ -492,8 +504,8 @@ void SceneTutorial::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-					 camera.target.x, camera.target.y, camera.target.z,
-					 camera.up.x, camera.up.y, camera.up.z);
+		camera.target.x, camera.target.y, camera.target.z,
+		camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -544,6 +556,11 @@ void SceneTutorial::Render() {
 	// Render all interactable objects
 	objBuilder.renderObjects();
 
+	// Anything after this is not rendered
+	if (pauseManager.isPaused()){
+		pauseManager.RenderPauseMenu();
+		return;
+	}
 
 	static bool canDebugPress = false;
 

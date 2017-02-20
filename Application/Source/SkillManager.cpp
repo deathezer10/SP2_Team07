@@ -16,7 +16,7 @@ void SkillManager::processSkills(double dt) {
 	if (Application::IsKeyPressed(MK_LBUTTON)) {
 
 		if (_elapsedTime >= _nextShootTime) {
-			_scene->objBuilder.createObject(new Bullet(_scene, _scene->camera.playerView, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage, false));
+			_scene->objBuilder.createObject(new Bullet(_scene, _scene->camera.playerView, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
 			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 		}
 	}

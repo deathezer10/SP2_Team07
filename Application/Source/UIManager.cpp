@@ -7,6 +7,7 @@
 
 #include "Scene.h"
 #include "UIManager.h"
+#include "PlayerDataManager.h"
 
 #include <sstream>
 
@@ -210,6 +211,15 @@ void UIManager::renderPlayerHUD(){
 		yaw << "Yaw: " << _scene->camera.getYaw();
 		renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 	}
+	
+	std::ostringstream strHealth;
+	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
+	renderTextOnScreen(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
+
+	std::ostringstream strShield;
+	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
+	renderTextOnScreen(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
+
 
 	std::ostringstream velocity;
 	velocity << "Speed: " << (int)_scene->camera.getCurrentVelocity() << "m/s";

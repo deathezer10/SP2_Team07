@@ -16,7 +16,7 @@ Camera3::~Camera3() {
 void cbMouseEvent(GLFWwindow* window, int button, int action, int mods) {
 
 	// Toggle cursor on right click
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE) {
+	if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE) {
 		if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
 		}
@@ -94,7 +94,7 @@ void Camera3::Update(double dt) {
 	if (canMove == false) {
 		setVelocity(0);
 		return;
-	}	
+	}
 
 	// Cursor is shown, stop rotating the camera
 	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
@@ -105,7 +105,7 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = _dt;
-	float CAMERA_LEFT_RIGHT_SPEED = 90.0f * _dt;
+	float CAMERA_LEFT_RIGHT_SPEED = 60.0f * _dt;
 	float rotationSpeed = 1.0f * _dt;
 
 	// Bring roll back to zero
@@ -169,13 +169,24 @@ void Camera3::Update(double dt) {
 
 	// Camera Move Up / Down
 	if (Application::IsKeyPressed('Z')) { // Up
-		position = position + up  * CAMERA_SPEED;
+		position = position + up  * CAMERA_LEFT_RIGHT_SPEED;
 		target = position + view;
 	}
 	else if (Application::IsKeyPressed('X')) { // Down
-		position = position - up * CAMERA_SPEED;
+		position = position - up * CAMERA_LEFT_RIGHT_SPEED;
 		target = position + view;
 	}
+
+	if (Application::IsKeyPressed('Q')) { // Up
+		position = position - right  * CAMERA_LEFT_RIGHT_SPEED;
+		target = position + view;
+	}
+	else if (Application::IsKeyPressed('E')) { // Down
+		position = position + right * CAMERA_LEFT_RIGHT_SPEED;
+		target = position + view;
+	}
+
+
 
 	// Positional bounds check
 	//position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
@@ -218,18 +229,20 @@ void Camera3::Update(double dt) {
 
 	CAMERA_SPEED *= currentVelocity;
 
+
 	// Move the Camera according to the velocity
 	position.x += view.x * CAMERA_SPEED;
 	position.y += view.y * CAMERA_SPEED;
 	position.z += view.z * CAMERA_SPEED;
 	target = position + view;
-
+	
 	// Clamping max current velocity
 	if (Application::IsKeyPressed('S'))
 		currentVelocity = Math::Clamp(currentVelocity, velocityMin, velocityMax);
 	else {
 		currentVelocity = Math::Clamp(currentVelocity, (wasMovingForward || currentVelocity > 0) ? 1.0f : -1.0f, velocityMax);
 	}
+
 
 	// Model Offset when moving
 	if (Application::IsKeyPressed('W')) {

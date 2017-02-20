@@ -14,10 +14,6 @@ void NPC::reduceHealth(int value) {
 	currentHP -= value;
 	currentHP = Math::Clamp(currentHP, 0, 500);
 
-	if (currentHP <= 0) {
-		_scene->objBuilder.destroyObject(this);
-		return;
-	}
 }
 
 

@@ -15,90 +15,123 @@ XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	_interactDistance = scale * 2;
 	isLightingEnabled = false;
 	++XF02Count;
-};
+}
+
+XF02::~XF02() {
+	--XF02Count;
+
+	if (NearestXF02Pos == &position) {
+		NearestXF02Pos = &Vector3(0, 0, 0);
+	}
+}
 
 bool XF02::checkInteract() {
 
-	if (NearestXF02Pos == nullptr) {
+	if (NearestXF02Pos == nullptr || NearestXF02Pos->IsZero()) {
 		NearestXF02Pos = &position;
 	}
 
-	Vector3 thisToCamera = (position - _scene->camera.position);
+	Vector3 thisToCamera = (_scene->camera.playerView - position); // Enemy to Camera
+	float thisToCameraLength = thisToCamera.Length(); // Length
+	float thisToCameraHorizontalLength = thisToCamera.HorizontalLength(); // Horizontal Length
 	Vector3 NearesXF02ToCamera = (*NearestXF02Pos) - _scene->camera.position;
-
 
 	if (NearesXF02ToCamera.LengthSquared() >= thisToCamera.LengthSquared()) {
 		NearestXF02Pos = &position;
 	}
 
-	// Move XF02 towards player using the unit vector
-	Vector3 distance = (position - _scene->camera.playerView);
-	Vector3 unitDistance = distance.Normalized();
+	Vector3 unitDistance = thisToCamera.Normalized(); // Used to move towards or away from player
 
-	// Rotate the XF02 towards the player
-	if (distance.z > 0){
-		rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x));
-		rotationX = -(Math::RadianToDegree(atan2(distance.y, distance.z)));
 
+	// Quasi-Rotatation towards the player; Gimbal Lock too overpowered man, we need to learn Quaternions!!
+	if (thisToCamera.z < 40) {
+		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
+		rotationZ = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z)) + 180;
 	}
-	else
-	{
-		rotationY = Math::RadianToDegree(atan2(distance.x, distance.z)) + 270;
-		rotationX = -Math::RadianToDegree(atan2(distance.y, distance.z)) + 180;
-
+	else {
+		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
+		rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z));
 	}
 
-	// Move the XF02
-	if (distance.Length() >= 10.0f && _currentVelocity <= 90.0f) //speed limit for enemy as well as to get enemy chase player
-	{
-		_currentVelocity += _currentaceleration*_scene->_dt;
+	if (thisToCamera.z < 60 && thisToCamera.z > -60) {
+		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
+		rotationZ = 0;
 	}
-	if (distance.Length() <= 100.0f) //so that enemy do crash into player
-	{
-		_currentVelocity = 0;
+	// End of Rotation
+
+	// Increment velocity every second
+	if (_currentVelocity < _MaxVelocity)
+		_currentVelocity += _Acceleration * _scene->_dt;
+
+	// Determine the current AI's State
+	if (currentHP < _RetreatThreshold) {
+		_currentState = AI_RETREAT;
 	}
-	if (distance.Length() <= 50.0f) //so that enemy do crash into player
-	{
-		_currentVelocity = -(_scene->camera.getCurrentVelocity() + 20.0f);
+	else if (thisToCameraLength > 90) {
+		_currentState = AI_CHASE;
 	}
-	//if (distance.Length() <= 40.0f && currentHP <= 100)// get enemy to run when being chased
-	//{
-	//	_currentVelocity = -(_scene->camera.getCurrentVelocity() + 20.0f);
-	//}
-	if (currentHP <= 100)//get enemy to turn to running direction when chased
-	{
-		if (_currentVelocity >= -90.0f&&distance.Length() <= 500.0f)
-		{
-			_currentVelocity = -(_scene->camera.getCurrentVelocity() + 20.0f);
+	else if (thisToCameraLength <= 90) {
+		_currentState = AI_ATTACK;
+	}
+	else {
+		_currentState = AI_IDLE;
+	}
+
+
+	switch (_currentState) {
+
+	case AI_STATE::AI_IDLE:
+		break;
+
+	case AI_STATE::AI_RETREAT:
+		unitDistance *= -1; // Fly away from player
+		rotationY -= 180; // Face away from player
+		rotationZ = 0; // Since we're running, no need to look at player anymore
+
+		// Stop running away if distance is too far from player
+		if (thisToCameraHorizontalLength >= _RetreatMaxDistance) {
+			unitDistance.SetZero();
 		}
-		else
-		{
-			_currentVelocity = 0;
+		break;
+
+	case AI_STATE::AI_CHASE:
+		// TODO: Insert checking of units beside this NPC to prevent 'converging'
+		break;
+
+	case AI_STATE::AI_ATTACK:
+
+		float dirZ;
+
+		if (thisToCamera.z < 40) {
+			dirZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z)) + 180;
+		}
+		else {
+			dirZ = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z));
+		}
+		if (thisToCamera.z < 60 && thisToCamera.z > -60) {
+			dirZ = 0;
 		}
 
-		rotationY = _scene->camera.getYaw()*-1;
+		_scene->textManager.queueRenderText(UIManager::Text{ std::to_string(dirZ), Color(1, 1, 1), UIManager::ANCHOR_BOT_CENTER });
+
+		if (_scene->_elapsedTime >= _NextDamageTime) {
+			_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(0, rotationY + 90, dirZ), unitDistance));
+			_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
+		}
+
+		unitDistance.SetZero(); // Stay stionary while firing
+		break;
 
 	}
 
-
-
-
-
-
-	float moveX = unitDistance.x * _currentVelocity * _scene->_dt;
-	float moveZ = unitDistance.z  * _currentVelocity * _scene->_dt;
-	float moveY = unitDistance.y  * _currentVelocity * _scene->_dt;
-
-
-	position.x += -(moveX);
-	position.z += -(moveZ);
-	position.y += -(moveY);
+	position.x += unitDistance.x * _currentVelocity * _scene->_dt;
+	position.y += unitDistance.y  * _currentVelocity * _scene->_dt;
+	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
 
 	if (currentHP <= 0) {
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}
-
 
 	return false;
 }

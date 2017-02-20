@@ -17,7 +17,14 @@ EnemyXF_04AI::EnemyXF_04AI(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	_interactDistance = scale;
 	isLightingEnabled = false;
 	++EnemyXF_04AICount;
-};
+}
+
+EnemyXF_04AI::~EnemyXF_04AI() {
+	--EnemyXF_04AICount;
+	if (NearestEnemyXF_04AIPos == &position) {
+		NearestEnemyXF_04AIPos = &Vector3(0, 0, 0);
+	}
+}
 
 bool EnemyXF_04AI::checkInteract() {
 

@@ -23,7 +23,7 @@ public:
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);
 	virtual void render();
-	static int RingCount;
+
 	const float _interactDistance = 4.0f;
 
 private:

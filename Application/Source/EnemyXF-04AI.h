@@ -9,7 +9,7 @@ class EnemyXF_04AI : public NPC {
 
 public:
 	EnemyXF_04AI(Scene* scene, Vector3 pos);
-	~EnemyXF_04AI() { EnemyXF_04AICount--; };
+	~EnemyXF_04AI();
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);

@@ -283,17 +283,7 @@ void SceneTutorial::Update(double dt) {
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
 	skillManager.processSkills(dt);
-
-
-	std::ostringstream strHealth;
-	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
-	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-
-	std::ostringstream strShield;
-	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
-	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
-
-
+	
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -505,9 +495,16 @@ void SceneTutorial::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+	if (Application::IsKeyPressed(MK_RBUTTON)) {
+		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+						 -camera.playerView.x, camera.playerView.y, -camera.playerView.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
+	else {
+		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {

@@ -20,7 +20,7 @@
 #include <sstream>
 
 
-SceneDogfight::SceneDogfight() : Scene(SCENE_DOGFIGHT){
+SceneDogfight::SceneDogfight() : Scene(SCENE_DOGFIGHT) {
 }
 
 SceneDogfight::~SceneDogfight() {}
@@ -132,12 +132,6 @@ void SceneDogfight::Init() {
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
 
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("powerup", Color(.12f, .18f, .32f));
-	meshList[GEO_CUBE]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
-	meshList[GEO_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_CUBE]->material.kShininess = 1.0f;
-
 	switch (pData->currentFighter) {
 
 	case 0:
@@ -240,16 +234,15 @@ void SceneDogfight::Init() {
 	const size_t rockAmount = 250;
 	const float randRange = 250;
 
-	//// Create interactable rocks
-	//for (size_t i = 0; i < rockAmount; i++) {
-	//	Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-	//	gg->setCollision(true);
-	//	objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
-	//}
-	
+	// Create interactable rocks
+	for (size_t i = 0; i < rockAmount; i++) {
+		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(true);
+		objBuilder.createObject(gg);
+	}
 
-	// Create interactable Rings
-	objBuilder.createObject(new Ring(this, Vector3(0, 5, 500)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+	// Create NPCs
 	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 100)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(25, -20, 100)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(0, -25, 100)), td_OBJ_TYPE::TYPE_ENEMY);
@@ -285,16 +278,6 @@ void SceneDogfight::Update(double dt) {
 	objBuilder.objInteractor.updateInteraction();
 	skillManager.processSkills(dt);
 
-
-	std::ostringstream strHealth;
-	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
-	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-
-	std::ostringstream strShield;
-	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
-	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
-
-
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -302,61 +285,33 @@ void SceneDogfight::Update(double dt) {
 	std::ostringstream objDist;
 	std::ostringstream objCount;
 
-	waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
 	// Objective Logic
 	switch (currentObjective) {
 
 	case 0: // Accelerate to collect ring
 
-		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
-		objCount << "Ring(s) left: " << Ring::RingCount;
+		textManager.queueRenderText(UIManager::Text("Eliminate all enemies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "Enemies Left: " << XF02::XF02Count;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
 		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
-	
-		// Transition to next objective
-		/*if (Ring::RingCount == 0) {
-			camera.setVelocity(1);
-			camera.allowYaw(true);
-
-			objBuilder.createObject(new Ring(this, Vector3(25, 5, 200)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-			objBuilder.createObject(new Ring(this, Vector3(-25, 5, 300)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+		if (XF02::XF02Count == 0) {
 			++currentObjective;
 		}
-		break;*/
 
-	//case 1: // Yaw left/right to rotate fighter
-	//	waypoint.RotateTowards(*Ring::NearestRingPos);
+		break;
 
-	//	textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-	//	textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	case 1:
 
-	//	objCount << "Ring(s) left: " << Ring::RingCount;
-	//	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-	//	objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-	//	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-	//	// Transition to next objective
-	//	if (Ring::RingCount == 0) {
-	//		camera.setVelocity(1);
-	//		camera.allowPitch(true);
-
-	//		objBuilder.createObject(new Ring(this, Vector3(-25, 20, 500)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-	//		objBuilder.createObject(new Ring(this, Vector3(-25, -20, 400)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-
-	//		++currentObjective;
-	//	}
-	//	break;
-
-
-
-	
+		objCount << "(Still WIP)";
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		break;
 
 	}
 
@@ -368,9 +323,18 @@ void SceneDogfight::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+
+	if (Application::IsKeyPressed(MK_RBUTTON)) {
+		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+						 -camera.playerView.x, camera.playerView.y, -camera.playerView.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
+	else {
+		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
+
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -421,43 +385,7 @@ void SceneDogfight::Render() {
 	// Render all interactable objects
 	objBuilder.renderObjects();
 
-
-	static bool canDebugPress = false;
-
-	if (!Application::IsKeyPressed('C')) {
-		canDebugPress = true;
-	}
-
-	if (Application::IsKeyPressed('C') && canDebugPress) {
-		canDebugPress = false;
-		showDebugInfo = !showDebugInfo;
-	}
-
-	if (showDebugInfo) {
-		// Debugging Text
-		std::ostringstream fps;
-		fps << "FPS: " << (int)(1 / _dt);
-		textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream targ;
-		targ << "Target: " << camera.getTarget().toString();
-		textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream upz;
-		upz << "Up: " << camera.getUp().toString();
-		textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream pitch;
-		pitch << "Pitch: " << camera.getPitch();
-		textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream yaw;
-		yaw << "Yaw: " << camera.getYaw();
-		textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	}
-
-	std::ostringstream velocity;
-	velocity << "Speed: " << (int)camera.getCurrentVelocity() << "m/s";
-	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
-
-	// Crosshair
-	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
+	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 

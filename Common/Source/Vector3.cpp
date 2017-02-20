@@ -274,6 +274,19 @@ float Vector3::Length(void) const {
 /******************************************************************************/
 /*!
 \brief
+Return horizontal length of vector with y-axis as zero
+
+\return
+Length
+*/
+/******************************************************************************/
+float Vector3::HorizontalLength(void) const {
+	return sqrt(x * x + z * z);
+}
+
+/******************************************************************************/
+/*!
+\brief
 Return square of length of vector
 
 \return

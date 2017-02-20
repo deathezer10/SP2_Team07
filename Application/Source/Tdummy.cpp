@@ -17,6 +17,14 @@ Tdummy::Tdummy(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	++TdummyCount;
 };
 
+Tdummy::~Tdummy() {
+	 TdummyCount--; 
+
+	 if (NearestTdummyPos == &position) {
+		 NearestTdummyPos = &Vector3(0, 0, 0);
+	 }
+}
+
 bool Tdummy::checkInteract() {
 
 	if (NearestTdummyPos == nullptr) {

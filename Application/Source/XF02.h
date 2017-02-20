@@ -7,9 +7,18 @@
 
 class XF02 : public NPC {
 
+	enum AI_STATE {
+
+		AI_IDLE = 0,
+		AI_RETREAT,
+		AI_CHASE,
+		AI_ATTACK
+
+	};
+
 public:
 	XF02(Scene* scene, Vector3 pos);
-	~XF02() { --XF02Count; };
+	~XF02();
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);
@@ -20,16 +29,18 @@ public:
 	static Vector3* NearestXF02Pos;
 
 private:
-	float _currentaceleration = 10.0f;
-	float _currentdeceleration = 10.0f;
+	float _Acceleration = 5.0f;
+	float _MaxVelocity = 20.0f;
 
+	const float _RetreatThreshold = 100; // Run away when HP is under this value
+	const float _RetreatMaxDistance = 500; // Maximum distance that the enemy can run away
 
-	const float _MovementSpeed = 1.0f; // Movement speed
-	const float _AttackDamage = 0.0f; // Damage per attack
-	const float _DamageInterval = 0.0f; // Cooldown between each attacks
-
+	const float _AttackDamage = 10.0f; // Damage per attack
+	const float _DamageInterval = 0.5f; // Cooldown between each attacks
 	float _NextDamageTime = 0; // DamageInterval's helper variable
 
-};
 
+	AI_STATE _currentState = AI_CHASE;
+
+};
 #endif

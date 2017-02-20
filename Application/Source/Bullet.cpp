@@ -25,19 +25,19 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + scen
 
 }
 
-Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 enemyRotation, Vector3 direction) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 enemyRotation, Vector3 direction) : Object(scene, pos) {
 	type = Scene::GEO_NONE;
 
 	_isEnemyBullet = true;
 
 	_bulletDamage = damage;
-	_bulletSpeed = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed;
-	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
+	_bulletSpeed = 50;
 
 	position.y -= 1.0f;
 
-	rotationZ = enemyRotation.z;
+	rotationX = enemyRotation.x;
 	rotationY = enemyRotation.y;
+	rotationZ = enemyRotation.z;
 
 	_direction = direction;
 	_startingPosition = pos + _direction;
@@ -55,9 +55,9 @@ bool Bullet::checkInteract() {
 	}
 
 	// Enemy Bullet
-	if (_isEnemyBullet == true){
+	if (_isEnemyBullet == true) {
 
-		if ((_scene->camera.playerView - position).Length() < _interactDistance){
+		if ((_scene->camera.playerView - position).Length() < _interactDistance) {
 			PlayerDataManager::getInstance()->damagePlayer(_bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
@@ -83,8 +83,8 @@ bool Bullet::checkInteract() {
 				// Damage the enemy and then remove this bullet
 				//npc->position += pushAway;
 				npc->reduceHealth(_bulletDamage);
-				npc->reduceVelocity((float)_bulletDamage);
-		
+				npc->reduceVelocity(npc->getCurrentVelocity() / 2);
+
 				_scene->objBuilder.destroyObject(this);
 				return true;
 			}

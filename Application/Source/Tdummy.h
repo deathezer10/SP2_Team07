@@ -9,7 +9,7 @@ class Tdummy : public NPC {
 
 public:
 	Tdummy(Scene* scene, Vector3 pos);
-	~Tdummy() { TdummyCount--; };
+	~Tdummy();
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);

@@ -13,6 +13,13 @@ Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	++RingCount;
 }
 
+Ring::~Ring() {
+	--RingCount;
+	if (NearestRingPos == &position) {
+		NearestRingPos = &Vector3(0, 0, 0);
+	}
+};
+
 bool Ring::checkInteract() {
 
 	if (NearestRingPos == nullptr) {

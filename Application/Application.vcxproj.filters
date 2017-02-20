@@ -323,7 +323,4 @@
       <Filter>Header Files\User Interface</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
-  </ItemGroup>
 </Project>

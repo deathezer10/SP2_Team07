@@ -16,8 +16,8 @@ void ObjectBuilder::destroyObject(Object* obj) {
 
 	// objInteractor.validateIterator(vec.erase(std::remove(vec.begin(), vec.end(), obj), vec.end())); // re-validate the iterator after erasing element
 
-	for (auto &it = mappy.begin(); it != mappy.end();){
-		if (it->second == obj){
+	for (auto &it = mappy.begin(); it != mappy.end();) {
+		if (it->second == obj) {
 			it = objInteractor._objects.erase(it);
 			objInteractor.validateIterator(it);
 			delete obj; // de-allocate memory

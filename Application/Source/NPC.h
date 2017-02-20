@@ -15,7 +15,7 @@ public:
 	// Set the Health without any bounds checking
 	void setHealth(int value);
 
-	// Damage the NPC with proper bounds checking
+	// Damage the NPC with proper bounds checking, does not destroy the Object when health is <= 0
 	void reduceHealth(int value);
 
 	// No bounds checking

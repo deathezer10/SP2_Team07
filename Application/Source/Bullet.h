@@ -9,7 +9,8 @@ class Bullet : public Object {
 
 
 public:
-	Bullet(Scene* scene, Vector3 pos, int damage, bool isEnemy = false);
+	Bullet(Scene* scene, Vector3 pos, int damage);
+	Bullet(Scene* scene, Vector3 pos, int damage, Vector3 enemyRotation, Vector3 direction);
 	~Bullet() {};
 
 	virtual bool checkInteract();
@@ -17,7 +18,7 @@ public:
 	virtual void render();
 
 private:
-	bool _isEnemyBullet;
+	bool _isEnemyBullet = false;
 
 	int _bulletDamage;
 	float _bulletSpeed;

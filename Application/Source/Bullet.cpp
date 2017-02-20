@@ -8,12 +8,10 @@
 
 using std::multimap;
 
-Bullet::Bullet(Scene* scene, Vector3 pos, int damage, bool isEnemy) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
 	type = Scene::GEO_NONE;
 
 	_bulletDamage = damage;
-	_isEnemyBullet = isEnemy;
-
 	_bulletSpeed = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed;
 	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
 
@@ -23,6 +21,25 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage, bool isEnemy) : Object(sce
 	rotationY = -scene->camera.getYaw() - 90;
 
 	_direction = scene->camera.getView();
+	_startingPosition = pos + _direction;
+
+}
+
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 enemyRotation, Vector3 direction) : Object(scene, pos + scene->camera.getView().Normalized() * 5) {
+	type = Scene::GEO_NONE;
+
+	_isEnemyBullet = true;
+
+	_bulletDamage = damage;
+	_bulletSpeed = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_speed;
+	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
+
+	position.y -= 1.0f;
+
+	rotationZ = enemyRotation.z;
+	rotationY = enemyRotation.y;
+
+	_direction = direction;
 	_startingPosition = pos + _direction;
 
 }

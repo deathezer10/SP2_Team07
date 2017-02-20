@@ -10,7 +10,7 @@
 #include "SceneShop.h"
 #include "SceneTutorial.h"
 #include "SceneDogfight.h"
-
+#include "SceneCargoShip.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
@@ -231,7 +231,7 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new SceneDogfight()); // Change Scene
 				break;
 			case 2: // Payload
-				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
 				break;
 			case 3: // Boss
 				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene

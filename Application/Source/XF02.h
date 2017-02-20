@@ -20,8 +20,8 @@ public:
 	static Vector3* NearestXF02Pos;
 
 private:
-	float _currentaceleration = 3.0f;
-	float _currentdeceleration = 3.0f;
+	float _currentaceleration = 10.0f;
+	float _currentdeceleration = 10.0f;
 
 
 	const float _MovementSpeed = 1.0f; // Movement speed

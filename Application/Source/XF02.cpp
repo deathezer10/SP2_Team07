@@ -46,26 +46,27 @@ bool XF02::checkInteract() {
 		rotationX = -Math::RadianToDegree(atan2(distance.y, distance.z))+180;
 	}
 	// Move the XF02
-	if (distance.Length() >= 40.0f) {
+	if (distance.Length() >= 10.0f && _currentVelocity <= 90.0f) {
 		_currentVelocity += _currentaceleration*_scene->_dt;
 
 	}
 
-	else if (distance.Length() <= 40.0f) {
-		_currentVelocity = 0;
+	//else if (distance.Length() <= 40.0f) {
+		//_currentVelocity = 0;
 
 
-	}
+	//}
 
-	/*if (distance.Length() <= 20.0f) {
+	if (distance.Length() <= 20.0f) {
 		_currentVelocity =-( _scene->camera.getCurrentVelocity() + 20.0f);
 
-		}*/
+		}
 
 
 	float moveX = unitDistance.x * _currentVelocity * _scene->_dt;
 	float moveZ = unitDistance.z  * _currentVelocity * _scene->_dt;
 	float moveY = unitDistance.y  * _currentVelocity * _scene->_dt;
+
 
 	position.x += -(moveX);
 	position.z += -(moveZ);

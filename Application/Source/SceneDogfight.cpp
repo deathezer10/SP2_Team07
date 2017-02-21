@@ -187,6 +187,8 @@ void SceneDogfight::Init() {
 	meshList[GEO_WAYPOINT] = MeshBuilder::GenerateOBJ("rock4", "OBJ/waypoint.obj");
 	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
+	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
@@ -259,6 +261,14 @@ void SceneDogfight::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
+
+
+
+	pauseManager.UpdatePauseMenu((float)dt);
+
+	if (pauseManager.isPaused()){
+		return;
+	}
 
 	if (Application::IsKeyPressed(VK_F1)) {
 		glEnable(GL_CULL_FACE);
@@ -385,6 +395,15 @@ void SceneDogfight::Render() {
 	// Render all interactable objects
 	objBuilder.renderObjects();
 
+
+	// Anything after this is not rendered
+	if (pauseManager.isPaused()){
+		pauseManager.RenderPauseMenu();
+		return;
+	}
+
+
+
 	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
@@ -447,6 +466,7 @@ void SceneDogfight::RenderSkybox() {
 
 	modelStack.PopMatrix();
 
+	
 }
 
 void SceneDogfight::Exit() {

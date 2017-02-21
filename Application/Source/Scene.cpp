@@ -6,6 +6,7 @@
 #include "SceneMainMenu.h"
 #include "SceneShop.h"
 #include "SceneGameOver.h"
+#include "SceneDogfight.h"
 
 
 Scene::Scene(TYPE_SCENE type) :
@@ -29,6 +30,7 @@ Scene* Scene::createScene(TYPE_SCENE type) {
 	case Scene::SCENE_SHOP:
 		return new SceneShop();
 	case Scene::SCENE_DOGFIGHT:
+		return new SceneDogfight();
 	case Scene::SCENE_CARGOSHIP:
 	case Scene::SCENE_BOSS:
 		break;

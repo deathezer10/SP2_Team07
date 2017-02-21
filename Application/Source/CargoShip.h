@@ -17,13 +17,16 @@ public:
 
 	static unsigned CargoShipCount;
 	static Vector3* NearestCargoShipPos;
+	static Vector3* CargoShipPos;
+	static float Destination;
 
 private:
 	float _currentaceleration = 60.0f;
 	float _currentdeceleration = 60.0f;
+	float _maxvelocity = 10.0f;
 
 
-	const float _MovementSpeed = 3.0f; // Movement speed
+	const float _MovementSpeed = 10.0f; // Movement speed
 	const float _AttackDamage = 0.0f; // Damage per attack
 	const float _DamageInterval = 0.0f; // Cooldown between each attacks
 

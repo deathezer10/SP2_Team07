@@ -126,11 +126,11 @@ void SceneCargoShip::Init() {
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
 
-	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet01.obj");
+	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
 
-	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet02.obj");
-	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/bullet02.tga");
+	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
+	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/enemybullet.tga");
 
 
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");

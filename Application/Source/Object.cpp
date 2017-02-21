@@ -2,7 +2,6 @@
 #include "Scene.h"
 
 
-
 void Object::render() {
 	_scene->modelStack.PushMatrix();
 	_scene->modelStack.Translate(position.x, position.y, position.z);

@@ -7,6 +7,7 @@
 
 class Tdummy : public NPC {
 
+
 public:
 	Tdummy(Scene* scene, Vector3 pos);
 	~Tdummy();

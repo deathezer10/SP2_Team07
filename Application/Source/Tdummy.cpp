@@ -44,7 +44,10 @@ bool Tdummy::checkInteract() {
 	Vector3 unitDistance = distance.Normalized();
 
 	// Rotate the Tdummy towards the player
-	rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x)) + 90;
+
+
+	rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
+	rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
 
 	// Move the Tdummy

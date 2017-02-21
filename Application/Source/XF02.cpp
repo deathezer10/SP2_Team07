@@ -27,7 +27,7 @@ XF02::~XF02() {
 
 bool XF02::checkInteract() {
 
-	if (NearestXF02Pos == nullptr || NearestXF02Pos->IsZero()) {
+	if (NearestXF02Pos == nullptr) {
 		NearestXF02Pos = &position;
 	}
 
@@ -42,22 +42,9 @@ bool XF02::checkInteract() {
 
 	Vector3 unitDistance = thisToCamera.Normalized(); // Used to move towards or away from player
 
-
-	// Quasi-Rotatation towards the player; Gimbal Lock too overpowered man, we need to learn Quaternions!!
-	if (thisToCamera.z < 40) {
-		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
-		rotationZ = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z)) + 180;
-	}
-	else {
-		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
-		rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z));
-	}
-
-	if (thisToCamera.z < 60 && thisToCamera.z > -60) {
-		rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
-		rotationZ = 0;
-	}
-	// End of Rotation
+	// Rotate towards player
+	rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
+	rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
 	// Increment velocity every second
 	if (_currentVelocity < _MaxVelocity)
@@ -100,22 +87,10 @@ bool XF02::checkInteract() {
 
 	case AI_STATE::AI_ATTACK:
 
-		float dirZ;
-
-		if (thisToCamera.z < 40) {
-			dirZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z)) + 180;
-		}
-		else {
-			dirZ = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.z));
-		}
-		if (thisToCamera.z < 60 && thisToCamera.z > -60) {
-			dirZ = 0;
-		}
-
-		_scene->textManager.queueRenderText(UIManager::Text{ std::to_string(dirZ), Color(1, 1, 1), UIManager::ANCHOR_BOT_CENTER });
+		float dirX = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
 		if (_scene->_elapsedTime >= _NextDamageTime) {
-			_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(0, rotationY + 90, dirZ), unitDistance));
+			_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
 			_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
 		}
 

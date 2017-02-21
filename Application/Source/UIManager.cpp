@@ -211,7 +211,7 @@ void UIManager::renderPlayerHUD(){
 		yaw << "Yaw: " << _scene->camera.getYaw();
 		renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 	}
-	
+
 	std::ostringstream strHealth;
 	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
 	renderTextOnScreen(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
@@ -240,9 +240,9 @@ void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vec
 	_scene->modelStack.PushMatrix();
 	_scene->modelStack.LoadIdentity();
 	_scene->modelStack.Translate((float)x, (float)y, 1);
-	_scene->modelStack.Rotate(rotate.x, 1, 0, 0);
 	_scene->modelStack.Rotate(rotate.y, 0, 1, 0);
 	_scene->modelStack.Rotate(rotate.z, 0, 0, 1);
+	_scene->modelStack.Rotate(rotate.x, 1, 0, 0);
 	_scene->modelStack.Scale(scale.x, scale.y, scale.z);
 	_scene->RenderMesh(mesh, false); //UI should not have light
 	_scene->projectionStack.PopMatrix();

@@ -126,8 +126,12 @@ void SceneCargoShip::Init() {
 	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
 	meshList[GEO_RIGHT]->textureID = LoadTGA("Image/skybox/right.tga");
 
-	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
+	meshList[GEO_BULLET] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet01.obj");
 	meshList[GEO_BULLET]->textureID = LoadTGA("Image/playerbullet.tga");
+
+	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet02.obj");
+	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/bullet02.tga");
+
 
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
@@ -195,6 +199,8 @@ void SceneCargoShip::Init() {
 	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("rock4", "OBJ/xf04.obj");
 	meshList[GEO_XF4]->textureID = LoadTGA("Image/xf04.tga");
 
+	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
@@ -251,7 +257,7 @@ void SceneCargoShip::Init() {
 
 
 	// Create interactable Rings
-	objBuilder.createObject(new Ring(this, Vector3(0, 5, 100)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+
 
 	//create cargoship
 	objBuilder.createObject(new CargoShip(this, Vector3(0, 0, 20)),td_OBJ_TYPE::TYPE_OBJECTIVE);
@@ -260,9 +266,9 @@ void SceneCargoShip::Init() {
 	objBuilder.createObject(new EnemyXF_04AI(this, Vector3(0, 10, 20)), td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 	// Disable controls at start of tutorial
-	camera.allowYaw(true);
-	camera.allowPitch(true);
-	skillManager.disableSkills();
+	//camera.allowYaw(true);
+	//camera.allowPitch(true);
+	//skillManager.disableSkills();
 
 }
 
@@ -270,6 +276,12 @@ void SceneCargoShip::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
+
+	pauseManager.UpdatePauseMenu((float)dt);
+
+	if (pauseManager.isPaused()){
+		return;
+	}
 
 	if (Application::IsKeyPressed(VK_F1)) {
 		glEnable(GL_CULL_FACE);
@@ -310,188 +322,13 @@ void SceneCargoShip::Update(double dt) {
 	// Objective Logic
 	switch (currentObjective) {
 
-	case 0: // Accelerate to collect ring
-		waypoint.RotateTowards(*Ring::NearestRingPos);
+		case 0: // Accelerate to collect ring
 
-		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+			waypoint.RotateTowards(*CargoShip::NearestCargoShipPos);
 
-		objCount << "Ring(s) left: " << Ring::RingCount;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+			objDist << "Distance: " << (int)((*CargoShip::NearestCargoShipPos) - camera.position).Length() << "m";
+			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));	
 
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Transition to next objective
-		if (Ring::RingCount == 0) {
-			camera.setVelocity(1);
-			camera.allowYaw(true);
-
-			objBuilder.createObject(new Ring(this, Vector3(25, 5, 200)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-			objBuilder.createObject(new Ring(this, Vector3(-25, 5, 300)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-
-			++currentObjective;
-		}
-		break;
-
-	case 1: // Yaw left/right to rotate fighter
-		waypoint.RotateTowards(*Ring::NearestRingPos);
-
-		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objCount << "Ring(s) left: " << Ring::RingCount;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Transition to next objective
-		if (Ring::RingCount == 0) {
-			camera.setVelocity(1);
-			camera.allowPitch(true);
-
-			objBuilder.createObject(new Ring(this, Vector3(-25, 20, 500)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-			objBuilder.createObject(new Ring(this, Vector3(-25, -20, 400)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-
-			++currentObjective;
-		}
-		break;
-
-	case 2: // mouse up/down to pitch
-		waypoint.RotateTowards(*Ring::NearestRingPos);
-
-		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Up/Down] to rotate Up/Down", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objCount << "Ring(s) left: " << Ring::RingCount;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Transition to next objective
-		if (Ring::RingCount == 0) {
-			camera.setVelocity(1);
-			skillManager.enableSkills();
-
-			objBuilder.createObject(new Tdummy(this, Vector3(-25, 0, 600)), td_OBJ_TYPE::TYPE_ENEMY);
-			objBuilder.createObject(new Tdummy(this, Vector3(25, -20, 650)), td_OBJ_TYPE::TYPE_ENEMY);
-			objBuilder.createObject(new Tdummy(this, Vector3(0, -25, 600)), td_OBJ_TYPE::TYPE_ENEMY);
-			objBuilder.createObject(new Tdummy(this, Vector3(0, 20, 650)), td_OBJ_TYPE::TYPE_ENEMY);
-			++currentObjective;
-		}
-		break;
-
-	case 3: // Eliminate all training dummies
-		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
-
-		textManager.queueRenderText(UIManager::Text("Eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Left-Click to Shoot", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objCount << "Training Dummy(s) left: " << Tdummy::TdummyCount;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Transition to next objective
-		if (Tdummy::TdummyCount == 0) {
-			camera.setVelocity(1);
-			camera.Reset();
-			skillManager.disableSkills();
-
-			Rock* rock = new Rock(this, Vector3(0, 0, 100));
-			rock->setCollision(true);
-			objBuilder.createObject(rock, ObjectInteractor::TYPE_OBJECTIVE);
-			++currentObjective;
-		}
-
-		break;
-
-	case 4: // Crash into the asteroid
-		waypoint.RotateTowards(Vector3(0, 0, 100));
-
-		textManager.queueRenderText(UIManager::Text("Asteroids can kill you! Try crashing into it!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objDist << "Distance: " << (int)(Vector3(0, 0, 100) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Transition to next objective
-		if (Rock::RockCount == 0) {
-			camera.setVelocity(1);
-			skillManager.enableSkills();
-
-			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 150), PowerUp::POWER_REGEN));
-
-			PlayerDataManager::getInstance()->getPlayerStats()->current_shield = 0;
-			PlayerDataManager::getInstance()->getPlayerStats()->current_health = 10;
-
-			++currentObjective;
-		}
-
-		break;
-
-	case 5: // Recover your HP
-		waypoint.RotateTowards(Vector3(0, 0, 150));
-
-		textManager.queueRenderText(UIManager::Text("Ouch! That hurts.. Pick up the <Repair Kit> to recover Full HP!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objDist << "Distance: " << (int)(Vector3(0, 0, 150) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Player recovered, change objective!
-		if (PlayerDataManager::getInstance()->getPlayerStats()->current_health >= 100) {
-			camera.setVelocity(1);
-
-			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 175), PowerUp::POWER_BARRAGE));
-
-			for (int i = -5; i <= 5; ++i) {
-				objBuilder.createObject(new Tdummy(this, Vector3(i * (float)10, 0, 300)), td_OBJ_TYPE::TYPE_ENEMY);
-			}
-
-			++currentObjective;
-		}
-		break;
-
-	case 6: // Barrage all dummies
-		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
-
-		textManager.queueRenderText(UIManager::Text("Pick up the <Barrage> Power-Up and eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Dummies eliminated
-		if (Tdummy::TdummyCount == 0) {
-
-			objBuilder.createObject(new PowerUp(this, Vector3(0, 0, 250), PowerUp::POWER_SPEEDBOOST));
-			objBuilder.createObject(new Ring(this, Vector3(0, 0, 1000)), td_OBJ_TYPE::TYPE_OBJECTIVE);
-
-			++currentObjective;
-		}
-		break;
-
-	case 7: // Spped Boost to the End
-		waypoint.RotateTowards(*Ring::NearestRingPos);
-
-		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up the <Speed Boost> and sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		// Objective Complete!
-		if (Ring::RingCount == 0) {
-
-			// Unlock level 1
-			if (PlayerDataManager::getInstance()->getPlayerData()->level01_unlocked == false) {
-				PlayerDataManager::getInstance()->getPlayerData()->level01_unlocked = true;
-				PlayerDataManager::getInstance()->SaveData();
-			}
-
-			SceneManager::getInstance()->changeScene(new SceneGameover("You have completed the Tutorial!", SceneGameover::TYPE_MENU::MENU_VICTORY, TYPE_SCENE::SCENE_TUTORIAL));
-			return;
-		}
 		break;
 
 	}
@@ -595,6 +432,15 @@ void SceneCargoShip::Render() {
 
 	// Crosshair
 	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
+
+
+	// Anything after this is not rendered
+	if (pauseManager.isPaused()){
+		pauseManager.RenderPauseMenu();
+		return;
+	}
+
+
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 

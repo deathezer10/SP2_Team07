@@ -10,12 +10,11 @@ class Bullet : public Object {
 
 public:
 	Bullet(Scene* scene, Vector3 pos, int damage);
-	Bullet(Scene* scene, Vector3 pos, int damage, Vector3 enemyRotation, Vector3 direction);
+	Bullet(Scene* scene, Vector3 pos, int damage, Vector3 rotation, Vector3 direction);
 	~Bullet() {};
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);
-	virtual void render();
 
 private:
 	bool _isEnemyBullet = false;

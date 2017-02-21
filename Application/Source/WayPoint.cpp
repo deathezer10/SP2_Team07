@@ -17,17 +17,10 @@ void WayPoint::RotateTowards(Vector3& target) {
 
 	Camera3 camera = _scene->camera; // Shortcut variable
 
-	Vector3	cameraToRing = target - camera.position;
+	Vector3	direction = camera.playerView - target;
 
-
-	if (cameraToRing.z < 0) { // Target is behind the camera
-		arrowRotation.y = Math::RadianToDegree(atan2(cameraToRing.z, cameraToRing.x)) + (-camera.getYaw());
-		arrowRotation.x = -(Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z))) - camera.getPitch();
-	}
-	else {
-		arrowRotation.y = Math::RadianToDegree(atan2(cameraToRing.x, cameraToRing.z)) + camera.getYaw() + 90;
-		arrowRotation.x = Math::RadianToDegree(atan2(cameraToRing.y, cameraToRing.z)) - camera.getPitch();
-	}
+	arrowRotation.y = -Math::RadianToDegree(atan2(direction.z, direction.x)) + camera.getYaw();
+	arrowRotation.x = -(Math::RadianToDegree(atan2(direction.y, direction.HorizontalLength()))) - camera.getPitch();
 
 }
 

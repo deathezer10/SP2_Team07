@@ -176,9 +176,6 @@
     <ClCompile Include="Source\XF02.cpp">
       <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CargoShip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneCargoShip.cpp">
       <Filter>Source Files\Scene</Filter>
     </ClCompile>
@@ -187,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="Source\PauseManager.cpp">
       <Filter>Source Files\User Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CargoShip.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -310,9 +310,6 @@
     <ClInclude Include="Source\XF02.h">
       <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CargoShip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\EnemyXF-04AI.h">
       <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
@@ -321,6 +318,9 @@
     </ClInclude>
     <ClInclude Include="Source\PauseManager.h">
       <Filter>Header Files\User Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CargoShip.h">
+      <Filter>Header Files\Object\NPC</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

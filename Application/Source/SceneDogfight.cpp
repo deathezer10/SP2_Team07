@@ -236,8 +236,8 @@ void SceneDogfight::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 250;
-	const float randRange = 250;
+	const size_t rockAmount = 200;
+	const float randRange = 500;
 
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
@@ -257,6 +257,14 @@ void SceneDogfight::Init() {
 	//camera.allowYaw(false);
 	//camera.allowPitch(false);
 	//skillManager.disableSkills();
+
+
+	const int powerCount = 50;
+
+	for (size_t i = 0; i < rockAmount; i++) {
+		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0,3)));
+		objBuilder.createObject(gg);
+	}
 
 }
 
@@ -309,7 +317,7 @@ void SceneDogfight::Update(double dt) {
 		textManager.queueRenderText(UIManager::Text("Eliminate all enemies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objCount << "Enemies Left: " << XF02::XF02Count;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
 		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));

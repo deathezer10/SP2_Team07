@@ -287,13 +287,13 @@ void SceneMainMenu::Render() {
 
 	if (isMenuOutside)
 	{
-		title = "Space Fighter 27";
+		title = "SPACE FIGHTER 27";
 		option1 = (_outsideSelected == 0) ? ">Play<" : "Play";
 		option2 = (_outsideSelected == 1) ? ">Shop<" : "Shop";
 		option3 = (_outsideSelected == 2) ? ">Quit<" : "Quit";
 
 
-		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(title, Color(0.37f, 0.84f, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -312,11 +312,11 @@ void SceneMainMenu::Render() {
 		std::string option4 = "level 3";
 		std::string option5 = "back";
 
-		title = "Level selection screen";
-		option1 = (_insideSelected == 0) ? ">Tutorial<" : "Tutorial";
-		option2 = (_insideSelected == 1) ? ">Level 1<" : "Level 1";
-		option3 = (_insideSelected == 2) ? ">Level 2<" : "Level 2";
-		option4 = (_insideSelected == 3) ? ">Level 3<" : "Level 3";
+		title = "Level Select";
+		option1 = (_insideSelected == 0) ? ">0) Tutorial<" : "0) Tutorial";
+		option2 = (_insideSelected == 1) ? ">1) Dog Fight<" : "1) Dog Fight";
+		option3 = (_insideSelected == 2) ? ">2) Escort Cargo Ship<" : "2) Escort Cargo Ship";
+		option4 = (_insideSelected == 3) ? ">3) Attack on Destroyer-01<" : "3) Attack on Destroyer-01";
 		option5 = (_insideSelected == 4) ? ">back<" : "back";
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

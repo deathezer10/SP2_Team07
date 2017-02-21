@@ -106,7 +106,7 @@ void Camera3::Update(double dt) {
 
 	float CAMERA_SPEED = _dt;
 	float CAMERA_LEFT_RIGHT_SPEED = 60.0f * _dt;
-	float rotationSpeed = 1.0f * _dt;
+	float rotationSpeed = _dt;
 
 	// Bring roll back to zero
 	if ((!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') || ((mouseMovedX == 0) && mouseYawEnabled))) {
@@ -178,7 +178,7 @@ void Camera3::Update(double dt) {
 	}
 
 	if (Application::IsKeyPressed('Q')) { // Up
-		position = position - right  * CAMERA_LEFT_RIGHT_SPEED;
+		position = position - right * CAMERA_LEFT_RIGHT_SPEED;
 		target = position + view;
 	}
 	else if (Application::IsKeyPressed('E')) { // Down
@@ -229,13 +229,39 @@ void Camera3::Update(double dt) {
 
 	CAMERA_SPEED *= currentVelocity;
 
+	if (canRoll) {
+		if (mouseMovedX > 0) { // Left
+			float angle = -rotationSpeed * mouseMovedDistanceX;
+			yaw -= angle;
+
+			Mtx44 rotation;
+			right.y = 0;
+			right.Normalize();
+			up = right.Cross(view).Normalized();
+			rotation.SetToRotation(angle, 0, 1, 0);
+			view = rotation * view;
+			target = position + view;
+		}
+		else if (mouseMovedX < 0) { // Left
+			float angle = rotationSpeed * mouseMovedDistanceX;
+			yaw -= angle;
+
+			Mtx44 rotation;
+			right.y = 0;
+			right.Normalize();
+			up = right.Cross(view).Normalized();
+			rotation.SetToRotation(angle, 0, 1, 0);
+			view = rotation * view;
+			target = position + view;
+		}
+	}
 
 	// Move the Camera according to the velocity
 	position.x += view.x * CAMERA_SPEED;
 	position.y += view.y * CAMERA_SPEED;
 	position.z += view.z * CAMERA_SPEED;
 	target = position + view;
-	
+
 	// Clamping max current velocity
 	if (Application::IsKeyPressed('S'))
 		currentVelocity = Math::Clamp(currentVelocity, velocityMin, velocityMax);

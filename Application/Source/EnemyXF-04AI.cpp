@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "EnemyXF-04AI.h"
-#include"CargoShip.h"
+#include "CargoShip.h"
 
 unsigned EnemyXF_04AI::EnemyXF_04AICount = 0;
 Vector3* EnemyXF_04AI::NearestEnemyXF_04AIPos = nullptr;
@@ -32,89 +32,61 @@ bool EnemyXF_04AI::checkInteract() {
 		NearestEnemyXF_04AIPos = &position;
 	}
 
-	Vector3 thisToCamera = (*CargoShip::NearestCargoShipPos - position); // Enemy to Cargo
-	float thisToCameraLength = thisToCamera.Length(); // Length
-	float thisToCameraHorizontalLength = thisToCamera.HorizontalLength(); // Horizontal Length
+	Vector3 EnemyToCargo = (CargoShip::Instance->position - position); // Enemy to Cargo
+	float EnemyToCargoLength = EnemyToCargo.Length(); // Length
+	float EnemyToCargoHorizontalLength = EnemyToCargo.HorizontalLength(); // Horizontal Length
 	Vector3 NearesXF04ToCamera = (*NearestEnemyXF_04AIPos) - _scene->camera.position;
-	Vector3 EnemytoCamera = (position-_scene->camera.position);//Enemy to Camera
+	Vector3 EnemytoCamera = (position - _scene->camera.playerView);//Enemy to Camera
 
-	if (NearesXF04ToCamera.LengthSquared() >= thisToCamera.LengthSquared()) {
+	if (NearesXF04ToCamera.LengthSquared() >= EnemyToCargo.LengthSquared()) {
 		NearestEnemyXF_04AIPos = &position;
 	}
 
-	Vector3 unitDistance = thisToCamera.Normalized(); // Used to move towards or away from cargo
-	Vector3 unitDistance2 = EnemytoCamera.Normalized();
+	Vector3 unitDistance = EnemyToCargo.Normalized(); // Used to move towards or away from cargo
+	Vector3 unitDistance2 = EnemytoCamera.Normalized();//Used to move towards or away from player
 
 	// Rotate towards cargo
-	rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
-	rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
+	rotationY = (-Math::RadianToDegree(atan2(EnemyToCargo.z, EnemyToCargo.x)) - 180);
+	rotationZ = -Math::RadianToDegree(atan2(EnemyToCargo.y, EnemyToCargo.HorizontalLength()));
 
 	// Increment velocity every second
 	if (_currentVelocity < _MaxVelocity)
 		_currentVelocity += _Acceleration * _scene->_dt;
 
-	// Determine the current AI's State
-	if (EnemytoCamera.Length() < 20) {
-		_currentState = AI_RETREAT;
-	}
-	else if (thisToCameraLength > 90) {
-		_currentState = AI_CHASE;
-	}
-	else if (thisToCameraLength < 16) {
-		_currentState = AI_ATTACK;
-	}
-	else {
-		_currentState = AI_IDLE;
-	}
+	float dirX = Math::RadianToDegree(atan2(EnemyToCargo.y, EnemyToCargo.HorizontalLength()));
 
 
-	switch (_currentState) {
-
-	case AI_STATE::AI_IDLE:
-		break;
-
-	case AI_STATE::AI_RETREAT:
-		unitDistance2 *= 1; // Fly away from player
-		rotationY -= 180; // Face away from player
-		rotationZ = 0; // Since we're running, no need to look at player anymore
-		switchstate = 1;
-		// Stop running away if distance is too far from player
-		if (EnemytoCamera.Length() >= 20) {
-			unitDistance.SetZero();
+	if (wasRetreating == true){
+		if (EnemytoCamera.Length() < _RetreatMaxDistanceAwayFromPlayer){//chase cargo if enemy and player is <60 distance
+			rotationY = -Math::RadianToDegree(atan2(EnemytoCamera.z, EnemytoCamera.x)) + 180;
+			rotationZ = 0;
+			unitDistance = unitDistance2;
 		}
-		break;
+		else {
+			wasRetreating = false;
+		}
+	}
+	else if (EnemytoCamera.Length() <  _RetreatFromPlayerThreshold){ // player is near, run away
+		rotationY = -Math::RadianToDegree(atan2(EnemytoCamera.z, EnemytoCamera.x)) + 180;
+		rotationZ = 0;
+		unitDistance = unitDistance2;
+		wasRetreating = true;
+	}
+	else if (EnemyToCargoLength < _RetreatMaxDistanceAwayFromCargo) { // chase cargo
+		_currentVelocity -= _Acceleration * _scene->_dt * 2;
 
-	case AI_STATE::AI_CHASE:
-		// TODO: Insert checking of units beside this NPC to prevent 'converging'
-		break;
-
-	case AI_STATE::AI_ATTACK:
-
-		float dirX = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
-
-		if (_scene->_elapsedTime >= _NextDamageTime) {
+		if (_scene->_elapsedTime >= _NextDamageTime) { // attack cargo
+			position.y += 1.f;
 			_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
 			_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
+			position.y -= 1.f;
 		}
-
-		unitDistance.SetZero(); // Stay stationary while firing
-		break;
-
-	}
-	switch (switchstate)
-	{
-	case 0:
-			position.x += unitDistance.x * _currentVelocity * _scene->_dt;
-			position.y += unitDistance.y  * _currentVelocity * _scene->_dt;
-			position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
-			break;
-	case 1:
-		position.x += unitDistance2.x * _currentVelocity * _scene->_dt;
-		position.y += unitDistance2.y  * _currentVelocity * _scene->_dt;
-		position.z += unitDistance2.z  * _currentVelocity * _scene->_dt;
-		break;
 	}
 
+
+	position.x += unitDistance.x * _currentVelocity * _scene->_dt;
+	position.y += unitDistance.y  * _currentVelocity * _scene->_dt;
+	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
 
 	if (currentHP <= 0) {
 		_scene->objBuilder.destroyObject(this);
@@ -122,98 +94,6 @@ bool EnemyXF_04AI::checkInteract() {
 	}
 
 	return false;
-
-
-
-
-
-
-	////////////////////////////////////LEARN FROM OLD CODE//////////////////////////////////////
-
-
-
-
-	/*RotateTowards(_scene->camera.playerView);
-
-	if (NearestEnemyXF_04AIPos == nullptr) {
-		NearestEnemyXF_04AIPos = &position;
-	}
-
-	Vector3 thisToCamera = (position - _scene->camera.position);
-	Vector3 NearesEnemyXF_04AIToCamera = (*NearestEnemyXF_04AIPos) - _scene->camera.position;
-
-
-	if (NearesEnemyXF_04AIToCamera.Length() > thisToCamera.Length()) {
-		NearestEnemyXF_04AIPos = &position;
-	}*/
-
-
-	///////////////////ABOVE DUNNID CHANGE///////////////////////////////////////////////////
-
-
-	//// Move EnemyXF_04AI towards cargo using the unit vector
-	//Vector3 distance = (*CargoShip::NearestCargoShipPos - position);
-	//Vector3 unitDistance = distance.Normalized();
-	////the distance between the player and the enemy
-	//Vector3 distance2 = (position-_scene->camera.position);
-
-	//// Rotate the EnemyXF_04AI towards the player
-	//rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x)) + 90;
-
-
-	//// Move the EnemyXF_04AI towards the cargo  
-	//if (distance.Length() >= 40.0f) {
-	//	//distance = *CargoShip::NearestCargoShipPos - position*_scene->_dt;
-	//	_currentVelocity += _currentdeceleration*_scene->_dt;
-	//}
-	//else if (distance.Length()<=10)
-	//{
-	////AI shoots bullet when it is near the cargo
-	//	_currentVelocity=0;
-	//	float dirX = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
-	//	if (_scene->_elapsedTime >= _NextDamageTime)
-	//	{
-	//		_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
-	//		_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
-	//	}
-	//}
-	//if (distance2.Length() <= 20)
-	//{
-	//	//stop shooting and move away
-	//	_currentVelocity -= _currentdeceleration*_scene->_dt;
-	//}
-
-	//float moveX = unitDistance.x * _currentVelocity * _scene->_dt;
-	//float moveZ = unitDistance.z  * _currentVelocity * _scene->_dt;
-	//float moveY = unitDistance.y  * _currentVelocity * _scene->_dt;
-
-	//position.x += moveX;
-	//position.z += moveZ;
-	//position.y += moveY;
-
-	//if (currentHP <= 0) {
-	//	_scene->objBuilder.destroyObject(this);
-	//	return true;
-	//}
-
-
-	//return false;
-}
-
-void EnemyXF_04AI::RotateTowards(Vector3& target) {
-	
-	Vector3 distance = (position - target);
-
-	// Rotate the XF02 towards the player
-	if (distance.z > 0){
-		rotationY = -Math::RadianToDegree(atan2(distance.z, distance.x));
-		rotationX = -(Math::RadianToDegree(atan2(distance.y, distance.z)));
-	}
-	else
-	{
-		rotationY = Math::RadianToDegree(atan2(distance.x, distance.z)) + 270;
-		rotationX = -Math::RadianToDegree(atan2(distance.y, distance.z)) + 180;
-	}
 }
 
 void EnemyXF_04AI::collisionHit(Vector3& hitPos) {

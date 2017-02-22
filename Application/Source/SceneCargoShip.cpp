@@ -317,7 +317,7 @@ void SceneCargoShip::Update(double dt) {
 
 	std::ostringstream objDist;
 	std::ostringstream objCount;
-
+	std::ostringstream Distleft;
 
 	// Objective Logic
 	switch (currentObjective) {
@@ -329,7 +329,13 @@ void SceneCargoShip::Update(double dt) {
 			objDist << "Distance: " << (int)((*CargoShip::NearestCargoShipPos) - camera.position).Length() << "m";
 			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));	
 
+			Distleft << "Distance Left: " << (int)(CargoShip::Destination) << "m";
+			textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_LEFT));
 		break;
+	
+
+
+			  
 
 	}
 

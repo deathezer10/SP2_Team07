@@ -7,7 +7,7 @@ unsigned CargoShip::CargoShipCount = 0;
 Vector3* CargoShip::NearestCargoShipPos = nullptr;
 Vector3* CargoShip::CargoShipPos ;
 
-float CargoShip::Destination = 1000.0f ;
+float CargoShip::Destination = 5000.0f ;
 
 
 CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
@@ -41,7 +41,7 @@ bool CargoShip::checkInteract() {
 
 	position.z += moveZ;
 	
-	_scene->textManager.queueRenderText(UIManager::Text{ std::to_string(Destination), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER });//current distance left
+	//_scene->textManager.queueRenderText(UIManager::Text{ std::to_string(Destination), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER });//current distance left
 
 	if (currentHP <= 0)
 	{

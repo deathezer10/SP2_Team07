@@ -93,6 +93,7 @@
     <ClCompile Include="Source\CargoShip.cpp" />
     <ClCompile Include="Source\EnemyXF-04AI.cpp" />
     <ClCompile Include="Source\PauseManager.cpp" />
+    <ClCompile Include="Source\Radar.cpp" />
     <ClCompile Include="Source\SceneCargoShip.cpp" />
     <ClCompile Include="Source\SceneDogfight.cpp" />
     <ClCompile Include="Source\Door.cpp" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Source\CargoShip.h" />
     <ClInclude Include="Source\EnemyXF-04AI.h" />
     <ClInclude Include="Source\PauseManager.h" />
+    <ClInclude Include="Source\Radar.h" />
     <ClInclude Include="Source\SceneCargoShip.h" />
     <ClInclude Include="Source\SceneDogfight.h" />
     <ClInclude Include="Source\Door.h" />

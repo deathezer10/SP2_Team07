@@ -14,7 +14,7 @@
 using std::ostringstream;
 
 
-UIManager::UIManager(Scene* scene) {
+UIManager::UIManager(Scene* scene) : radar(scene) {
 
 	_scene = scene;
 
@@ -227,9 +227,12 @@ void UIManager::renderPlayerHUD(){
 
 	// Crosshair
 	renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
+
+	radar.RenderRadar((float)Application::_windowWidth / 40, (float)Application::_windowHeight / 20);
+
 }
 
-void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale) {
+void UIManager::RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale) {
 	// glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -100, 100); //size of screen UI
@@ -239,7 +242,7 @@ void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vec
 	_scene->viewStack.LoadIdentity(); //No need camera for ortho mode
 	_scene->modelStack.PushMatrix();
 	_scene->modelStack.LoadIdentity();
-	_scene->modelStack.Translate((float)x, (float)y, 1);
+	_scene->modelStack.Translate(x, y, 1);
 	_scene->modelStack.Rotate(rotate.y, 0, 1, 0);
 	_scene->modelStack.Rotate(rotate.z, 0, 0, 1);
 	_scene->modelStack.Rotate(rotate.x, 1, 0, 0);
@@ -250,7 +253,6 @@ void UIManager::RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vec
 	_scene->modelStack.PopMatrix();
 	// glEnable(GL_DEPTH_TEST);
 }
-
 
 void UIManager::reset() {
 

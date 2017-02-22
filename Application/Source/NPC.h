@@ -6,8 +6,8 @@
 class NPC : public Object {
 
 public:
-	NPC(Scene* scene, Vector3 pos) : Object(scene, pos) {};
-	~NPC() {};
+	NPC(Scene* scene, Vector3 pos);
+	~NPC();
 
 	int getCurrentHealth() { return currentHP; };
 	float getCurrentVelocity() { return _currentVelocity; };

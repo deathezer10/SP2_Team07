@@ -135,6 +135,10 @@ void SceneDogfight::Init() {
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
 
+	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 1, 0));
+	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
+	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
+
 	switch (pData->currentFighter) {
 
 	case 0:
@@ -262,7 +266,7 @@ void SceneDogfight::Init() {
 	const int powerCount = 50;
 
 	for (size_t i = 0; i < rockAmount; i++) {
-		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0,3)));
+		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 3)));
 		objBuilder.createObject(gg);
 	}
 
@@ -347,13 +351,13 @@ void SceneDogfight::Render() {
 
 	if (Application::IsKeyPressed(MK_RBUTTON)) {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 -camera.playerView.x, camera.playerView.y, -camera.playerView.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			-camera.playerView.x, camera.playerView.y, -camera.playerView.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();
@@ -477,7 +481,7 @@ void SceneDogfight::RenderSkybox() {
 
 	modelStack.PopMatrix();
 
-	
+
 }
 
 void SceneDogfight::Exit() {

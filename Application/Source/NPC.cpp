@@ -2,6 +2,17 @@
 #include "Scene.h"
 
 
+NPC::NPC(Scene* scene, Vector3 pos) : Object(scene, pos){
+
+	scene->textManager.radar.addUnit(this);
+
+}
+
+NPC::~NPC(){
+	_scene->textManager.radar.removeUnit(this);
+};
+
+
 void NPC::setHealth(int value) {
 	currentHP = value;
 }

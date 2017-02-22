@@ -188,6 +188,9 @@
     <ClCompile Include="Source\CargoShip.cpp">
       <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Radar.cpp">
+      <Filter>Source Files\Navigation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -321,6 +324,9 @@
     </ClInclude>
     <ClInclude Include="Source\CargoShip.h">
       <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Radar.h">
+      <Filter>Header Files\Navigation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

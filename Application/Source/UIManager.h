@@ -9,7 +9,7 @@
 #include "MatrixStack.h"
 #include "Mesh.h"
 #include "Vertex.h"
-
+#include "Radar.h"
 
 // forward declaration
 class Scene;
@@ -69,12 +69,15 @@ public:
 
 	// Prints all the pending Text onto the screen
 	void dequeueText();
-	
+
 	//Render the mesh onto the screen with the given Screen Coordinates
-	void RenderMeshOnScreen(Mesh* mesh, int x, int y, Vector3 rotate, Vector3 scale);
+	void RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale);
+
+	Radar radar;
 
 private:
 	Scene* _scene;
+
 
 	std::vector<unsigned> currentFontWidth;
 

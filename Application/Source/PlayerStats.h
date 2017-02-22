@@ -6,7 +6,7 @@ struct PlayerStat {
 	float base_speed;
 	int base_damage;
 	int base_shield;
-
+	
 	int initial_bullet_damage;
 	int initial_bullet_speed;
 	float initial_bullet_cooldown;
@@ -29,17 +29,17 @@ struct PlayerStat {
 // Data Format: Speed,Damage,Shield
 const int Ship_Stats[12] {
 
-	// Default: 
-	1, 1, 1,
+	    // Default: 
+	    3, 3, 3,
 
 		// SF-1
-		2, 1, 0,
+		5, 3, 1,
 
 		// DF-6
-		1, 2, 0,
+		2, 5, 2,
 
 		// A-10
-		0, 1, 2
+		1, 2, 5
 
 };
 

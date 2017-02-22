@@ -301,16 +301,6 @@ void SceneCargoShip::Update(double dt) {
 	objBuilder.objInteractor.updateInteraction();
 	skillManager.processSkills(dt);
 
-
-	std::ostringstream strHealth;
-	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
-	textManager.queueRenderText(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-
-	std::ostringstream strShield;
-	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
-	textManager.queueRenderText(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
-
-
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -331,11 +321,7 @@ void SceneCargoShip::Update(double dt) {
 
 			Distleft << "Distance Left: " << (int)(CargoShip::Destination) << "m";
 			textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_LEFT));
-		break;
-	
-
-
-			  
+		break;  
 
 	}
 
@@ -431,22 +417,14 @@ void SceneCargoShip::Render() {
 		yaw << "Yaw: " << camera.getYaw();
 		textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
 	}
-
-	std::ostringstream velocity;
-	velocity << "Speed: " << (int)camera.getCurrentVelocity() << "m/s";
-	textManager.renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
-
-	// Crosshair
-	textManager.renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
-
-
+	
 	// Anything after this is not rendered
 	if (pauseManager.isPaused()){
 		pauseManager.RenderPauseMenu();
 		return;
 	}
 
-
+	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 

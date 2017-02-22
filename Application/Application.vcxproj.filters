@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{9acd1dc5-fd64-4ef4-b618-ec21f3f675f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scene">
+      <UniqueIdentifier>{e1e35b8e-9f9e-4dd2-af63-66cfb674fafb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\User Interface">
+      <UniqueIdentifier>{866ba9c4-bc11-405c-a047-339a2442daf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\User Interface">
+      <UniqueIdentifier>{06905edf-c7ba-4fe5-9f42-c7502542a860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Object">
+      <UniqueIdentifier>{7ce3631b-1d2d-4960-9f1d-c2073a148ae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Object">
+      <UniqueIdentifier>{f8767a51-1bb0-47bd-81e6-094cd071cdd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Object\Solid">
+      <UniqueIdentifier>{9af79f5a-56cd-4c9a-848d-deaf0c3caa75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Object\Solid">
+      <UniqueIdentifier>{e1f7fade-3496-4628-a383-6bc0d0ef8e9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Object\NPC">
+      <UniqueIdentifier>{652e6301-6ab4-43ca-beb3-f921c10d216f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Object\NPC">
+      <UniqueIdentifier>{5f157378-f0e1-419c-97d8-192efbf5f7b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Navigation">
+      <UniqueIdentifier>{402727b4-241f-4140-89e7-7eb87d81edd8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Navigation">
+      <UniqueIdentifier>{dff04f0a-8a3a-47c4-b6e7-73ac45e7efdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player">
+      <UniqueIdentifier>{881fead1-5b9c-4da3-b3ab-7881de8f28e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player\Skills">
+      <UniqueIdentifier>{685bd003-976a-44ba-ab9e-c87ace964779}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Player\Data">
+      <UniqueIdentifier>{7f3c8215-324b-45a0-80b9-1291e89529ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player">
+      <UniqueIdentifier>{74716512-d02e-456e-8566-f2d2353cd4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Skills">
+      <UniqueIdentifier>{e6ed641b-04f7-4380-9515-a541d74131bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Player\Data">
+      <UniqueIdentifier>{92b54d71-3462-41b9-95a7-41de1cdac2c9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Application.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\MeshBuilder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadTGA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\LoadOBJ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assignment03.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\UIManager.cpp">
+      <Filter>Source Files\User Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectBuilder.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectInteractor.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Rock.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Door.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneGameOver.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneMainMenu.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneShop.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ring.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneTutorial.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PowerUP.cpp">
+      <Filter>Source Files\Object\Solid</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Tdummy.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Slime.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\NPC.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ObjectCollider.cpp">
+      <Filter>Source Files\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerStats.cpp">
+      <Filter>Source Files\Player\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerDataManager.cpp">
+      <Filter>Source Files\Player\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkillManager.cpp">
+      <Filter>Source Files\Player\Skills</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\WayPoint.cpp">
+      <Filter>Source Files\Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneDogfight.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\XF02.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneCargoShip.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EnemyXF-04AI.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PauseManager.cpp">
+      <Filter>Source Files\User Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CargoShip.cpp">
+      <Filter>Source Files\Object\NPC</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Application.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\shader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\MeshBuilder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Vertex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Geometry.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadTGA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\LoadOBJ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assignment03.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\UIManager.h">
+      <Filter>Header Files\User Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectBuilder.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectInteractor.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Rock.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Door.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneGameOver.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneMainMenu.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneShop.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ring.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTutorial.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ObjectCollider.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PowerUp.h">
+      <Filter>Header Files\Object\Solid</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object.h">
+      <Filter>Header Files\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Tdummy.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Slime.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\NPC.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerStats.h">
+      <Filter>Header Files\Player\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerDataManager.h">
+      <Filter>Header Files\Player\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SkillManager.h">
+      <Filter>Header Files\Player\Skills</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WayPoint.h">
+      <Filter>Header Files\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneDogfight.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\XF02.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\EnemyXF-04AI.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneCargoShip.h">
+      <Filter>Header Files\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PauseManager.h">
+      <Filter>Header Files\User Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CargoShip.h">
+      <Filter>Header Files\Object\NPC</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -168,6 +168,8 @@ void SceneShop::Init() {
 	pData = PlayerDataManager::getInstance()->getPlayerData();
 	column = pData->currentFighter;
 
+	camera.allowMovement(false);
+
 }
 
 void SceneShop::Update(double dt) {
@@ -520,8 +522,11 @@ void SceneShop::Render() {
 	option6 = (_menuSelected == 5) ? ">Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level " : "Shield Recharge Rate ($" + std::to_string(UpgradePrice[4]) + "): Level ";
 	option7 = (_menuSelected == 6) ? ">Back" : "Back";
 
+
+
 	if (column == 0)
 	{
+	
 		option2 += std::to_string(pData->FG6_Bullet_damage);
 		option3 += std::to_string(pData->FG6_Bullet_speed);
 		option4 += std::to_string(pData->FG6_Bullet_ROF);
@@ -556,7 +561,62 @@ void SceneShop::Render() {
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+	textManager.renderTextOnScreen(UIManager::Text(option8, Color(1, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+
+	std::ostringstream Stats;
+	std::ostringstream Speed;
+	std::ostringstream Damage;
+	std::ostringstream Shield;
+
+	switch (column){
+
+	case 0:
+	
+		Speed << "Speed: Normal";
+		Damage<<"Damage: Normal";
+		Shield<<"Shield:Normal";
+     	textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+
+		break;
+	case 1:
+	
+		Speed << "Speed: High";
+		Damage << "Damage: Normal";
+		Shield << "Shield: Low";
+
+		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.0f, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(1.0f, 0.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+
+		break;
+	case 2:
+
+
+		Speed << "Speed: Normal";
+		Damage << "Damage: High";
+		Shield << "Shield: Low";
+
+		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(1.0f, 0.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+
+		break;
+	case 3:
+	
+		Speed << "Speed: Low";
+		Damage << "Damage: Normal";
+		Shield << "Shield: High";
+	
+		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(1.0f, 0.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(0.0f, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
+		break;
+	}
+	
+
+
 
 	rotShip.y += 45 * (float)_dt;
 	int spaceShipX = Application::_windowWidth / 20;

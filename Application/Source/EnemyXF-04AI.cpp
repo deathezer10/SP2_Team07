@@ -57,7 +57,7 @@ bool EnemyXF_04AI::checkInteract() {
 
 
 	if (wasRetreating == true){
-		if (EnemytoCamera.Length() < _RetreatMaxDistanceAwayFromPlayer){//chase cargo if enemy and player is <60 distance
+		if (EnemytoCamera.Length() < _RetreatMaxDistanceAwayFromPlayer){//chase cargo if enemy and player is >60 distance
 			rotationY = -Math::RadianToDegree(atan2(EnemytoCamera.z, EnemytoCamera.x)) + 180;
 			rotationZ = 0;
 			unitDistance = unitDistance2;

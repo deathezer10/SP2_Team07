@@ -263,10 +263,8 @@ void SceneCargoShip::Init() {
 
 
 	//create cargoship
-	objBuilder.createObject(new CargoShip(this, Vector3(0, 0, 20)),td_OBJ_TYPE::TYPE_OBJECTIVE);
+	objBuilder.createObject(new CargoShip(this, Vector3(0, 0, 20)), td_OBJ_TYPE::TYPE_OBJECTIVE);
 
-	//create xf-04
-	objBuilder.createObject(new EnemyXF_04AI(this, Vector3(0, 10, 20)), td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 	// Disable controls at start of tutorial
 	//camera.allowYaw(true);
@@ -276,7 +274,7 @@ void SceneCargoShip::Init() {
 }
 
 void SceneCargoShip::Update(double dt) {
-
+	const float randomrange1=250;
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
@@ -312,29 +310,26 @@ void SceneCargoShip::Update(double dt) {
 	std::ostringstream objCount;
 	std::ostringstream Distleft;
 
-	// Objective Logic
-	switch (currentObjective) {
 
-		case 0: // 
+	waypoint.RotateTowards(CargoShip::Instance->position);
 
-			waypoint.RotateTowards(CargoShip::Instance->position);
-
-			CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
-			textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
+	textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
 
 
-			//distance left for cargo ship to travel
-			Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
-			textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+	//distance left for cargo ship to travel
+	Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
+	textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
-			
 
-		break;  
-
+	//create xf-04
+	if (_elapsedTime >= _NextXF04SpawnTime)
+	{
+		objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_OBJECTIVE);
+		_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
 	}
-
 
 }
 
@@ -398,7 +393,7 @@ void SceneCargoShip::Render() {
 	objBuilder.renderObjects();
 
 
-	
+
 	// Anything after this is not rendered
 	if (pauseManager.isPaused()){
 		pauseManager.RenderPauseMenu();
@@ -410,8 +405,8 @@ void SceneCargoShip::Render() {
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40,Application::_windowHeight / 10-3, Vector3(0, 0, 0), Vector3(1*CargoShip::Instance->hp, 1, 1));
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40,Application::_windowHeight / 10-3, Vector3(0, 0, 0), Vector3(1, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(1 * CargoShip::Instance->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(1, 1, 1));
 
 	// Render all pending text onto screen
 	textManager.dequeueText();

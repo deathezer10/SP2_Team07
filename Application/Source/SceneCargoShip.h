@@ -28,7 +28,10 @@ private:
 	bool showDebugInfo = false;
 
 	int currentObjective = 0;
-
+	float _NextXF04SpawnTime = 0.0f;
+	float _NextXF02SpawnTime = 2.0f;
+	const float _SpawnXF02Interval = 5.0f;
+	const float _SpawnXF04Interval = 5.0f;
 	PlayerSaveData* pData;
 
 };

@@ -201,6 +201,9 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
 
+	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f), 20, 1);
+	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f), 20, 1);
+
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
@@ -305,22 +308,29 @@ void SceneCargoShip::Update(double dt) {
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
-	std::ostringstream objDist;
+	std::ostringstream CargoHp;
 	std::ostringstream objCount;
 	std::ostringstream Distleft;
 
 	// Objective Logic
 	switch (currentObjective) {
 
-		case 0: // Accelerate to collect ring
+		case 0: // 
 
-			waypoint.RotateTowards(*CargoShip::NearestCargoShipPos);
+			waypoint.RotateTowards(CargoShip::Instance->position);
 
-			objDist << "Distance: " << (int)((*CargoShip::NearestCargoShipPos) - camera.position).Length() << "m";
-			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));	
+			CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
+			textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-			Distleft << "Distance Left: " << (int)(CargoShip::Destination) << "m";
-			textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_LEFT));
+
+
+
+			//distance left for cargo ship to travel
+			Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
+			textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+
+			
+
 		break;  
 
 	}
@@ -388,35 +398,6 @@ void SceneCargoShip::Render() {
 	objBuilder.renderObjects();
 
 
-	static bool canDebugPress = false;
-
-	if (!Application::IsKeyPressed('C')) {
-		canDebugPress = true;
-	}
-
-	if (Application::IsKeyPressed('C') && canDebugPress) {
-		canDebugPress = false;
-		showDebugInfo = !showDebugInfo;
-	}
-
-	if (showDebugInfo) {
-		// Debugging Text
-		std::ostringstream fps;
-		fps << "FPS: " << (int)(1 / _dt);
-		textManager.renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream targ;
-		targ << "Target: " << camera.getTarget().toString();
-		textManager.renderTextOnScreen(UIManager::Text(targ.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream upz;
-		upz << "Up: " << camera.getUp().toString();
-		textManager.renderTextOnScreen(UIManager::Text(upz.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream pitch;
-		pitch << "Pitch: " << camera.getPitch();
-		textManager.renderTextOnScreen(UIManager::Text(pitch.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		std::ostringstream yaw;
-		yaw << "Yaw: " << camera.getYaw();
-		textManager.renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-	}
 	
 	// Anything after this is not rendered
 	if (pauseManager.isPaused()){
@@ -427,6 +408,10 @@ void SceneCargoShip::Render() {
 	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40,Application::_windowHeight / 10-3, Vector3(0, 0, 0), Vector3(1*CargoShip::Instance->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40,Application::_windowHeight / 10-3, Vector3(0, 0, 0), Vector3(1, 1, 1));
 
 	// Render all pending text onto screen
 	textManager.dequeueText();

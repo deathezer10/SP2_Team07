@@ -8,22 +8,23 @@ class CargoShip : public NPC {
 
 public:
 	CargoShip(Scene* scene, Vector3 pos);
-	~CargoShip() { CargoShipCount--; };
-
+	~CargoShip() {};
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);
 
 	float _interactDistance;
 
-	static unsigned CargoShipCount;
-	static Vector3* NearestCargoShipPos;
-	static Vector3* CargoShipPos;
-	static float Destination;
+	float Destination = 6000.0f;
+	 float hp=1;
+	 float cargolife=0;
+
+	static CargoShip* Instance;
 
 private:
 	float _currentaceleration = 60.0f;
 	float _currentdeceleration = 60.0f;
 	float _maxvelocity = 10.0f;
+	const int default_health = 60000;
 
 
 	const float _MovementSpeed = 10.0f; // Movement speed

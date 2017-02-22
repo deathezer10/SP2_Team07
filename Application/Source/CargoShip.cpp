@@ -3,21 +3,18 @@
 
 
 
-unsigned CargoShip::CargoShipCount = 0;
-Vector3* CargoShip::NearestCargoShipPos = nullptr;
-Vector3* CargoShip::CargoShipPos ;
-
-float CargoShip::Destination = 5000.0f ;
-
+CargoShip* CargoShip::Instance = nullptr;
 
 CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
-	setHealth(600);
+	setHealth(60000);
 	type = Scene::GEO_CARGOSHIP;
 	scale = 5.0f;
 	rotationY = 90.f;
 	_interactDistance = scale;
-	NearestCargoShipPos=&position;
+
 	isLightingEnabled = false;
+	currentHP = default_health;
+	Instance = this;
 };
 
 bool CargoShip::checkInteract() {
@@ -26,26 +23,47 @@ bool CargoShip::checkInteract() {
 
 	Vector3 distance = (position);//
 	Vector3 unitDistance = distance.Normalized();
-	
-	if (Destination!=0.0f)
+
+
+	// movement part
+	if (Destination <= 0.0f)
 	{
-	_currentVelocity = _maxvelocity;
+		_currentVelocity = 0;
+
 	}
 	else
 	{
-		_currentVelocity = 0;
+		_currentVelocity = _maxvelocity;
 	}
 
+
 	float moveZ = unitDistance.z  * _currentVelocity * _scene->_dt;
-
-
 	position.z += moveZ;
+
+
+
+
+	//take damage part
+
+
+
+	//scaling the healthbar to health left in percentage
+	if (hp > Math::EPSILON)//so that the healthbar do not scale to x axis to 0 and crash the program
+	{
+		hp = (float)currentHP / (float)default_health;
+		cargolife = (float)currentHP;
+	}
+ 
 	
-	//_scene->textManager.queueRenderText(UIManager::Text{ std::to_string(Destination), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER });//current distance left
+
+
+
+	//destroyed part
 
 	if (currentHP <= 0)
 	{
 		_scene->objBuilder.destroyObject(this);
+		return true;
 	}
 	return false;
 }

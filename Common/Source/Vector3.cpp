@@ -300,6 +300,19 @@ float Vector3::LengthSquared(void) const {
 /******************************************************************************/
 /*!
 \brief
+Return square horizontal length of vector with y-axis as zero
+
+\return
+Length
+*/
+/******************************************************************************/
+float Vector3::HorizontalLengthSquared(void) const {
+	return x * x + z * z;
+}
+
+/******************************************************************************/
+/*!
+\brief
 Dot product of 2 vectors
 
 \param rhs

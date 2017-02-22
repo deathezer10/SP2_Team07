@@ -228,7 +228,7 @@ void UIManager::renderPlayerHUD(){
 	// Crosshair
 	renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
-	radar.RenderRadar((float)Application::_windowWidth / 40, (float)Application::_windowHeight / 20);
+	radar.RenderRadar((float)Application::_windowWidth / 105, (float)Application::_windowHeight / 80);
 
 }
 

@@ -19,11 +19,10 @@ Struct to define a 3D vector
 /******************************************************************************/
 /*!
 		Class Vector3:
-\brief	Defines a 3D vector and its methods
-*/
+		\brief	Defines a 3D vector and its methods
+		*/
 /******************************************************************************/
-struct Vector3
-{
+struct Vector3 {
 	float x, y, z;
 	bool IsEqual(float a, float b) const;
 
@@ -32,45 +31,46 @@ struct Vector3
 	~Vector3();
 
 	std::string toString();
-	
-	Vector3& Set( float a = 0, float b = 0, float c = 0 ); //Set all data
-	Vector3& SetZero( void ); //Set all data to zero
-	bool IsZero( void ) const; //Check if data is zero
 
-	Vector3 operator+( const Vector3& rhs ) const; //Vector addition
-	Vector3& operator+=( const Vector3& rhs ); 
-	
-	Vector3 operator-( const Vector3& rhs ) const; //Vector subtraction
-	Vector3& operator-=( const Vector3& rhs );
-	
-	Vector3 operator-( void ) const; //Unary negation
-	
-	Vector3 operator*( float scalar ) const; //Scalar multiplication
-	Vector3& operator*=( float scalar );
+	Vector3& Set(float a = 0, float b = 0, float c = 0); //Set all data
+	Vector3& SetZero(void); //Set all data to zero
+	bool IsZero(void) const; //Check if data is zero
 
-	bool operator==( const Vector3& rhs ) const; //Equality check
-	bool operator!= ( const Vector3& rhs ) const; //Inequality check
+	Vector3 operator+(const Vector3& rhs) const; //Vector addition
+	Vector3& operator+=(const Vector3& rhs);
+
+	Vector3 operator-(const Vector3& rhs) const; //Vector subtraction
+	Vector3& operator-=(const Vector3& rhs);
+
+	Vector3 operator-(void) const; //Unary negation
+
+	Vector3 operator*(float scalar) const; //Scalar multiplication
+	Vector3& operator*=(float scalar);
+
+	bool operator==(const Vector3& rhs) const; //Equality check
+	bool operator!= (const Vector3& rhs) const; //Inequality check
 
 	Vector3& operator=(const Vector3& rhs); //Assignment operator
 
-	float Length( void ) const; //Get magnitude
+	float Length(void) const; //Get magnitude
 	float HorizontalLength(void) const; // Get horizontal magnitude
-	float LengthSquared (void ) const; //Get square of magnitude
-	
-	float Dot( const Vector3& rhs ) const; //Dot product
-	Vector3 Cross( const Vector3& rhs ) const; //Cross product
-	
+	float LengthSquared(void) const; //Get square of magnitude
+	float HorizontalLengthSquared(void) const;
+
+	float Dot(const Vector3& rhs) const; //Dot product
+	Vector3 Cross(const Vector3& rhs) const; //Cross product
+
 	//Return a copy of this vector, normalized
 	//Throw a divide by zero exception if normalizing a zero vector
-	Vector3 Normalized( void ) const throw( DivideByZero );
-	
+	Vector3 Normalized(void) const throw(DivideByZero);
+
 	//Normalize this vector and return a reference to it
 	//Throw a divide by zero exception if normalizing a zero vector
-	Vector3& Normalize( void ) throw( DivideByZero );
-	
-	friend std::ostream& operator<<( std::ostream& os, Vector3& rhs); //print to ostream
+	Vector3& Normalize(void) throw(DivideByZero);
 
-	friend Vector3 operator*( float scalar, const Vector3& rhs ); //what is this for?
+	friend std::ostream& operator<<(std::ostream& os, Vector3& rhs); //print to ostream
+
+	friend Vector3 operator*(float scalar, const Vector3& rhs); //what is this for?
 };
 
 #endif //VECTOR3_H

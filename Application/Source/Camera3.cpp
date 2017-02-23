@@ -227,6 +227,10 @@ void Camera3::Update(double dt) {
 		}
 	}
 
+	if (std::abs(position.x) >= skyboxBound || std::abs(position.y) >= skyboxBound || std::abs(position.z) >= skyboxBound){
+		currentVelocity = -10;
+	}
+
 	CAMERA_SPEED *= currentVelocity;
 
 	//if (canRoll) {

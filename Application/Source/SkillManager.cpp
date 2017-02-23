@@ -63,7 +63,7 @@ void SkillManager::processPowerUp() {
 		stat->current_bullet_cooldown = stat->initial_bullet_cooldown;
 	}
 	else if (isBarrageActive) {
-		_scene->textManager.queueRenderText(UIManager::Text{ "Barrage Active", Color(0, 0, 1), UIManager::ANCHOR_TOP_LEFT });
+		_scene->textManager.queueRenderText(UIManager::Text{ "Barrage Active", Color(0.97f, 1, 0.46f), UIManager::ANCHOR_TOP_LEFT });
 	}
 
 	// Reset speed
@@ -72,7 +72,7 @@ void SkillManager::processPowerUp() {
 		_scene->camera.setVelocity(40);
 	}
 	else if (isSpeedBoostActive) {
-		_scene->textManager.queueRenderText(UIManager::Text{ "Speed Boost Active", Color(0, 0, 1), UIManager::ANCHOR_TOP_LEFT });
+		_scene->textManager.queueRenderText(UIManager::Text{ "Speed Boost Active", Color(0.97f, 1, 0.46f), UIManager::ANCHOR_TOP_LEFT });
 		_scene->camera.setVelocity(_scene->camera.getMaxVelocity()); // constantly set speed to maximum
 	}
 

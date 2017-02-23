@@ -148,6 +148,7 @@ void SceneGameover::Init() {
 	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], light[0].exponent);
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1); // Make sure you pass uniform parameters after glUseProgram()
+	camera.allowMovement(false);
 
 }
 

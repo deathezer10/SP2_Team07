@@ -34,7 +34,7 @@ private:
 
 	const float _RetreatThreshold = 100; // Run away when HP is under this value
 	const float _RetreatMaxDistance = 500; // Maximum distance that the enemy can run away
-
+	const float _AttackMaxDistance = 50;
 	const int _AttackDamage = 10; // Damage per attack
 	const float _DamageInterval = 0.5f; // Cooldown between each attacks
 	float _NextDamageTime = 0; // DamageInterval's helper variable

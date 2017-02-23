@@ -87,18 +87,32 @@ bool XF02::checkInteract() {
 
 	case AI_STATE::AI_CHASE:
 		// TODO: Insert checking of units beside this NPC to prevent 'converging'
+		
+		if (thisToCameraHorizontalLength >= _AttackMaxDistance)
+		{
+			unitDistance *= 5;
+		}
+		else
+		{
+			unitDistance.SetZero();
+		}
 		break;
 
 	case AI_STATE::AI_ATTACK:
 
 		float dirX = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
-		if (_scene->_elapsedTime >= _NextDamageTime) {
-			_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
-			_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
-		}
+		if (thisToCameraHorizontalLength <= _AttackMaxDistance)
+		{
+			if (_scene->_elapsedTime >= _NextDamageTime) {
+				_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
+				_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
+			}
 
-		unitDistance.SetZero(); // Stay stionary while firing
+			unitDistance.SetZero(); // Stay stationary while firing
+		}
+		
+		
 		break;
 
 	}

@@ -103,9 +103,6 @@ void SceneDogfight::Init() {
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f); // far clipping
 	projectionStack.LoadMatrix(projection);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -129,9 +126,6 @@ void SceneDogfight::Init() {
 
 	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/enemybullet.tga");
-
-	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
-	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
 
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f));
@@ -166,7 +160,6 @@ void SceneDogfight::Init() {
 	meshList[GEO_XF2] = MeshBuilder::GenerateOBJ("enemy", "OBJ/xf02.obj");
 	meshList[GEO_XF2]->textureID = LoadTGA("Image/xf02.tga");
 
-
 	meshList[GEO_REGEN] = MeshBuilder::GenerateOBJ("regen", "OBJ/regen.obj");
 	meshList[GEO_REGEN]->textureID = LoadTGA("Image/regen.tga");
 
@@ -194,7 +187,7 @@ void SceneDogfight::Init() {
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
 
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga");
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
@@ -254,26 +247,18 @@ void SceneDogfight::Init() {
 		objBuilder.createObject(gg);
 	}
 
+	const int powerCount = 100;
+
+	for (size_t i = 0; i < powerCount; i++) {
+		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 3)));
+		objBuilder.createObject(gg);
+	}
 
 	// Create NPCs
 	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(25, -20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(175, -25, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(-175, 20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
-
-
-	// Disable controls at start of tutorial
-	//camera.allowYaw(false);
-	//camera.allowPitch(false);
-	//skillManager.disableSkills();
-
-
-	const int powerCount = 50;
-
-	for (size_t i = 0; i < rockAmount; i++) {
-		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 3)));
-		objBuilder.createObject(gg);
-	}
 
 }
 
@@ -286,7 +271,7 @@ void SceneDogfight::Update(double dt) {
 
 	pauseManager.UpdatePauseMenu((float)dt);
 
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		return;
 	}
 
@@ -326,8 +311,7 @@ void SceneDogfight::Update(double dt) {
 	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
-	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit)
-	{
+	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
 		objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 	}
@@ -345,15 +329,18 @@ void SceneDogfight::Render() {
 
 	viewStack.LoadIdentity();
 
-	if (Application::IsKeyPressed(MK_RBUTTON)) {
-		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-			-camera.playerView.x, camera.playerView.y, -camera.playerView.z,
-			camera.up.x, camera.up.y, camera.up.z);
+	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_2)) {
+
+		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
+
+		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z, 
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-			camera.target.x, camera.target.y, camera.target.z,
-			camera.up.x, camera.up.y, camera.up.z);
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();
@@ -408,7 +395,7 @@ void SceneDogfight::Render() {
 
 
 	// Anything after this is not rendered
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		pauseManager.RenderPauseMenu();
 		return;
 	}

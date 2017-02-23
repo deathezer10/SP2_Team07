@@ -192,7 +192,7 @@ void SceneTutorial::Init() {
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
 
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga");
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
@@ -269,7 +269,7 @@ void SceneTutorial::Update(double dt) {
 
 	pauseManager.UpdatePauseMenu((float)dt);
 
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		return;
 	}
 
@@ -290,7 +290,7 @@ void SceneTutorial::Update(double dt) {
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
 	skillManager.processSkills(dt);
-	
+
 	// Flashlight position and direction
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
@@ -466,14 +466,14 @@ void SceneTutorial::Update(double dt) {
 
 	case 7: // Spped Boost to the End
 
-		if (camera.getCurrentVelocity() != camera.getMaxVelocity()){
+		if (camera.getCurrentVelocity() != camera.getMaxVelocity()) {
 			waypoint.RotateTowards(Vector3(0, 0, 275));
 		}
 		else {
 			waypoint.RotateTowards(*Ring::NearestRingPos);
 		}
 
-		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up the <Speed Boost> and sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up <Speed Boost> & Sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
 		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
@@ -502,9 +502,13 @@ void SceneTutorial::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	if (Application::IsKeyPressed(MK_RBUTTON)) {
-		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 -camera.playerView.x, camera.playerView.y, -camera.playerView.z,
+
+	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_2)) {
+
+		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
+
+		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
+						 camera.target.x, camera.target.y, camera.target.z,
 						 camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
@@ -512,6 +516,7 @@ void SceneTutorial::Render() {
 						 camera.target.x, camera.target.y, camera.target.z,
 						 camera.up.x, camera.up.y, camera.up.z);
 	}
+
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -563,7 +568,7 @@ void SceneTutorial::Render() {
 	objBuilder.renderObjects();
 
 	// Anything after this is not rendered
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		pauseManager.RenderPauseMenu();
 		return;
 	}

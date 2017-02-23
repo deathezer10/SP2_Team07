@@ -32,7 +32,7 @@ bool EnemyXF_04AI::checkInteract() {
 		NearestEnemyXF_04AIPos = &position;
 	}
 
-	Vector3 EnemyToCargo = (CargoShip::Instance->position - position); // Enemy to Cargo
+	Vector3 EnemyToCargo = (*CargoShip::HyperPosition - position); // Enemy to Cargo
 	float EnemyToCargoLength = EnemyToCargo.Length(); // Length
 	float EnemyToCargoHorizontalLength = EnemyToCargo.HorizontalLength(); // Horizontal Length
 	Vector3 NearesXF04ToCamera = (*NearestEnemyXF_04AIPos) - _scene->camera.position;

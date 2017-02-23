@@ -2,6 +2,13 @@
 #include "SkillManager.h"
 #include "PlayerDataManager.h"
 
+#include "GLFW\glfw3.h"
+
+
+SkillManager::SkillManager(Scene* scene) {
+	_scene = scene;
+	pStat = PlayerDataManager::getInstance()->getPlayerStats();
+};
 
 void SkillManager::processSkills(double dt) {
 
@@ -13,19 +20,34 @@ void SkillManager::processSkills(double dt) {
 	processPowerUp();
 	processPassiveSkill();
 
-	if (Application::IsKeyPressed(MK_LBUTTON)) {
-
+	// Using GLFW to get Mouse Down because Application::IsKeyPressed() is sometimes unreliable
+	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_1)) {
 		if (_elapsedTime >= _nextShootTime) {
 			_scene->objBuilder.createObject(new Bullet(_scene, _scene->camera.position, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
 			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 		}
 	}
 
+	// Start of Godmode Activation
+	if (!Application::IsKeyPressed('V')) {
+		canGodmodePress = true;
+	}
+
+	if (Application::IsKeyPressed('V') && canGodmodePress) {
+		isGodmodeActive = !isGodmodeActive;
+		canGodmodePress = false;
+	}
+
+	if (isGodmodeActive) {
+		pStat->current_shield = pStat->initial_shield_capacity;
+		pStat->current_health = 100;
+		_scene->textManager.queueRenderText(UIManager::Text{ "Godmode Activated", Color(.6f, .99f, .66f), UIManager::ANCHOR_CENTER_CENTER });
+	}
+	// End of Godmode Activation
+
 }
 
 void SkillManager::processPassiveSkill() {
-
-	PlayerStat* pStat = PlayerDataManager::getInstance()->getPlayerStats();
 
 	// Shield Regeneration Logic
 	if (pStat->current_shield < pStat->initial_shield_capacity && isShieldRecovering == false) {

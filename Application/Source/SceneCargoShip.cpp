@@ -102,10 +102,7 @@ void SceneCargoShip::Init() {
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f); // far clipping
 	projectionStack.LoadMatrix(projection);
-
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
+	
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -129,11 +126,7 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/enemybullet.tga");
-
-
-	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
-	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
-
+	
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("powerup", Color(.12f, .18f, .32f));
 	meshList[GEO_CUBE]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
 	meshList[GEO_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
@@ -163,9 +156,6 @@ void SceneCargoShip::Init() {
 		break;
 
 	}
-
-	meshList[GEO_TDUMMY] = MeshBuilder::GenerateOBJ("enemy", "OBJ/drone.obj");
-	meshList[GEO_TDUMMY]->textureID = LoadTGA("Image/drone.tga");
 
 	meshList[GEO_REGEN] = MeshBuilder::GenerateOBJ("regen", "OBJ/regen.obj");
 	meshList[GEO_REGEN]->textureID = LoadTGA("Image/regen.tga");
@@ -209,7 +199,7 @@ void SceneCargoShip::Init() {
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f));
 
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga");
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
@@ -258,32 +248,28 @@ void SceneCargoShip::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 250;
-	const float randRange = 250;
+	const size_t rockAmount = 200;
+	const float randRange = 1000;
 
-	//// Create interactable rocks
-	//for (size_t i = 0; i < rockAmount; i++) {
-	//	Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-	//	gg->setCollision(true);
-	//	objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_OBJECTIVE);
-	//}
+	// Create interactable rocks
+	for (size_t i = 0; i < rockAmount; i++) {
+		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(true);
+		objBuilder.createObject(gg);
+	}
 
+	const int powerCount = 100;
 
-	// Create interactable Rings
-
+	for (size_t i = 0; i < powerCount; i++) {
+		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 3)));
+		objBuilder.createObject(gg);
+	}
 
 	//create cargoship
 	_CargoShip = new CargoShip(this, Vector3(0, 0, 20));
 	_CargoShip->setCollision(true);
-
 	objBuilder.createObject(_CargoShip, td_OBJ_TYPE::TYPE_OBJECTIVE);
-
-
-	// Disable controls at start of tutorial
-	//camera.allowYaw(true);
-	//camera.allowPitch(true);
-	//skillManager.disableSkills();
-
+	
 }
 
 void SceneCargoShip::Update(double dt) {
@@ -295,7 +281,7 @@ void SceneCargoShip::Update(double dt) {
 
 	pauseManager.UpdatePauseMenu((float)dt);
 
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		return;
 	}
 
@@ -327,33 +313,31 @@ void SceneCargoShip::Update(double dt) {
 	std::ostringstream Distleft;
 
 
-	waypoint.RotateTowards(CargoShip::Instance->position);
+	waypoint.RotateTowards(_CargoShip->position);
 
-	CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/6000 ";
+	CargoHp << "Cargo Ship HP: " << (int)(_CargoShip->getCurrentHealth()) << " / 6000";
 	textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-	objCount << "XF02 Left: " << XF02::XF02Count;
+	objCount << "XF02 left: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-	objCount02 << "XF04 Left: " << EnemyXF_04AI::EnemyXF_04AICount;
+	objCount02 << "XF04 left: " << EnemyXF_04AI::EnemyXF_04AICount;
 	textManager.queueRenderText(UIManager::Text(objCount02.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 	//distance left for cargo ship to travel
-	Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
+	Distleft << "Distance left: " << (int)(_CargoShip->Destination) << "m";
 	textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
 
 	//create xf-04
-	if (_elapsedTime >= _NextXF04SpawnTime)
-	{
+	if (_elapsedTime >= _NextXF04SpawnTime) {
 		Vector3 spawnPos1 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 		objBuilder.createObject(new EnemyXF_04AI(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
 	}
 
 	// xf02
-	if (_elapsedTime >= _NextXF02SpawnTime && XF02::XF02Count < fighterlimit)
-	{
+	if (_elapsedTime >= _NextXF02SpawnTime && XF02::XF02Count < fighterlimit) {
 
 		Vector3 spawnPos1 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 		Vector3 spawnPos2 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
@@ -363,15 +347,6 @@ void SceneCargoShip::Update(double dt) {
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 
 	}
-	if (CargoShip::Instance->Destination <= 0) {
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP));
-		return;
-	}
-	if (CargoShip::Instance->getCurrentHealth() <= 0) {
-		SceneManager::getInstance()->changeScene(new SceneGameover("You Failed the level", SceneGameover::MENU_GAMEOVER, Scene::SCENE_CARGOSHIP));
-		return;
-	}
-
 
 
 }
@@ -381,9 +356,21 @@ void SceneCargoShip::Render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	viewStack.LoadIdentity();
-	viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-		camera.target.x, camera.target.y, camera.target.z,
-		camera.up.x, camera.up.y, camera.up.z);
+
+	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_2)) {
+
+		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
+
+		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
+	else {
+		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
+	}
+
 	modelStack.LoadIdentity();
 
 	if (light[0].type == Light::LIGHT_DIRECTIONAL) {
@@ -444,7 +431,7 @@ void SceneCargoShip::Render() {
 
 
 	// Anything after this is not rendered
-	if (pauseManager.isPaused()){
+	if (pauseManager.isPaused()) {
 		pauseManager.RenderPauseMenu();
 		return;
 	}
@@ -454,7 +441,7 @@ void SceneCargoShip::Render() {
 	textManager.renderTextOnScreen(UIManager::Text("Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * CargoShip::Instance->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * _CargoShip->hp, 1, 1));
 	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20, 1, 1));
 
 	// Render all pending text onto screen

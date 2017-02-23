@@ -19,6 +19,7 @@ public:
 
     void changeScene(Scene* scene);
     
+	Scene* getCurrentScene() { return currentScene; };
     
 protected:
     SceneManager(){};

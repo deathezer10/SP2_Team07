@@ -9,7 +9,7 @@
 using std::multimap;
 
 // Player Bullet
-Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (scene->camera.getView().Normalized() * 5)) {
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (scene->camera.getView().Normalized() * 4.5f)) {
 	type = Scene::GEO_BULLET;
 
 	_bulletDamage = damage;
@@ -17,13 +17,6 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (sce
 	_bulletSpeed += scene->camera.getCurrentVelocity(); // bullet must be faster than the fighter!
 
 	position.y -= 1.25f;
-
-	// TODO: 
-	// FIX Bullet not hitting enemies in front 
-	// Camera BackView fix
-	// Defeat Scene when player HP <= 0
-	// HP & Shield to bars
-	// Shield regen buggy
 
 	rotationX = scene->camera.getPitch();
 	rotationY = -scene->camera.getYaw() + 90;
@@ -55,8 +48,6 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 rotation, Vector3 
 
 bool Bullet::checkInteract() {
 
-	position += _direction * _bulletSpeed * _scene->_dt;
-
 	// Remove bullet once reached max distance
 	if ((_startingPosition - position).Length() >= _bulletMaxDistance) {
 		_scene->objBuilder.destroyObject(this);
@@ -65,15 +56,15 @@ bool Bullet::checkInteract() {
 
 	// Enemy Bullet
 	if (_isEnemyBullet == true) {
-		
-		// Retrieve all values that from key 'Enemy'
+
+		// Retrieve all values that from key 'Objective'
 		auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
 			Object* temp = it->second;
 
-			// NPC bullet collision
+			// Objective bullet collision
 			if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
 
 				NPC* npc = static_cast<NPC*>(temp);
@@ -121,6 +112,9 @@ bool Bullet::checkInteract() {
 
 
 	}
+
+	// Move bullet at the end so it doesn't "clip" through object in front of it
+	position += _direction * _bulletSpeed * _scene->_dt;
 
 	return false;
 }

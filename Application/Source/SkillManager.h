@@ -1,13 +1,16 @@
 #ifndef SKILL_MANAGER_H
 #define SKILL_MANAGER_H
 
+
+
 class Scene;
+struct PlayerStat;
 
 class SkillManager {
 
 
 public:
-	SkillManager(Scene* scene) { _scene = scene; };
+	SkillManager(Scene* scene);
 	~SkillManager() {};
 
 	void disableSkills() { skillEnabled = false; };
@@ -24,6 +27,7 @@ public:
 
 private:
 	Scene* _scene;
+	PlayerStat* pStat;
 
 	bool skillEnabled = true;
 	bool canShoot = true;
@@ -46,6 +50,8 @@ private:
 
 	bool isBarrageActive = false;
 	bool isSpeedBoostActive = false;
+	bool isGodmodeActive = false;
+	bool canGodmodePress = false;
 
 };
 #endif

@@ -16,9 +16,8 @@ public:
 
 	float Destination = 1800.0f;
 	float hp = 1;
-	float cargolife = 0;
 
-	static CargoShip* Instance;
+	static Vector3* HyperPosition;
 
 private:
 	float _currentaceleration = 60.0f;

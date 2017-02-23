@@ -180,7 +180,7 @@ void UIManager::renderTextOnScreen(Text text) {
 	glEnable(GL_DEPTH_TEST);
 }
 
-void UIManager::renderPlayerHUD(){
+void UIManager::renderPlayerHUD() {
 
 	static bool canDebugPress = false;
 
@@ -214,12 +214,23 @@ void UIManager::renderPlayerHUD(){
 
 	std::ostringstream strHealth;
 	strHealth << "Health: " << PlayerDataManager::getInstance()->getPlayerStats()->current_health;
-	renderTextOnScreen(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_LEFT));
+	renderTextOnScreen(UIManager::Text(strHealth.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_health <= 50) ? Color(1, 0, 0) : Color(0, 1, 0), UIManager::ANCHOR_BOT_CENTER));
 
 	std::ostringstream strShield;
 	strShield << "Shield: " << (int)PlayerDataManager::getInstance()->getPlayerStats()->current_shield;
-	renderTextOnScreen(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(.31f, .81f, .99f), UIManager::ANCHOR_BOT_LEFT));
+	renderTextOnScreen(UIManager::Text(strShield.str(), (PlayerDataManager::getInstance()->getPlayerStats()->current_shield <= 50) ? Color(1, 0, 0) : Color(0, 1, 1), UIManager::ANCHOR_BOT_CENTER));
 
+	float healthScale = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_health / 100;
+	float shieldScale = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_shield / (float)PlayerDataManager::getInstance()->getPlayerStats()->current_shield_capacity;
+
+	float winHeight = Application::_windowHeight / 10;
+	float winWidth = Application::_windowWidth / 10;
+
+	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * healthScale, 1, 1));
+	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
+
+	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * shieldScale, 1, 1));
+	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
 
 	std::ostringstream velocity;
 	velocity << "Speed: " << (int)_scene->camera.getCurrentVelocity() << "m/s";
@@ -228,7 +239,7 @@ void UIManager::renderPlayerHUD(){
 	// Crosshair
 	renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
-	radar.RenderRadar((float)Application::_windowWidth / 105, (float)Application::_windowHeight / 80);
+	radar.RenderRadar(winWidth * 0.1f, winHeight * 0.125f);
 
 }
 

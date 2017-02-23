@@ -5,7 +5,8 @@
 #include <sstream>
 
 #include "PlayerDataManager.h"
-
+#include "SceneManager.h"
+#include "SceneGameOver.h"
 
 using std::ofstream;
 using std::ifstream;
@@ -190,13 +191,17 @@ void PlayerDataManager::damagePlayer(int amount) {
 	else {
 		pStat.getStatData()->current_health -= amount;
 	}
-	
+
 	// Transfer remainder damage to Health
 	if (pStat.getStatData()->current_shield < 0) {
 		pStat.getStatData()->current_health += (int)pStat.getStatData()->current_shield;
-	}	
+	}
 
 	if (pStat.getStatData()->current_shield < 0)
 		pStat.getStatData()->current_shield = 0;
 
+	if (pStat.getStatData()->current_health <= 0) {
+		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your Space Fighter was destroyed!", SceneGameover::MENU_GAMEOVER, SceneManager::getInstance()->getCurrentScene()->sceneType));
+		return;
+	}
 }

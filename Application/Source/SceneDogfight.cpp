@@ -252,11 +252,12 @@ void SceneDogfight::Init() {
 
 
 	// Create NPCs
-	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 100)), td_OBJ_TYPE::TYPE_ENEMY);
-	objBuilder.createObject(new XF02(this, Vector3(25, -20, 100)), td_OBJ_TYPE::TYPE_ENEMY);
-	objBuilder.createObject(new XF02(this, Vector3(0, -25, 100)), td_OBJ_TYPE::TYPE_ENEMY);
-	objBuilder.createObject(new XF02(this, Vector3(0, 20, 100)), td_OBJ_TYPE::TYPE_ENEMY);
+	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 400)), td_OBJ_TYPE::TYPE_ENEMY);
+	objBuilder.createObject(new XF02(this, Vector3(25, -20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
+	objBuilder.createObject(new XF02(this, Vector3(175, -25, 400)), td_OBJ_TYPE::TYPE_ENEMY);
+	objBuilder.createObject(new XF02(this, Vector3(-175, 20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 
+	
 	// Disable controls at start of tutorial
 	//camera.allowYaw(false);
 	//camera.allowPitch(false);
@@ -276,8 +277,8 @@ void SceneDogfight::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
-
-
+	const float randomrange1 = 500;
+	const unsigned int fighterlimit = 30;
 
 	pauseManager.UpdatePauseMenu((float)dt);
 
@@ -325,6 +326,13 @@ void SceneDogfight::Update(double dt) {
 
 		objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
 		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+
+		if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count< fighterlimit)
+		{
+			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
+			_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
+		}
 
 		if (XF02::XF02Count == 0) {
 			++currentObjective;

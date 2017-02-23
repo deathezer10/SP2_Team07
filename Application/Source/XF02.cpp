@@ -90,7 +90,7 @@ bool XF02::checkInteract() {
 		
 		if (thisToCameraHorizontalLength >= _AttackMaxDistance)
 		{
-			unitDistance *= 5;
+			unitDistance *= 2;
 		}
 		else
 		{

@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <map>
+
 #include "Object.h"
 #include "Rock.h"
 #include "Door.h"
@@ -11,8 +12,8 @@
 #include "Ring.h"
 #include "PowerUp.h"
 
-class Scene;
 
+class Object;
 
 // Stores Objects in the Scene and update the interactions accordingly
 class ObjectInteractor {

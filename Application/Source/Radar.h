@@ -27,7 +27,7 @@ private:
 
 	vector<NPC*> unitContainer; // To access the position of the units
 
-	const float _RadarRange = 2.0f; // Distance before the Radar can detect any enemy, change this to increase Radar's detection range
+	const float _RadarRange = 4.0f; // Distance before the Radar can detect any enemy, change this to increase Radar's detection range
 	const float _RadarSize = 7; // Background size of the radar
 	const float _RadarSizeSquared; // Helper variable: Square length of the Radar
 	const float _RadarEnemySize = 0.007f; // Enemy Icon Size: Scaling is relative to _RadarSize :: (This * _RadarSize)

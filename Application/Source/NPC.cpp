@@ -3,18 +3,41 @@
 
 
 NPC::NPC(Scene* scene, Vector3 pos) : Object(scene, pos){
-
 	scene->textManager.radar.addUnit(this);
-
-}
+};
 
 NPC::~NPC(){
 	_scene->textManager.radar.removeUnit(this);
 };
 
+void NPC::render() {
+	_scene->modelStack.PushMatrix();
+	_scene->modelStack.Translate(position.x, position.y, position.z);
+	_scene->modelStack.Rotate(rotationY, 0, 1, 0);
+	_scene->modelStack.Rotate(rotationZ, 0, 0, 1);
+	_scene->modelStack.Rotate(rotationX, 1, 0, 0);
+	_scene->modelStack.Scale(scale, scale, scale);
+	_scene->RenderMesh(_scene->meshList[type], isLightingEnabled);
+	_scene->modelStack.PopMatrix();
+
+	if (_isHealthBarEnabled){
+		float barSize = ((float)currentHP / (float)defaultHP) * 5;
+
+		_scene->modelStack.PushMatrix();
+		_scene->modelStack.Translate(position.x - barSize, position.y + 2, position.z);
+		_scene->modelStack.Translate(0, 2, 0);
+		// _scene->modelStack.Rotate(, 1, 0, 0);
+		//_scene->modelStack.Rotate(, 0, 1, 0);		
+		_scene->modelStack.Scale(barSize, 0.5f, 1);
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], isLightingEnabled);
+		_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], isLightingEnabled);
+		_scene->modelStack.PopMatrix();
+	}
+
+}
 
 void NPC::setHealth(int value) {
-	currentHP = value;
+	currentHP = defaultHP = value;
 }
 
 void NPC::reduceHealth(int value) {

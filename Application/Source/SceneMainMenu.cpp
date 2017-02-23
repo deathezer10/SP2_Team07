@@ -14,7 +14,6 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-#include "Assignment03.h"
 
 #include <sstream>
 
@@ -234,7 +233,7 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
 				break;
 			case 3: // Boss
-				SceneManager::getInstance()->changeScene(new Assignment03()); // Change Scene
+				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
 				break;
 			case 4: // Back button
 				_insideSelected = 0;

@@ -11,7 +11,6 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
-#include "Assignment03.h"
 #include "UIManager.h"
 #include <sstream>
 

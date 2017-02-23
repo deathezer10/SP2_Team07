@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "SceneManager.h"
 
+#include "PlayerDataManager.h"
+
 #include <GLFW\glfw3.h>
 
 SceneManager *SceneManager::_instance = 0;
@@ -52,5 +54,6 @@ void SceneManager::changeScene(Scene* scene){
     else {
         pendingScene = scene;
         _hasPendingScene = true;
+		PlayerDataManager::getInstance()->ResetPlayerStats(); // Clear potential Power Up leakage before transitioning
     }
 }

@@ -6,7 +6,7 @@
 class NPC : public Object {
 
 public:
-	NPC(Scene* scene, Vector3 pos);
+	NPC(Scene* scene, Vector3 pos, bool showOnRadar = true);
 	~NPC();
 
 	virtual void render();
@@ -26,13 +26,18 @@ public:
 	// No bounds checking
 	void reduceVelocity(float value);
 
+	// Toggle health bar visibility
 	void toggleHealthbar(bool toggle){ _isHealthBarEnabled = toggle; };
+
+	bool isInsideRadar() { return _isInsideRadar; };
 
 protected:
 	int currentHP;
 	int defaultHP;
 
 	float _currentVelocity = 0;
+
+	bool _isInsideRadar;
 	bool _isHealthBarEnabled = true;
 
 

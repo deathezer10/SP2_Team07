@@ -229,32 +229,32 @@ void Camera3::Update(double dt) {
 
 	CAMERA_SPEED *= currentVelocity;
 
-	if (canRoll) {
-		if (mouseMovedX > 0) { // Left
-			float angle = -rotationSpeed * mouseMovedDistanceX;
-			yaw -= angle;
+	//if (canRoll) {
+	//	if (mouseMovedX > 0) { // Left
+	//		float angle = -rotationSpeed * mouseMovedDistanceX;
+	//		yaw -= angle;
 
-			Mtx44 rotation;
-			right.y = 0;
-			right.Normalize();
-			up = right.Cross(view).Normalized();
-			rotation.SetToRotation(angle, 0, 1, 0);
-			view = rotation * view;
-			target = position + view;
-		}
-		else if (mouseMovedX < 0) { // Left
-			float angle = rotationSpeed * mouseMovedDistanceX;
-			yaw -= angle;
+	//		Mtx44 rotation;
+	//		right.y = 0;
+	//		right.Normalize();
+	//		up = right.Cross(view).Normalized();
+	//		rotation.SetToRotation(angle, 0, 1, 0);
+	//		view = rotation * view;
+	//		target = position + view;
+	//	}
+	//	else if (mouseMovedX < 0) { // Left
+	//		float angle = rotationSpeed * mouseMovedDistanceX;
+	//		yaw -= angle;
 
-			Mtx44 rotation;
-			right.y = 0;
-			right.Normalize();
-			up = right.Cross(view).Normalized();
-			rotation.SetToRotation(angle, 0, 1, 0);
-			view = rotation * view;
-			target = position + view;
-		}
-	}
+	//		Mtx44 rotation;
+	//		right.y = 0;
+	//		right.Normalize();
+	//		up = right.Cross(view).Normalized();
+	//		rotation.SetToRotation(angle, 0, 1, 0);
+	//		view = rotation * view;
+	//		target = position + view;
+	//	}
+	//}
 
 	// Move the Camera according to the velocity
 	position.x += view.x * CAMERA_SPEED;

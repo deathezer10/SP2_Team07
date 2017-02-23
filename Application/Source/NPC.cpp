@@ -1,13 +1,20 @@
+#include "Application.h"
 #include "NPC.h"
 #include "Scene.h"
 
+#include "GL\glew.h"
 
-NPC::NPC(Scene* scene, Vector3 pos) : Object(scene, pos){
-	scene->textManager.radar.addUnit(this);
+NPC::NPC(Scene* scene, Vector3 pos, bool showOnRadar) : Object(scene, pos){
+
+	_isInsideRadar = showOnRadar;
+
+	if (showOnRadar)
+		scene->textManager.radar.addUnit(this);
 };
 
 NPC::~NPC(){
-	_scene->textManager.radar.removeUnit(this);
+	if (_isInsideRadar)
+		_scene->textManager.radar.removeUnit(this);
 };
 
 void NPC::render() {
@@ -18,21 +25,40 @@ void NPC::render() {
 	_scene->modelStack.Rotate(rotationX, 1, 0, 0);
 	_scene->modelStack.Scale(scale, scale, scale);
 	_scene->RenderMesh(_scene->meshList[type], isLightingEnabled);
-	_scene->modelStack.PopMatrix();
 
 	if (_isHealthBarEnabled){
-		float barSize = ((float)currentHP / (float)defaultHP) * 5;
+
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+
+		const float overallSize = 0.5f;
+		float barSize = ((float)currentHP / (float)defaultHP) * overallSize;
+		
+		_scene->modelStack.PushMatrix();
+		{
+			_scene->modelStack.Translate(0, 0.25f, -overallSize);
+			_scene->modelStack.Rotate(-90, 0, 1, 0);
+			_scene->modelStack.Scale(overallSize, 0.025f, 0.1f);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], isLightingEnabled);
+		}
+		_scene->modelStack.PopMatrix();
 
 		_scene->modelStack.PushMatrix();
-		_scene->modelStack.Translate(position.x - barSize, position.y + 2, position.z);
-		_scene->modelStack.Translate(0, 2, 0);
-		// _scene->modelStack.Rotate(, 1, 0, 0);
-		//_scene->modelStack.Rotate(, 0, 1, 0);		
-		_scene->modelStack.Scale(barSize, 0.5f, 1);
-		_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], isLightingEnabled);
-		_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], isLightingEnabled);
+		{
+			_scene->modelStack.Translate(0, 0.25f, -barSize);
+			_scene->modelStack.Rotate(-90, 0, 1, 0);
+			_scene->modelStack.Scale(barSize, 0.025f, 0.1f);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], isLightingEnabled);
+		}
 		_scene->modelStack.PopMatrix();
+		
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+
 	}
+
+	_scene->modelStack.PopMatrix();
+
 
 }
 

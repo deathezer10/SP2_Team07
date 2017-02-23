@@ -15,8 +15,8 @@ public:
 	float _interactDistance;
 
 	float Destination = 1800.0f;
-	 float hp=1;
-	 float cargolife=0;
+	float hp = 1;
+	float cargolife = 0;
 
 	static CargoShip* Instance;
 

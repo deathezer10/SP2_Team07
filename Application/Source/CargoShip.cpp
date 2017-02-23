@@ -12,6 +12,8 @@ CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	rotationY = 90.f;
 	_interactDistance = scale;
 
+	collider.setBoundingBoxSize(Vector3(scale + 10, scale + 4, scale + 15));
+
 	isLightingEnabled = false;
 	Instance = this;
 };

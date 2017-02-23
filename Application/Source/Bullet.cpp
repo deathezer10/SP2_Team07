@@ -18,6 +18,13 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (sce
 
 	position.y -= 1.25f;
 
+	// TODO: 
+	// FIX Bullet not hitting enemies in front 
+	// Camera BackView fix
+	// Defeat Scene when player HP <= 0
+	// HP & Shield to bars
+	// Shield regen buggy
+
 	rotationX = scene->camera.getPitch();
 	rotationY = -scene->camera.getYaw() + 90;
 
@@ -58,8 +65,7 @@ bool Bullet::checkInteract() {
 
 	// Enemy Bullet
 	if (_isEnemyBullet == true) {
-
-
+		
 		// Retrieve all values that from key 'Enemy'
 		auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_OBJECTIVE);
 

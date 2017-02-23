@@ -22,7 +22,7 @@ public:
 	static Vector3* NearestEnemyXF_04AIPos;
 
 private:
-	const int _AttackDamage = 10; // Damage per attack
+	const int _AttackDamage = 40; // Damage per attack
 	const float _DamageInterval = 0.5f; // Cooldown between each attacks
 	const float _AttackInterval = 5.f;
 

@@ -27,10 +27,7 @@ SceneCargoShip::SceneCargoShip() : Scene(SCENE_CARGOSHIP) {
 SceneCargoShip::~SceneCargoShip() {}
 
 void SceneCargoShip::Init() {
-
 	pData = PlayerDataManager::getInstance()->getPlayerData();
-
-	PlayerStat* gg = PlayerDataManager::getInstance()->getPlayerStats();
 
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -199,7 +196,7 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_SPACESTATION] = MeshBuilder::GenerateOBJ("space station", "OBJ/SpaceStation.obj");
 	meshList[GEO_SPACESTATION]->textureID = LoadTGA("Image/SpaceStation.tga");
-	
+
 	meshList[GEO_XF2] = MeshBuilder::GenerateOBJ("enemy", "OBJ/xf02.obj");
 	meshList[GEO_XF2]->textureID = LoadTGA("Image/xf02.tga");
 
@@ -276,7 +273,10 @@ void SceneCargoShip::Init() {
 
 
 	//create cargoship
-	objBuilder.createObject(new CargoShip(this, Vector3(0, 0, 20)), td_OBJ_TYPE::TYPE_OBJECTIVE);
+	_CargoShip = new CargoShip(this, Vector3(0, 0, 20));
+	_CargoShip->setCollision(true);
+
+	objBuilder.createObject(_CargoShip, td_OBJ_TYPE::TYPE_OBJECTIVE);
 
 
 	// Disable controls at start of tutorial
@@ -287,7 +287,7 @@ void SceneCargoShip::Init() {
 }
 
 void SceneCargoShip::Update(double dt) {
-	const float randomrange1=250;
+	const float randomrange1 = 250;
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
@@ -327,45 +327,50 @@ void SceneCargoShip::Update(double dt) {
 	std::ostringstream Distleft;
 
 
-		waypoint.RotateTowards(CargoShip::Instance->position);
+	waypoint.RotateTowards(CargoShip::Instance->position);
 
-		CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/6000 ";
-		textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/6000 ";
+	textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-		objCount << "XF02 Left: " << XF02::XF02Count;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+	objCount << "XF02 Left: " << XF02::XF02Count;
+	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-		objCount02 << "XF04 Left: " <<EnemyXF_04AI::EnemyXF_04AICount;
-		textManager.queueRenderText(UIManager::Text(objCount02.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+	objCount02 << "XF04 Left: " << EnemyXF_04AI::EnemyXF_04AICount;
+	textManager.queueRenderText(UIManager::Text(objCount02.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-		//distance left for cargo ship to travel
-		Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
-		textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+	//distance left for cargo ship to travel
+	Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
+	textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
 
-		//create xf-04
-		if (_elapsedTime >= _NextXF04SpawnTime)
-		{
-			objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
-			_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
-		}
+	//create xf-04
+	if (_elapsedTime >= _NextXF04SpawnTime)
+	{
+		Vector3 spawnPos1 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		objBuilder.createObject(new EnemyXF_04AI(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
+		_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
+	}
 
-		// xf02
-		if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit)
-		{
-			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
-			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
-			_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
-			
-		}
-		if (CargoShip::Instance->Destination<=0 ) {
+	// xf02
+	if (_elapsedTime >= _NextXF02SpawnTime && XF02::XF02Count < fighterlimit)
+	{
+
+		Vector3 spawnPos1 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		Vector3 spawnPos2 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+
+		objBuilder.createObject(new XF02(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
+		objBuilder.createObject(new XF02(this, spawnPos2), td_OBJ_TYPE::TYPE_ENEMY);
+		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
+
+	}
+	if (CargoShip::Instance->Destination <= 0) {
 		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP));
 		return;
-		}
-		if (CargoShip::Instance->getCurrentHealth() <= 0) {
+	}
+	if (CargoShip::Instance->getCurrentHealth() <= 0) {
 		SceneManager::getInstance()->changeScene(new SceneGameover("You Failed the level", SceneGameover::MENU_GAMEOVER, Scene::SCENE_CARGOSHIP));
 		return;
-		}
+	}
 
 
 
@@ -429,7 +434,7 @@ void SceneCargoShip::Render() {
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90.0f, 0, 1, 0);
 
-	modelStack.Translate( 1850,0 ,0 );
+	modelStack.Translate(1850, 0, 0);
 	RenderMesh(meshList[GEO_SPACESTATION], true);
 	modelStack.PopMatrix();
 
@@ -446,7 +451,7 @@ void SceneCargoShip::Render() {
 
 	textManager.renderPlayerHUD();
 
-	textManager.renderTextOnScreen(UIManager::Text(" Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text("Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
 	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * CargoShip::Instance->hp, 1, 1));

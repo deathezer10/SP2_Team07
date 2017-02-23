@@ -409,8 +409,8 @@ void SceneCargoShip::Render() {
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(1 * CargoShip::Instance->hp, 1, 1));
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(1, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * CargoShip::Instance->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20, 1, 1));
 
 	// Render all pending text onto screen
 	textManager.dequeueText();

@@ -24,7 +24,6 @@ private:
 	float _currentaceleration = 60.0f;
 	float _currentdeceleration = 60.0f;
 	float _maxvelocity = 10.0f;
-	const int default_health = 60000;
 
 
 	const float _MovementSpeed = 10.0f; // Movement speed

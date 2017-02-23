@@ -28,7 +28,7 @@ SceneDogfight::~SceneDogfight() {}
 void SceneDogfight::Init() {
 
 	pData = PlayerDataManager::getInstance()->getPlayerData();
-	
+
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
@@ -192,7 +192,7 @@ void SceneDogfight::Init() {
 	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
-	
+
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
 	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga");
 
@@ -261,7 +261,7 @@ void SceneDogfight::Init() {
 	objBuilder.createObject(new XF02(this, Vector3(175, -25, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(-175, 20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 
-	
+
 	// Disable controls at start of tutorial
 	//camera.allowYaw(false);
 	//camera.allowPitch(false);
@@ -315,46 +315,27 @@ void SceneDogfight::Update(double dt) {
 	std::ostringstream objDist;
 	std::ostringstream objCount;
 
+	waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
-	// Objective Logic
-	switch (currentObjective) {
+	textManager.queueRenderText(UIManager::Text("Eliminate all enemies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
-	case 0: 
+	objCount << "Enemies Left: " << XF02::XF02Count;
+	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-		waypoint.RotateTowards(*XF02::NearestXF02Pos);
-
-		textManager.queueRenderText(UIManager::Text("Eliminate all enemies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
-		objCount << "Enemies Left: " << XF02::XF02Count;
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-		objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
+	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
-		if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count< fighterlimit)
-		{
-			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
-			_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
-		}
-
-		if (XF02::XF02Count == 0) {
-			++currentObjective;
-		}
-
-		break;
-
-	case 1:// victory senario
-
-
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT));
-		return;
-
-		break;
-
-	
+	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit)
+	{
+		objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
+		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 	}
 
+	if (XF02::XF02Count == 0) {
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT));
+		return;
+	}
 
 }
 

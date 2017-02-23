@@ -6,14 +6,13 @@
 CargoShip* CargoShip::Instance = nullptr;
 
 CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
-	setHealth(60000);
+	setHealth(6000);
 	type = Scene::GEO_CARGOSHIP;
 	scale = 5.0f;
 	rotationY = 90.f;
 	_interactDistance = scale;
 
 	isLightingEnabled = false;
-	currentHP = default_health;
 	Instance = this;
 };
 
@@ -50,7 +49,7 @@ bool CargoShip::checkInteract() {
 	//scaling the healthbar to health left in percentage
 	if (hp > Math::EPSILON)//so that the healthbar do not scale to x axis to 0 and crash the program
 	{
-		hp = (float)currentHP / (float)default_health;
+		hp = (float)currentHP / (float)defaultHP;
 		cargolife = (float)currentHP;
 	}
  

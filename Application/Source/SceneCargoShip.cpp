@@ -325,13 +325,11 @@ void SceneCargoShip::Update(double dt) {
 	std::ostringstream objCount;
 	std::ostringstream objCount02;
 	std::ostringstream Distleft;
-	switch (currentObjective) {
 
-	case 0:
 
 		waypoint.RotateTowards(CargoShip::Instance->position);
 
-		CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
+		CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/6000 ";
 		textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objCount << "XF02 Left: " << XF02::XF02Count;
@@ -361,20 +359,15 @@ void SceneCargoShip::Update(double dt) {
 			
 		}
 		if (CargoShip::Instance->Destination<=0 ) {
-			++currentObjective;
-		}
-
-		break;
-
-	case 1://victory scenario
-
 		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP));
 		return;
+		}
+		if (CargoShip::Instance->getCurrentHealth() <= 0) {
+		SceneManager::getInstance()->changeScene(new SceneGameover("You Failed the level", SceneGameover::MENU_GAMEOVER, Scene::SCENE_CARGOSHIP));
+		return;
+		}
 
-		
-		break;
-	
-	}
+
 
 }
 

@@ -194,10 +194,12 @@ void SceneCargoShip::Init() {
 	meshList[GEO_WAYPOINT] = MeshBuilder::GenerateOBJ("rock4", "OBJ/waypoint.obj");
 	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
-	meshList[GEO_CARGOSHIP] = MeshBuilder::GenerateOBJ("rock4", "OBJ/cargo_ship.obj");
+	meshList[GEO_CARGOSHIP] = MeshBuilder::GenerateOBJ("cargoeship", "OBJ/cargo_ship.obj");
 	meshList[GEO_CARGOSHIP]->textureID = LoadTGA("Image/cargo_ship.tga");
 
-
+	meshList[GEO_SPACESTATION] = MeshBuilder::GenerateOBJ("space station", "OBJ/SpaceStation.obj");
+	meshList[GEO_SPACESTATION]->textureID = LoadTGA("Image/SpaceStation.tga");
+	
 	meshList[GEO_XF2] = MeshBuilder::GenerateOBJ("enemy", "OBJ/xf02.obj");
 	meshList[GEO_XF2]->textureID = LoadTGA("Image/xf02.tga");
 
@@ -329,8 +331,8 @@ void SceneCargoShip::Update(double dt) {
 
 		waypoint.RotateTowards(CargoShip::Instance->position);
 
-		CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
-		textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		CargoHp << "Cargo Ship HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
+		textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objCount << "XF02 Left: " << XF02::XF02Count;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
@@ -346,7 +348,7 @@ void SceneCargoShip::Update(double dt) {
 		//create xf-04
 		if (_elapsedTime >= _NextXF04SpawnTime)
 		{
-			objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_OBJECTIVE);
+			objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
 			_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
 		}
 
@@ -431,6 +433,12 @@ void SceneCargoShip::Render() {
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Rotate(-90.0f, 0, 1, 0);
+
+	modelStack.Translate( 1850,0 ,0 );
+	RenderMesh(meshList[GEO_SPACESTATION], true);
+	modelStack.PopMatrix();
 
 	// Render all interactable objects
 	objBuilder.renderObjects();
@@ -445,7 +453,7 @@ void SceneCargoShip::Render() {
 
 	textManager.renderPlayerHUD();
 
-	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.renderTextOnScreen(UIManager::Text(" Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 
 	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * CargoShip::Instance->hp, 1, 1));

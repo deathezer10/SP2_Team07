@@ -11,7 +11,7 @@ Vector3* XF02::NearestXF02Pos = nullptr;
 XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(200);
 	type = Scene::GEO_XF2;
-	scale = 10.0f;
+	scale = 1.0f;
 	_interactDistance = scale * 2;
 	isLightingEnabled = false;
 	++XF02Count;
@@ -71,13 +71,17 @@ bool XF02::checkInteract() {
 		break;
 
 	case AI_STATE::AI_RETREAT:
-		unitDistance *= -1; // Fly away from player
+
 		rotationY -= 180; // Face away from player
 		rotationZ = 0; // Since we're running, no need to look at player anymore
 
 		// Stop running away if distance is too far from player
 		if (thisToCameraHorizontalLength >= _RetreatMaxDistance) {
 			unitDistance.SetZero();
+		}
+		else
+		{
+			unitDistance *= -1; // Fly away from player
 		}
 		break;
 

@@ -14,7 +14,7 @@ public:
 
 	float _interactDistance;
 
-	float Destination = 6000.0f;
+	float Destination = 1800.0f;
 	 float hp=1;
 	 float cargolife=0;
 

@@ -30,8 +30,8 @@ private:
 	int currentObjective = 0;
 	float _NextXF04SpawnTime = 0.0f;
 	float _NextXF02SpawnTime = 0.0f;
-	const float _SpawnXF02Interval = 25.0f;
-	const float _SpawnXF04Interval = 25.0f;
+	const float _SpawnXF02Interval = 15.0f;
+	const float _SpawnXF04Interval = 10.0f;
 	PlayerSaveData* pData;
 
 };

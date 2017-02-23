@@ -47,6 +47,7 @@ public:
 		GEO_TABLE,
 		GEO_CHAIR,
 		GEO_SPACESHIP,
+		GEO_SPACESTATION,
 
 		// Space Fighter Meshes
 		GEO_FG6,

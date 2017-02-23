@@ -18,7 +18,7 @@ public:
 
 	};	
 
-	SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene);
+	SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene, int currencyEarned = 0);
 	~SceneGameover();
 
 	virtual void Init();
@@ -36,6 +36,7 @@ private:
 	TYPE_MENU _menuType;
 	unsigned _menuSelected;
 	string _title;
+	int _currencyEarned;
 
 };
 

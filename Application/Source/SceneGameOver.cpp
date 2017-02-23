@@ -16,11 +16,12 @@
 #include <sstream>
 
 
-SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene) : Scene(SCENE_GAMEOVER_VICTORY){
+SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene, int currency) : Scene(SCENE_GAMEOVER_VICTORY){
 	_previousScene = previousScene;
 	_menuSelected = 0;
 	_menuType = type;
 	_title = title;
+	_currencyEarned = currency;
 }
 
 SceneGameover::~SceneGameover() {
@@ -354,7 +355,7 @@ void SceneGameover::Render() {
 	if (_menuType == MENU_VICTORY) {
 		std::string option3 = "Option 3";
 		std::string option4 = "Currency earned: ";
-		option4.append(std::to_string(PlayerDataManager::getInstance()->getPlayerData()->currency));
+		option4.append(std::to_string(_currencyEarned));
 		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

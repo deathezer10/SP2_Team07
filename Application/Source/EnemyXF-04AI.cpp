@@ -12,7 +12,7 @@ Vector3* EnemyXF_04AI::NearestEnemyXF_04AIPos = nullptr;
 EnemyXF_04AI::EnemyXF_04AI(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(100);
 	type = Scene::GEO_XF4;
-	scale = 5.0f;
+	scale = 2.0f;
 	_interactDistance = scale;
 	isLightingEnabled = false;
 	++EnemyXF_04AICount;

@@ -17,6 +17,7 @@
 #include "SceneGameOver.h"
 #include "CargoShip.h"
 #include"EnemyXF-04AI.h"
+#include "XF02.h"
 #include <sstream>
 
 
@@ -196,7 +197,11 @@ void SceneCargoShip::Init() {
 	meshList[GEO_CARGOSHIP] = MeshBuilder::GenerateOBJ("rock4", "OBJ/cargo_ship.obj");
 	meshList[GEO_CARGOSHIP]->textureID = LoadTGA("Image/cargo_ship.tga");
 
-	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("rock4", "OBJ/xf04.obj");
+
+	meshList[GEO_XF2] = MeshBuilder::GenerateOBJ("enemy", "OBJ/xf02.obj");
+	meshList[GEO_XF2]->textureID = LoadTGA("Image/xf02.tga");
+
+	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("enwmy", "OBJ/xf04.obj");
 	meshList[GEO_XF4]->textureID = LoadTGA("Image/xf04.tga");
 
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
@@ -282,6 +287,8 @@ void SceneCargoShip::Update(double dt) {
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
+	const unsigned int fighterlimit = 20;
+
 	pauseManager.UpdatePauseMenu((float)dt);
 
 	if (pauseManager.isPaused()){
@@ -312,27 +319,57 @@ void SceneCargoShip::Update(double dt) {
 
 	std::ostringstream CargoHp;
 	std::ostringstream objCount;
+	std::ostringstream objCount02;
 	std::ostringstream Distleft;
+	switch (currentObjective) {
+
+	case 0:
+
+		waypoint.RotateTowards(CargoShip::Instance->position);
+
+		CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
+		textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "XF02 Left: " << XF02::XF02Count;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		objCount02 << "XF04 Left: " <<EnemyXF_04AI::EnemyXF_04AICount;
+		textManager.queueRenderText(UIManager::Text(objCount02.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+
+		//distance left for cargo ship to travel
+		Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
+		textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
 
-	waypoint.RotateTowards(CargoShip::Instance->position);
+		//create xf-04
+		if (_elapsedTime >= _NextXF04SpawnTime)
+		{
+			objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_OBJECTIVE);
+			_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
+		}
 
-	CargoHp << "CargoShip HP: " << (int)(CargoShip::Instance->cargolife) << "/60000 ";
-	textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		// xf02
+		if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit)
+		{
+			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
+			objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
+			_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
+			
+		}
+		if (CargoShip::Instance->Destination<=0 ) {
+			++currentObjective;
+		}
 
+		break;
 
+	case 1://victory scenario
 
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP));
+		return;
 
-	//distance left for cargo ship to travel
-	Distleft << "Distance Left: " << (int)(CargoShip::Instance->Destination) << "m";
-	textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
-
-
-	//create xf-04
-	if (_elapsedTime >= _NextXF04SpawnTime)
-	{
-		objBuilder.createObject(new EnemyXF_04AI(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_OBJECTIVE);
-		_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
+		
+		break;
+	
 	}
 
 }

@@ -135,6 +135,9 @@ void SceneDogfight::Init() {
 	meshList[GEO_RING] = MeshBuilder::GenerateOBJ("ring", "OBJ/ring.obj");
 	meshList[GEO_RING]->textureID = LoadTGA("Image/ring.tga");
 
+	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
+	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f));
+
 	switch (pData->currentFighter) {
 
 	case 0:
@@ -205,7 +208,7 @@ void SceneDogfight::Init() {
 	light[0].type = Light::LIGHT_SPOT;
 	light[0].position.Set(0, 10, 5);
 	light[0].color.Set(1, 1, 1);
-	light[0].power = 2;
+	light[0].power = 1;
 	light[0].kC = 1.f;
 	light[0].kL = 0.01f;
 	light[0].kQ = 0.001f;
@@ -216,6 +219,7 @@ void SceneDogfight::Init() {
 
 
 	// Lighting 2
+	//light[1].type = Light::LIGHT_POINT;
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 10, -5);
 	light[1].color.Set(1.0f, 1.0f, 1.0f);
@@ -315,7 +319,7 @@ void SceneDogfight::Update(double dt) {
 	// Objective Logic
 	switch (currentObjective) {
 
-	case 0: // Accelerate to collect ring
+	case 0: 
 
 		waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
@@ -340,12 +344,15 @@ void SceneDogfight::Update(double dt) {
 
 		break;
 
-	case 1:
+	case 1:// victory senario
 
-		objCount << "(Still WIP)";
-		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT));
+		return;
+
 		break;
 
+	
 	}
 
 

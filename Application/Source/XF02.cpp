@@ -1,6 +1,6 @@
 #include "Scene.h"
 #include "XF02.h"
-
+#include "CargoShip.h"
 
 
 unsigned XF02::XF02Count = 0;
@@ -11,7 +11,7 @@ Vector3* XF02::NearestXF02Pos = nullptr;
 XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(200);
 	type = Scene::GEO_XF2;
-	scale = 1.0f;
+	scale = 2.0f;
 	_interactDistance = scale * 2;
 	isLightingEnabled = false;
 	++XF02Count;
@@ -42,10 +42,16 @@ bool XF02::checkInteract() {
 
 	Vector3 unitDistance = thisToCamera.Normalized(); // Used to move towards or away from player
 
+
 	// Rotate towards player
 	rotationY = -Math::RadianToDegree(atan2(thisToCamera.z, thisToCamera.x)) + 180;
 	rotationZ = -Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
+
+		//scale = Math::Clamp<float>(thisToCameraHorizontalLength/10.0f,1.0f,10.0f);
+	
+		
+	
 	// Increment velocity every second
 	if (_currentVelocity < _MaxVelocity)
 		_currentVelocity += _Acceleration * _scene->_dt;
@@ -96,6 +102,7 @@ bool XF02::checkInteract() {
 		{
 			unitDistance.SetZero();
 		}
+	
 		break;
 
 	case AI_STATE::AI_ATTACK:

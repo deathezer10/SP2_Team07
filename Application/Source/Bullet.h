@@ -22,7 +22,8 @@ private:
 	int _bulletDamage;
 	float _bulletSpeed;
 
-	const float _interactDistance = 5.f;
+	const float _interactDistance = 5.0f;
+	const float _interactDistanceSquared = _interactDistance * _interactDistance;
 	const float _bulletMaxDistance = 300.0f;
 
 	Vector3 _startingPosition;

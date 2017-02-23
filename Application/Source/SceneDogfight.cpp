@@ -28,9 +28,7 @@ SceneDogfight::~SceneDogfight() {}
 void SceneDogfight::Init() {
 
 	pData = PlayerDataManager::getInstance()->getPlayerData();
-
-	PlayerStat* gg = PlayerDataManager::getInstance()->getPlayerStats();
-
+	
 	//Load vertex and fragment shaders
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");

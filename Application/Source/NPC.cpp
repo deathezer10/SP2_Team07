@@ -72,7 +72,7 @@ void NPC::reduceHealth(int value) {
 		return;
 
 	currentHP -= value;
-	currentHP = Math::Clamp(currentHP, 0, 500);
+	currentHP = Math::Clamp(currentHP, 0, defaultHP);
 
 }
 

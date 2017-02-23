@@ -8,7 +8,8 @@
 
 using std::multimap;
 
-Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + scene->camera.getView().Normalized() * 4) {
+// Player Bullet
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (scene->camera.getView().Normalized() * 5)) {
 	type = Scene::GEO_BULLET;
 
 	_bulletDamage = damage;
@@ -25,6 +26,7 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + scen
 
 }
 
+// Enemy Bullet
 Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 rotation, Vector3 direction) : Object(scene, pos) {
 	type = Scene::GEO_BULLET02;
 
@@ -57,7 +59,29 @@ bool Bullet::checkInteract() {
 	// Enemy Bullet
 	if (_isEnemyBullet == true) {
 
-		if ((_scene->camera.playerView - position).Length() < _interactDistance) {
+
+		// Retrieve all values that from key 'Enemy'
+		auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_OBJECTIVE);
+
+		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+
+			Object* temp = it->second;
+
+			// NPC bullet collision
+			if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
+
+				NPC* npc = static_cast<NPC*>(temp);
+
+				// Damage the enemy and then remove this bullet
+				npc->reduceHealth(_bulletDamage);
+
+				_scene->objBuilder.destroyObject(this);
+				return true;
+			}
+
+		}
+
+		if ((_scene->camera.playerView - position).LengthSquared() < _interactDistanceSquared) {
 			PlayerDataManager::getInstance()->damagePlayer(_bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
@@ -74,14 +98,11 @@ bool Bullet::checkInteract() {
 			Object* temp = it->second;
 
 			// NPC bullet collision
-			if ((temp->position - position).Length() < _interactDistance) {
+			if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
 
-				NPC* npc = dynamic_cast<NPC*>(temp);
-				Vector3 pushAway = (npc->position - _scene->camera.position).Normalized();
-				pushAway *= 5; // multiply the unit vector by 5 so we can push him further
+				NPC* npc = static_cast<NPC*>(temp);
 
 				// Damage the enemy and then remove this bullet
-				//npc->position += pushAway;
 				npc->reduceHealth(_bulletDamage);
 				npc->reduceVelocity(npc->getCurrentVelocity() / 2);
 
@@ -90,6 +111,8 @@ bool Bullet::checkInteract() {
 			}
 
 		}
+
+
 
 	}
 

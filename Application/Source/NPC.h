@@ -9,6 +9,8 @@ public:
 	NPC(Scene* scene, Vector3 pos);
 	~NPC();
 
+	virtual void render();
+
 	int getCurrentHealth() { return currentHP; };
 	float getCurrentVelocity() { return _currentVelocity; };
 
@@ -24,9 +26,14 @@ public:
 	// No bounds checking
 	void reduceVelocity(float value);
 
+	void toggleHealthbar(bool toggle){ _isHealthBarEnabled = toggle; };
+
 protected:
 	int currentHP;
+	int defaultHP;
+
 	float _currentVelocity = 0;
+	bool _isHealthBarEnabled = true;
 
 
 };

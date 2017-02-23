@@ -15,9 +15,7 @@ public:
 		_scene(scene),
 		position(pos),
 		collidable(colisionEnabled),
-		collider(&position, boxWidth, boxHeight, boxDepth)
-	{
-	};
+		collider(&position, boxWidth, boxHeight, boxDepth){};
 
 	virtual ~Object() {};
 
@@ -36,7 +34,8 @@ public:
 	float rotationY = 0;
 	float rotationZ = 0;
 	float scale = 1;
-	unsigned type;
+
+	unsigned type; // Geometry Mesh type
 
 	Collider& getCollider() { return collider; }
 

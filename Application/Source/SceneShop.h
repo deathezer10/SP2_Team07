@@ -7,7 +7,6 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "UIManager.h"
-#include "Assignment03.h"
 #include "PlayerDataManager.h"
 
 #include <vector>

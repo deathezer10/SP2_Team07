@@ -1,5 +1,6 @@
 #include "ObjectInteractor.h"
-#include "Assignment03.h"
+#include "Scene.h"
+
 
 
 ObjectInteractor::ObjectInteractor() {
@@ -20,7 +21,7 @@ void ObjectInteractor::updateInteraction() {
 	for (objIterator; objIterator != _objects.end();) {
 
 		Object* temp = objIterator->second;
-
+		
 		if (temp->checkInteract() == false && temp->isCollidable()) { // Process collision
 			Vector3 hitpos;
 			if (temp->getCollider().checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {

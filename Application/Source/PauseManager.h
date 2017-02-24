@@ -29,7 +29,8 @@ private:
 	Scene* _scene;
 	bool _paused = false;
 	short _currentOption = 0;
-	const char PAUSE_KEY = '6'; // Default Value: 0x1B - VK_ESCAPE : Didn't want to include additional Header files
+	const char PAUSE_KEY = 0x1B; // Default Value: 0x1B - VK_ESCAPE : Didn't want to include additional Header files
+	
 	bool _canPauseButtonPress = false;
 	bool _canMenuPress = false;
 

@@ -3,22 +3,21 @@
 #include "CargoShip.h"
 #include "PlayerDataManager.h"
 #include "SceneDogfight.h"
+
+
 unsigned XF02::XF02Count = 0;
 Vector3* XF02::NearestXF02Pos = nullptr;
-
 
 
 XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(200);
 	type = Scene::GEO_XF2;
 	scale = 2.0f;
-	_interactDistance = scale * 2;
 	isLightingEnabled = false;
 	++XF02Count;
 	
-	collidable = true;
-	getCollider().setBoundingBoxSize(Vector3(scale, scale, scale));
-
+	setCollision(true);
+	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
 }
 
 XF02::~XF02() {
@@ -31,7 +30,7 @@ XF02::~XF02() {
 	}
 }
 
-bool XF02::checkInteract() {
+bool XF02::update() {
 
 	if (NearestXF02Pos == nullptr) {
 		NearestXF02Pos = &position;

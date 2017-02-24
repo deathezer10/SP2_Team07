@@ -9,8 +9,10 @@ Vector3* Ring::NearestRingPos = nullptr;
 Ring::Ring(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	type = Scene::GEO_RING;
 	scale = 20;
-	_interactDistance = scale;
 	++RingCount;
+
+	setCollision(true);
+	collider.setBoundingBoxSize(Vector3(scale * 2, scale * 2, scale));
 }
 
 Ring::~Ring() {
@@ -20,7 +22,7 @@ Ring::~Ring() {
 	}
 };
 
-bool Ring::checkInteract() {
+bool Ring::update() {
 
 	if (NearestRingPos == nullptr) {
 		NearestRingPos = &position;
@@ -35,7 +37,7 @@ bool Ring::checkInteract() {
 	}
 
 	// Interacted
-	if ((position - _scene->camera.position).Length() < _interactDistance) {
+	if (collider.checkCollision(_scene->camera.getCollider()) == true) {
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}

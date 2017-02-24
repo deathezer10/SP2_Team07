@@ -9,11 +9,10 @@ class CargoShip : public NPC {
 public:
 	CargoShip(Scene* scene, Vector3 pos);
 	~CargoShip() {};
-	virtual bool checkInteract();
+
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
-
-	float _interactDistance;
-
+	
 	float Destination = 1800.0f;
 	float hp = 1;
 

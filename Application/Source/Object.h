@@ -11,7 +11,7 @@ class Scene;
 class Object {
 
 public:
-	Object(Scene* scene, Vector3 pos, bool colisionEnabled = false, float boxWidth = 5, float boxHeight = 5, float boxDepth = 5) :
+	Object(Scene* scene, Vector3 pos, bool colisionEnabled = false, float boxWidth = 1, float boxHeight = 1, float boxDepth = 1) :
 		_scene(scene),
 		position(pos),
 		collidable(colisionEnabled),
@@ -20,7 +20,7 @@ public:
 	virtual ~Object() {};
 
 	// Process interaction logic every frame, returns true if Object is flagged for deletion
-	virtual bool checkInteract() = 0;
+	virtual bool update() = 0;
 
 	// Called when there's an collision with another Object
 	// Arg0: Unit Vector of the opposing Object to this Object

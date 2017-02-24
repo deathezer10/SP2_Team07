@@ -13,11 +13,9 @@ public:
 	XF04(Scene* scene, Vector3 pos);
 	~XF04();
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
-
-	float _interactDistance;
-
+	
 	static unsigned EnemyXF_04AICount;
 	static Vector3* NearestEnemyXF_04AIPos;
 

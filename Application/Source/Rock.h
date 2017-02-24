@@ -14,12 +14,13 @@ public:
 
 	static unsigned RockCount;
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
 
-	const float _interactDistance = 10.0f;
-
 private:
+	const int _PlayerCollisionDamage = 100; // Deals this damage when player collided onto the asteroid
+
+
 
 };
 #endif

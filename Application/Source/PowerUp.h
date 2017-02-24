@@ -20,14 +20,11 @@ public:
 	PowerUp(Scene* scene, Vector3 pos, PowerType pType);
 	~PowerUp() {};
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
 	virtual void render();
-
-	const float _interactDistance = 4.0f;
-
+	
 private:
-	float _defaultScale = 1;
 	PowerType powertype;
 
 };

@@ -24,6 +24,10 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (sce
 	_direction = scene->camera.getView();
 	_startingPosition = pos + _direction;
 
+	setCollision(true);
+	collider.setTrigger(true);
+	collider.setBoundingBoxSize(Vector3(scale * 2, scale * 2, scale * 2));
+
 }
 
 // Enemy Bullet
@@ -44,12 +48,16 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 rotation, Vector3 
 	_direction = direction;
 	_startingPosition = pos + _direction;
 
+	setCollision(true);
+	collider.setTrigger(true);
+	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
+
 }
 
-bool Bullet::checkInteract() {
+bool Bullet::update() {
 
 	// Remove bullet once reached max distance
-	if ((_startingPosition - position).Length() >= _bulletMaxDistance) {
+	if ((_startingPosition - position).LengthSquared() >= (_bulletMaxDistance * _bulletMaxDistance)) {
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}
@@ -62,23 +70,25 @@ bool Bullet::checkInteract() {
 
 		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
-			Object* temp = it->second;
+			Object* obj = it->second;
 
 			// Objective bullet collision
-			if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
+			if (collider.checkCollision(obj->getCollider()) == true) {
 
-				NPC* npc = static_cast<NPC*>(temp);
+				NPC* npc = static_cast<NPC*>(obj);
 
 				// Damage the enemy and then remove this bullet
 				npc->reduceHealth(_bulletDamage);
 
 				_scene->objBuilder.destroyObject(this);
+
 				return true;
 			}
 
 		}
 
-		if ((_scene->camera.playerView - position).LengthSquared() < _interactDistanceSquared) {
+		// Bullet hit the player?
+		if (collider.checkCollision(_scene->camera.getCollider()) == true) {
 			PlayerDataManager::getInstance()->damagePlayer(_bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
@@ -92,12 +102,12 @@ bool Bullet::checkInteract() {
 
 		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
-			Object* temp = it->second;
+			Object* obj = it->second;
 
 			// NPC bullet collision
-			if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
+			if (collider.checkCollision(obj->getCollider()) == true) {
 
-				NPC* npc = static_cast<NPC*>(temp);
+				NPC* npc = static_cast<NPC*>(obj);
 
 				// Damage the enemy and then remove this bullet
 				npc->reduceHealth(_bulletDamage);
@@ -108,9 +118,7 @@ bool Bullet::checkInteract() {
 			}
 
 		}
-
-
-
+		
 	}
 
 	// Move bullet at the end so it doesn't "clip" through object in front of it

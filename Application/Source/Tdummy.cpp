@@ -15,6 +15,9 @@ Tdummy::Tdummy(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	_interactDistance = scale;
 	isLightingEnabled = false;
 	++TdummyCount;
+	
+	setCollision(true);
+	collider.setBoundingBoxSize(Vector3(scale , scale, scale));
 };
 
 Tdummy::~Tdummy() {
@@ -25,7 +28,7 @@ Tdummy::~Tdummy() {
 	 }
 }
 
-bool Tdummy::checkInteract() {
+bool Tdummy::update() {
 
 	if (NearestTdummyPos == nullptr) {
 		NearestTdummyPos = &position;

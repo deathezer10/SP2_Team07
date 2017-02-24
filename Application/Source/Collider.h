@@ -16,18 +16,26 @@ public:
 	float bboxHeight = 0;
 	float bboxDepth = 0;
 
-	Vector3 getBoxMin();
-	Vector3 getBoxMax();
+	// Does this Collider push the player back?
+	bool isTrigger() { return _isTrigger; };
+
+	// Toggles whether this Collider pushes the player's Camera back upon collision
+	void setTrigger(bool toggle) { _isTrigger = toggle; };
 
 	void setBoundingBoxSize(Vector3 size) { bboxWidth = size.x; bboxHeight = size.y; bboxDepth = size.z; };
 
-	// Compare the bounding box of this Object to the target and returns true if it is intercepting
-	// Output: Unit vector from the direction of the other Object to this Object
-	bool checkCollision(Collider &other, Vector3* hitDirection);
-	
+	// Compares the bounding box of this Object with the Target and returns true if they are interecepting
+	// Output: Unit vector from the direction of the Target to this Object
+	bool checkCollision(Collider &other, Vector3* hitDirection = nullptr);
+
 private:
 	Vector3* position;
 	Object* _obj = nullptr;
-	
+
+	Vector3 getBoxMin();
+	Vector3 getBoxMax();
+
+	bool _isTrigger = false;
+
 };
 #endif

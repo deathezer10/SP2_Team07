@@ -15,10 +15,8 @@ public:
 	static int RingCount;
 	static Vector3* NearestRingPos;
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
-
-	float _interactDistance;
-
+	
 };
 #endif

@@ -18,25 +18,22 @@ XF04::XF04(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	setHealth(100);
 	type = Scene::GEO_XF4;
 	scale = 2.0f;
-	_interactDistance = scale;
 	isLightingEnabled = false;
 	++EnemyXF_04AICount;
-
-
-
-	collidable = true;
-	getCollider().setBoundingBoxSize(Vector3(scale, scale, scale));
+	
+	setCollision(true);
+	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
 }
 
 XF04::~XF04() {
 	--EnemyXF_04AICount;
+
 	if (NearestEnemyXF_04AIPos == &position) {
 		NearestEnemyXF_04AIPos = &Vector3(0, 0, 0);
 	}
 }
 
-bool XF04::checkInteract() {
-
+bool XF04::update() {
 
 	if (NearestEnemyXF_04AIPos == nullptr) {
 		NearestEnemyXF_04AIPos = &position;
@@ -92,22 +89,7 @@ bool XF04::checkInteract() {
 			position.y -= 1.f;
 		}
 	}
-
-	//// Retrieve all values that from key 'Enemy'
-	//auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
-
-	//for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
-
-	//	Object* temp = it->second;
-
-	//	// NPC bullet collision
-	//	if ((temp->position - position).LengthSquared() <= _interactDistanceSquared) {
-	//		NPC* npc = static_cast<NPC*>(temp);
-	//	}
-
-	//}
-
-
+	
 	position.x += unitDistance.x * _currentVelocity * _scene->_dt;
 	position.y += unitDistance.y  * _currentVelocity * _scene->_dt;
 	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
@@ -122,5 +104,4 @@ bool XF04::checkInteract() {
 }
 
 void XF04::collisionHit(Vector3& hitPos) {
-
 }

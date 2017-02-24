@@ -34,21 +34,23 @@ void NPC::render() {
 		const float overallSize = 0.5f;
 		float barSize = ((float)currentHP / (float)defaultHP) * overallSize;
 		
+		// Background
 		_scene->modelStack.PushMatrix();
 		{
 			_scene->modelStack.Translate(0, 0.25f, -overallSize);
 			_scene->modelStack.Rotate(-90, 0, 1, 0);
 			_scene->modelStack.Scale(overallSize, 0.025f, 0.1f);
-			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], isLightingEnabled);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], false);
 		}
 		_scene->modelStack.PopMatrix();
-
+		
+		// Foreground
 		_scene->modelStack.PushMatrix();
 		{
 			_scene->modelStack.Translate(0, 0.25f, -barSize);
 			_scene->modelStack.Rotate(-90, 0, 1, 0);
 			_scene->modelStack.Scale(barSize, 0.025f, 0.1f);
-			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], isLightingEnabled);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], false);
 		}
 		_scene->modelStack.PopMatrix();
 		

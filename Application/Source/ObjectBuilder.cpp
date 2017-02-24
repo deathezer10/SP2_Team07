@@ -14,8 +14,7 @@ void ObjectBuilder::destroyObject(Object* obj) {
 
 	std::multimap<td_OBJ_TYPE, Object*> &mappy = objInteractor._objects; // shortcut variable
 
-	// objInteractor.validateIterator(vec.erase(std::remove(vec.begin(), vec.end(), obj), vec.end())); // re-validate the iterator after erasing element
-
+	// Loop through the entire collection to erase the object
 	for (auto &it = mappy.begin(); it != mappy.end();) {
 		if (it->second == obj) {
 			it = objInteractor._objects.erase(it);

@@ -6,18 +6,20 @@
 PowerUp::PowerUp(Scene* scene, Vector3 pos, PowerType pType) : Object(scene, pos) {
 	type = Scene::GEO_NONE;
 	powertype = pType;
-	scale = 3;
+	scale = 10;
 
 	rotationZ = 45;
 
+	setCollision(true);
+	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
 }
 
 
-bool PowerUp::checkInteract() {
+bool PowerUp::update() {
 
-	rotationY += 30 * _scene->_dt;
+	rotationY += 45 * _scene->_dt;
 
-	if ((position - _scene->camera.position).Length() < _interactDistance) {
+	if (collider.checkCollision(_scene->camera.getCollider()) == true) {
 		switch (powertype) {
 		case POWER_SPEEDBOOST:
 		{
@@ -54,7 +56,6 @@ void PowerUp::collisionHit(Vector3& hitPos) {
 }
 
 void PowerUp::render() {
-
 
 	_scene->modelStack.PushMatrix();
 	_scene->modelStack.Translate(position.x, position.y, position.z);

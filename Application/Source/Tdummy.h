@@ -12,7 +12,7 @@ public:
 	Tdummy(Scene* scene, Vector3 pos);
 	~Tdummy();
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
 
 	 float _interactDistance;

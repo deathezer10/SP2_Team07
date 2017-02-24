@@ -11,7 +11,6 @@ CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	type = Scene::GEO_CARGOSHIP;
 	scale = 5.0f;
 	rotationY = 90.f;
-	_interactDistance = scale;
 
 	collider.setBoundingBoxSize(Vector3(scale + 10, scale + 4, scale + 15));
 
@@ -20,7 +19,7 @@ CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	isLightingEnabled = true;
 };
 
-bool CargoShip::checkInteract() {
+bool CargoShip::update() {
 
 	Destination -= _currentVelocity * _scene->_dt;
 

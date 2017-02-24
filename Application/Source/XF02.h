@@ -20,10 +20,8 @@ public:
 	XF02(Scene* scene, Vector3 pos);
 	~XF02();
 
-	virtual bool checkInteract();
+	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
-
-	float _interactDistance;
 
 	static unsigned XF02Count;
 	static Vector3* NearestXF02Pos;
@@ -38,8 +36,7 @@ private:
 	const int _AttackDamage = 10; // Damage per attack
 	const float _DamageInterval = 1.0f; // Cooldown between each attacks
 	float _NextDamageTime = 0; // DamageInterval's helper variable
-
-
+	
 	AI_STATE _currentState = AI_CHASE;
 
 };

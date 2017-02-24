@@ -11,6 +11,8 @@ Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 	rotationY = Math::RandFloatMinMax(0, 360);
 	const int sizeOffset = 4;
 	scale = 5;
+
+	setCollision(true);
 	collider.setBoundingBoxSize(Vector3(scale + sizeOffset, scale + sizeOffset, scale + sizeOffset));
 
 	switch (Math::RandIntMinMax(0, 3)) {
@@ -31,21 +33,16 @@ Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 }
 
 
-bool Rock::checkInteract() {
+bool Rock::update() {
 
 	rotationY += Math::RandFloatMinMax(1, 10)* _scene->_dt;
-
-	// Rock collision
-	if ((position - _scene->camera.target).Length() < _interactDistance) {
-
-	}
-
+	
 	return false;
 }
 
 void Rock::collisionHit(Vector3& hitPos) {
 
-	PlayerDataManager::getInstance()->damagePlayer(100);
+	PlayerDataManager::getInstance()->damagePlayer(_PlayerCollisionDamage);
 	_scene->objBuilder.destroyObject(this);
 	return;
 

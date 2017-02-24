@@ -20,19 +20,19 @@ void ObjectInteractor::updateInteraction() {
 
 	for (objIterator; objIterator != _objects.end();) {
 
-		Object* temp = objIterator->second;
+		Object* obj = objIterator->second;
 
-		if (temp->checkInteract() == false && temp->isCollidable()) { // Process collision
+		if (obj->update() == false && obj->isCollidable() == true) { // Process collision
 			Vector3 hitpos;
-			Collider collider = temp->getCollider();
+			Collider collider = obj->getCollider();
 
 			// Render Box Collider onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
 			if (UIManager::showDebugInfo == true){
 
-				temp->_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
+				obj->_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
 
-					temp->_scene->meshList[Scene::GEO_CUBE],
-					temp->position,
+					obj->_scene->meshList[Scene::GEO_CUBE],
+					obj->position,
 					Vector3(0, 0, 0),
 					Vector3(collider.bboxWidth, collider.bboxHeight, collider.bboxDepth)
 
@@ -40,10 +40,10 @@ void ObjectInteractor::updateInteraction() {
 
 			}
 
-			if (collider.checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
+			if (collider.checkCollision(obj->_scene->camera.getCollider(), &hitpos) == true && collider.isTrigger() == false) {
 				hitpos.Normalize();
-				temp->_scene->camera.setVelocity(-1);
-				temp->collisionHit(hitpos);
+				obj->_scene->camera.setVelocity(-1);
+				obj->collisionHit(hitpos);
 			}
 
 		}

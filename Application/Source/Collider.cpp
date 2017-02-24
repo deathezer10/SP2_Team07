@@ -34,18 +34,7 @@ Vector3 Collider::getBoxMax() {
 }
 
 bool Collider::checkCollision(Collider &other, Vector3* hitDirection) {
-
-	/* Render Box Collider onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
-	_obj->_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
-
-	_obj->_scene->meshList[Scene::GEO_CUBE],
-	*position,
-	Vector3(0, 0, 0),
-	Vector3(bboxWidth, bboxHeight, bboxDepth)
-
-	});
-	*/
-
+	
 	Vector3 myMin = getBoxMin();
 	Vector3 myMax = getBoxMax();
 

@@ -21,13 +21,29 @@ void ObjectInteractor::updateInteraction() {
 	for (objIterator; objIterator != _objects.end();) {
 
 		Object* temp = objIterator->second;
-		
+
 		if (temp->checkInteract() == false && temp->isCollidable()) { // Process collision
 			Vector3 hitpos;
-			if (temp->getCollider().checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
+			Collider collider = temp->getCollider();
+
+			if (collider.checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
 				hitpos.Normalize();
 				temp->_scene->camera.setVelocity(-1);
 				temp->collisionHit(hitpos);
+			}
+
+			// Render Box Collider onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
+			if (UIManager::showDebugInfo == true){
+
+				temp->_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
+
+					temp->_scene->meshList[Scene::GEO_CUBE],
+					temp->position,
+					Vector3(0, 0, 0),
+					Vector3(collider.bboxWidth, collider.bboxHeight, collider.bboxDepth)
+
+				});
+
 			}
 		}
 

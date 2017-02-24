@@ -1090,7 +1090,7 @@ Mesh* MeshBuilder::GenerateText(const std::string &meshName, unsigned numRow, un
 			v.pos.Set(-1, -1, 0); v.texCoord.Set(j * width, (numRow - i - 1) * height); vertex_buffer_data.push_back(v); // bot left
 			v.pos.Set(1, -1, 0);  v.texCoord.Set((j + 1) * width, (numRow - i - 1) * height); vertex_buffer_data.push_back(v); // bot right            
 			v.pos.Set(1, 1, 0);  v.texCoord.Set((j + 1) * width, (numRow - i) * height); vertex_buffer_data.push_back(v); // top right
-			
+
 			index_buffer_data.push_back(0 + offset);
 			index_buffer_data.push_back(1 + offset);
 			index_buffer_data.push_back(2 + offset);

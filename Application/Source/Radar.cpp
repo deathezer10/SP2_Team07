@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Radar.h"
 #include "Scene.h"
+#include "NPC.h"
 
 #include <algorithm>
 

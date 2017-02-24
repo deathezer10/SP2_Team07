@@ -6,8 +6,6 @@
 
 #include "Object.h"
 #include "Rock.h"
-#include "Door.h"
-#include "Slime.h"
 #include "Bullet.h"
 #include "Ring.h"
 #include "PowerUp.h"

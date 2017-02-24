@@ -16,7 +16,7 @@
 #include "SceneMainMenu.h"
 #include "SceneGameOver.h"
 #include "CargoShip.h"
-#include"EnemyXF-04AI.h"
+#include "XF04.h"
 #include "XF02.h"
 #include <sstream>
 
@@ -322,7 +322,7 @@ void SceneCargoShip::Update(double dt) {
 	objCount << "XF02 left: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-	objCount02 << "XF04 left: " << EnemyXF_04AI::EnemyXF_04AICount;
+	objCount02 << "XF04 left: " << XF04::EnemyXF_04AICount;
 	textManager.queueRenderText(UIManager::Text(objCount02.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 	//distance left for cargo ship to travel
@@ -333,7 +333,7 @@ void SceneCargoShip::Update(double dt) {
 	//create xf-04
 	if (_elapsedTime >= _NextXF04SpawnTime) {
 		Vector3 spawnPos1 = _CargoShip->position + Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
-		objBuilder.createObject(new EnemyXF_04AI(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
+		objBuilder.createObject(new XF04(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF04SpawnTime = _elapsedTime + _SpawnXF04Interval;
 	}
 

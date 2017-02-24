@@ -98,6 +98,8 @@ public:
 
 	Radar radar;
 
+	static bool showDebugInfo;
+
 private:
 	Scene* _scene;
 
@@ -110,7 +112,7 @@ private:
 	std::queue<Text> currentTextQueue;
 	std::queue<MeshQueue> currentMeshQueue;
 
-	bool showDebugInfo = false;
+	
 
 };
 #endif

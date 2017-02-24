@@ -12,7 +12,11 @@
 
 #include <sstream>
 
+
 using std::ostringstream;
+
+
+bool UIManager::showDebugInfo = false;
 
 
 UIManager::UIManager(Scene* scene) : radar(scene) {
@@ -221,8 +225,9 @@ void UIManager::renderPlayerHUD() {
 		showDebugInfo = !showDebugInfo;
 	}
 
+	// Display debugging information
 	if (showDebugInfo) {
-		// Debugging Text
+
 		std::ostringstream fps;
 		fps << "FPS: " << (int)(1 / _scene->_dt);
 		renderTextOnScreen(UIManager::Text(fps.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
@@ -238,6 +243,7 @@ void UIManager::renderPlayerHUD() {
 		std::ostringstream yaw;
 		yaw << "Yaw: " << _scene->camera.getYaw();
 		renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
+		
 	}
 
 	std::ostringstream strHealth;

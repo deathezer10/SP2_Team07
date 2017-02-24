@@ -7,11 +7,11 @@
 /***************************************************
 AUTHOR: LEE YONG HAN
 **************************************************/
-class EnemyXF_04AI : public NPC {
+class XF04 : public NPC {
 
 public:
-	EnemyXF_04AI(Scene* scene, Vector3 pos);
-	~EnemyXF_04AI();
+	XF04(Scene* scene, Vector3 pos);
+	~XF04();
 
 	virtual bool checkInteract();
 	virtual void collisionHit(Vector3& hitPos);

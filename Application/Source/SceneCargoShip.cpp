@@ -186,8 +186,7 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("enwmy", "OBJ/xf04.obj");
 	meshList[GEO_XF4]->textureID = LoadTGA("Image/xf04.tga");
-
-
+	
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
 	meshList[GEO_HP_FOREGROUND]->textureID = LoadTGA("Image/health_fg.tga");//texture for health
 

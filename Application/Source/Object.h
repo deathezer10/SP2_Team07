@@ -2,7 +2,7 @@
 #define OBJECT_H
 
 #include "Vector3.h"
-#include "ObjectCollider.h"
+#include "Collider.h"
 
 class Scene;
 
@@ -15,7 +15,7 @@ public:
 		_scene(scene),
 		position(pos),
 		collidable(colisionEnabled),
-		collider(&position, boxWidth, boxHeight, boxDepth){};
+		collider(this, boxWidth, boxHeight, boxDepth){};
 
 	virtual ~Object() {};
 

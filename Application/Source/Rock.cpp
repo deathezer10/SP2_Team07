@@ -9,7 +9,7 @@ Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 
 	++RockCount;
 	rotationY = Math::RandFloatMinMax(0, 360);
-	const int sizeOffset = 3;
+	const int sizeOffset = 4;
 	scale = 5;
 	collider.setBoundingBoxSize(Vector3(scale + sizeOffset, scale + sizeOffset, scale + sizeOffset));
 
@@ -19,7 +19,7 @@ Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 		break;
 	case 1:
 		type = Scene::GEO_ROCK2;
-		collider.setBoundingBoxSize(Vector3(scale + sizeOffset, scale + (scale * 3), scale + sizeOffset)); // special size for rock 2
+		collider.setBoundingBoxSize(Vector3(scale + sizeOffset, scale + (scale * 5), scale + sizeOffset)); // special size for rock 2
 		break;
 	case 2:
 		type = Scene::GEO_ROCK3;

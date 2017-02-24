@@ -7,12 +7,13 @@
 #include <vector>
 
 #include "MatrixStack.h"
-#include "Mesh.h"
 #include "Vertex.h"
 #include "Radar.h"
 
+
 // forward declaration
 class Scene;
+class Mesh;
 
 
 // Provides functions to display of HUDs
@@ -45,6 +46,22 @@ public:
 		UI_ANCHOR anchor;
 	};
 
+	struct MeshQueue {
+		MeshQueue(Mesh* mesh, Vector3 position, Vector3 rotation, Vector3 scaling, bool lighting = false) {
+			this->mesh = mesh;
+			this->position = position;
+			this->rotation = rotation;
+			this->scaling = scaling;
+			this->lighting = lighting;
+		}
+
+		Mesh* mesh;
+		Vector3 position;
+		Vector3 rotation;
+		Vector3 scaling;
+		bool lighting;
+	};
+
 	UIManager(Scene* scene);
 	~UIManager() {};
 
@@ -70,6 +87,12 @@ public:
 	// Prints all the pending Text onto the screen
 	void dequeueText();
 
+	// Renders all the pending Meshes onto the screen
+	void dequeueMesh();
+
+	//Render the mesh onto the world
+	void queueRenderMesh(MeshQueue meshQueue);
+
 	//Render the mesh onto the screen with the given Screen Coordinates
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale);
 
@@ -85,6 +108,7 @@ private:
 
 	// Pending Texts waiting to be printed
 	std::queue<Text> currentTextQueue;
+	std::queue<MeshQueue> currentMeshQueue;
 
 	bool showDebugInfo = false;
 

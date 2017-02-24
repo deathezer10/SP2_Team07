@@ -149,9 +149,6 @@
     <ClCompile Include="Source\NPC.cpp">
       <Filter>Source Files\Object\NPC</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ObjectCollider.cpp">
-      <Filter>Source Files\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PlayerStats.cpp">
       <Filter>Source Files\Player\Data</Filter>
     </ClCompile>
@@ -187,6 +184,9 @@
     </ClCompile>
     <ClCompile Include="Source\SceneManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Collider.cpp">
+      <Filter>Source Files\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -268,9 +268,6 @@
     <ClInclude Include="Source\SceneTutorial.h">
       <Filter>Header Files\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ObjectCollider.h">
-      <Filter>Header Files\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Source\PowerUp.h">
       <Filter>Header Files\Object\Solid</Filter>
     </ClInclude>
@@ -318,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="Source\Radar.h">
       <Filter>Header Files\Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Collider.h">
+      <Filter>Header Files\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,10 +3,13 @@
 
 #include "Vector3.h"
 
+class Object;
+
 class Collider {
 
 public:
 	Collider(Vector3* pos, float width, float height, float depth);
+	Collider(Object* obj, float width, float height, float depth);
 	~Collider() {};
 
 	float bboxWidth = 0;
@@ -21,9 +24,10 @@ public:
 	// Compare the bounding box of this Object to the target and returns true if it is intercepting
 	// Output: Unit vector from the direction of the other Object to this Object
 	bool checkCollision(Collider &other, Vector3* hitDirection);
-
+	
 private:
 	Vector3* position;
-
+	Object* _obj = nullptr;
+	
 };
 #endif

@@ -3,7 +3,7 @@
 
 #include "Camera2.h"
 #include "Mtx44.h"
-#include "ObjectCollider.h"
+#include "Collider.h"
 
 
 

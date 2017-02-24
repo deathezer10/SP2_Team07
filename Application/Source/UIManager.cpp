@@ -6,6 +6,7 @@
 #include "GLFW\glfw3.h"
 
 #include "Scene.h"
+#include "Mesh.h"
 #include "UIManager.h"
 #include "PlayerDataManager.h"
 
@@ -51,6 +52,33 @@ bool UIManager::LoadFontWidth(std::string fontPath) {
 	return true;
 }
 
+
+//Render the mesh onto the world
+void UIManager::queueRenderMesh(MeshQueue meshQueue){
+	currentMeshQueue.push(meshQueue);
+}
+
+void UIManager::dequeueMesh() {
+	// Print all the queued Texts
+	while (!currentMeshQueue.empty()) {
+
+		MeshQueue mesh = currentMeshQueue.front();
+
+		_scene->modelStack.PushMatrix();
+		_scene->modelStack.Translate(mesh.position.x, mesh.position.y, mesh.position.z);
+		_scene->modelStack.Scale(mesh.scaling.x, mesh.scaling.y, mesh.scaling.z);
+		_scene->modelStack.Rotate(mesh.rotation.x, 1, 0, 0);
+		_scene->modelStack.Rotate(mesh.rotation.y, 0, 1, 0);
+		_scene->modelStack.Rotate(mesh.rotation.z, 0, 0, 1);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //default fill mode
+		_scene->RenderMesh(mesh.mesh, mesh.lighting);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+		_scene->modelStack.PopMatrix();
+
+		currentMeshQueue.pop();
+	}
+}
 
 void UIManager::queueRenderText(Text text) {
 	currentTextQueue.push(text);

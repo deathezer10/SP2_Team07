@@ -102,7 +102,7 @@ void SceneCargoShip::Init() {
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f); // far clipping
 	projectionStack.LoadMatrix(projection);
-	
+
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image/skybox/front.tga");
 
@@ -126,12 +126,6 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_BULLET02] = MeshBuilder::GenerateOBJ("bullet", "OBJ/bullet.obj");
 	meshList[GEO_BULLET02]->textureID = LoadTGA("Image/enemybullet.tga");
-	
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("powerup", Color(.12f, .18f, .32f));
-	meshList[GEO_CUBE]->material.kAmbient.Set(1.0f, 1.0f, 0.0f);
-	meshList[GEO_CUBE]->material.kDiffuse.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_CUBE]->material.kSpecular.Set(0.5f, 0.5f, 0.5f);
-	meshList[GEO_CUBE]->material.kShininess = 1.0f;
 
 	switch (pData->currentFighter) {
 
@@ -214,6 +208,8 @@ void SceneCargoShip::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
 
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Collider", Color(0, 1, 0), 0.5f, 0.5f, 0.5f);
+
 
 	// Lighting 1
 	light[0].type = Light::LIGHT_SPOT;
@@ -275,7 +271,7 @@ void SceneCargoShip::Init() {
 	_CargoShip = new CargoShip(this, Vector3(0, 0, 20));
 	_CargoShip->setCollision(true);
 	objBuilder.createObject(_CargoShip, td_OBJ_TYPE::TYPE_OBJECTIVE);
-	
+
 }
 
 void SceneCargoShip::Update(double dt) {
@@ -368,13 +364,13 @@ void SceneCargoShip::Render() {
 		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
 
 		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();
@@ -454,6 +450,7 @@ void SceneCargoShip::Render() {
 	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20, 1, 1));
 
 	// Render all pending text onto screen
+	textManager.dequeueMesh();
 	textManager.dequeueText();
 	textManager.reset();
 }

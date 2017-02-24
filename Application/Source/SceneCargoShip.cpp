@@ -187,7 +187,6 @@ void SceneCargoShip::Init() {
 	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("enwmy", "OBJ/xf04.obj");
 	meshList[GEO_XF4]->textureID = LoadTGA("Image/xf04.tga");
 
-	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
 
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
 	meshList[GEO_HP_FOREGROUND]->textureID = LoadTGA("Image/health_fg.tga");//texture for health
@@ -227,7 +226,7 @@ void SceneCargoShip::Init() {
 
 	// Lighting 2
 	light[1].type = Light::LIGHT_DIRECTIONAL;
-	light[1].position.Set(0, 10, -5);
+	light[1].position.Set(0, 10, 10);
 	light[1].color.Set(1.0f, 1.0f, 1.0f);
 	light[1].power = 1.0f;
 

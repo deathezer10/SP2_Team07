@@ -315,7 +315,7 @@ void SceneMainMenu::Render() {
 		option1 = (_insideSelected == 0) ? ">0) Tutorial<" : "0) Tutorial";
 		option2 = (_insideSelected == 1) ? ">1) Dog Fight<" : "1) Dog Fight";
 		option3 = (_insideSelected == 2) ? ">2) Escort Cargo Ship<" : "2) Escort Cargo Ship";
-		option4 = (_insideSelected == 3) ? ">3) Attack on Destroyer-01<" : "3) Attack on Destroyer-01";
+		option4 = (_insideSelected == 3) ? ">3) Assault on Destroyer-01<" : "3) Attack on Destroyer-01";
 		option5 = (_insideSelected == 4) ? ">back<" : "back";
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

@@ -105,7 +105,7 @@ void PauseManager::RenderPauseMenu(){
 
 	}
 
-	_scene->textManager.RenderMeshOnScreen(_scene->meshList[Scene::GEO_MENU_BACKGROUND], Application::_windowWidth / 20, Application::_windowHeight / 25, Vector3(90, 0, 0), Vector3(1, 1, 1));
+	_scene->textManager.RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], (Application::_windowWidth / 10) * 0.375f, Application::_windowHeight / 25, Vector3(0, 0, 0), Vector3(10, 14, 1));
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ title, color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ option1t, color, UIManager::ANCHOR_CENTER_CENTER });

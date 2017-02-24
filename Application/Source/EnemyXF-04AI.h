@@ -23,7 +23,7 @@ public:
 
 private:
 	const int _AttackDamage = 40; // Damage per attack
-	const float _DamageInterval = 0.5f; // Cooldown between each attacks
+	const float _DamageInterval = 1.0f; // Cooldown between each attacks
 	const float _AttackInterval = 5.f;
 
 	float _AttackTime = 0;

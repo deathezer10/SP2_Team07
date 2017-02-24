@@ -197,6 +197,7 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f));
+	meshList[GEO_SHIELD_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 1.0f));
 
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
 	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
@@ -273,7 +274,7 @@ void SceneCargoShip::Init() {
 }
 
 void SceneCargoShip::Update(double dt) {
-	const float randomrange1 = 250;
+	const float randomrange1 = 450;
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 

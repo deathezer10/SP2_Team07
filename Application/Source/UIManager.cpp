@@ -229,7 +229,7 @@ void UIManager::renderPlayerHUD() {
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * healthScale, 1, 1));
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
 
-	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * shieldScale, 1, 1));
+	RenderMeshOnScreen(_scene->meshList[Scene::GEO_SHIELD_FOREGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * shieldScale, 1, 1));
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
 
 	std::ostringstream velocity;

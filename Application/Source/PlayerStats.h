@@ -80,8 +80,8 @@ public:
 	const float substracter_cd_bullet_rof = 0.10f;
 	const float minimum_bullet_cooldown = 0.10f;
 
-	const float base_cd_shield_recovery = 10;
-	const float substracter_cd_shield_recovery = 2.5f;
+	const float base_cd_shield_recovery = 5;
+	const float substracter_cd_shield_recovery = 1.0f;
 	const float minimum_shield_recoveryRate = 5.0f;
 
 private:

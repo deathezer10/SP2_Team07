@@ -32,7 +32,7 @@ private:
 	float _NextXF04SpawnTime = 0.0f;
 	float _NextXF02SpawnTime = 0.0f;
 	const float _SpawnXF02Interval = 40.0f;
-	const float _SpawnXF04Interval = 15.0f;
+	const float _SpawnXF04Interval = 20.0f;
 	PlayerSaveData* pData;
 	CargoShip* _CargoShip = nullptr;
 

@@ -316,7 +316,7 @@ void SceneCargoShip::Update(double dt) {
 
 	waypoint.RotateTowards(_CargoShip->position);
 
-	CargoHp << "Cargo Ship HP: " << (int)(_CargoShip->getCurrentHealth()) << " / 6000";
+	CargoHp << "Cargo Ship HP: " << (int)(_CargoShip->getCurrentHealth()) << " / 5000";
 	textManager.queueRenderText(UIManager::Text(CargoHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 	objCount << "XF02 left: " << XF02::XF02Count;

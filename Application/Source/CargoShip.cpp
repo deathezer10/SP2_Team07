@@ -7,7 +7,7 @@
 Vector3* CargoShip::HyperPosition;
 
 CargoShip::CargoShip(Scene* scene, Vector3 pos) : NPC(scene, pos) {
-	setHealth(6000);
+	setHealth(5000);
 	type = Scene::GEO_CARGOSHIP;
 	scale = 5.0f;
 	rotationY = 90.f;

@@ -8,7 +8,7 @@ PlayerStats::PlayerStats() {
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
-		0,
+		0, 0
 	};
 }
 
@@ -68,6 +68,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 	pStat.current_fighter = currentFighter;
 	pStat.current_health = default_health;
 	pStat.current_shield = (float)default_shield;
+	pStat.currency_earned = 0;
 	// End of Struct Resetting
 
 	ConvertToPlayerStats(); // Convert the Save Data Stats to Real Gameplay Stats

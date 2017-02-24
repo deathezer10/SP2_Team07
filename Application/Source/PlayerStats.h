@@ -23,6 +23,8 @@ struct PlayerStat {
 	int current_health;
 	float current_shield;
 
+	int currency_earned;
+
 };
 
 // Base Ship Stats before conversion

@@ -19,7 +19,7 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
-	double currenttime=360;
+	double currenttime=361;
 	static unsigned killcount;
 
 private:

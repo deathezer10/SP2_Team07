@@ -321,12 +321,12 @@ void SceneDogfight::Update(double dt) {
 
 	waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
-	textManager.queueRenderText(UIManager::Text("Eliminate all enemies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.queueRenderText(UIManager::Text("Survive and Destroy 20 hostile XF-02 fighters!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 	objCount << "Enemies Around: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-	timer << "Time left: "<<(int) minutes%60 <<":"<<(int) seconds%60 ;
+	timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
 	textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
 	killtracker << "Killcount: " << (int)SceneDogfight::killcount<<" /20";
@@ -455,14 +455,14 @@ void SceneDogfight::RenderSkybox() {
 	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -1000);
+	modelStack.Translate(0, 0, -990);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 1000);
+	modelStack.Translate(0, 0, 990);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -470,7 +470,7 @@ void SceneDogfight::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-1000, 0, 0);
+	modelStack.Translate(-990, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -478,7 +478,7 @@ void SceneDogfight::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(1000, 0, 0);
+	modelStack.Translate(990, 0, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -486,7 +486,7 @@ void SceneDogfight::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 1000, 0);
+	modelStack.Translate(0, 990, 0);
 	modelStack.Rotate(180, 0, 0, 1);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -494,7 +494,7 @@ void SceneDogfight::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -1000, 0);
+	modelStack.Translate(0, -990, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();

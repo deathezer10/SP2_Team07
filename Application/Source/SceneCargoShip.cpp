@@ -461,15 +461,16 @@ void SceneCargoShip::RenderSkybox() {
 
 	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
 
+
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -1000);
+	modelStack.Translate(0, 0, -990);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
 	RenderMesh(meshList[GEO_FRONT], false);
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 1000);
+	modelStack.Translate(0, 0, 990);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -477,7 +478,7 @@ void SceneCargoShip::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(-1000, 0, 0);
+	modelStack.Translate(-990, 0, 0);
 	modelStack.Rotate(90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -485,7 +486,7 @@ void SceneCargoShip::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(1000, 0, 0);
+	modelStack.Translate(990, 0, 0);
 	modelStack.Rotate(-90, 0, 1, 0);
 	modelStack.Rotate(90, 1, 0, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -493,7 +494,7 @@ void SceneCargoShip::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, 1000, 0);
+	modelStack.Translate(0, 990, 0);
 	modelStack.Rotate(180, 0, 0, 1);
 	modelStack.Rotate(180, 0, 1, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
@@ -501,7 +502,7 @@ void SceneCargoShip::RenderSkybox() {
 	modelStack.PopMatrix();
 
 	modelStack.PushMatrix();
-	modelStack.Translate(0, -1000, 0);
+	modelStack.Translate(0, -990, 0);
 	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
 	RenderMesh(meshList[GEO_BOTTOM], false);
 	modelStack.PopMatrix();

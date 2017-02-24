@@ -14,6 +14,7 @@
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
+#include "CargoShip.h"
 
 #include <sstream>
 
@@ -122,6 +123,31 @@ void SceneMainMenu::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
+	meshList[GEO_MAIN_MENU] = MeshBuilder::GenerateQuad("main_menu", Color(1, 1, 1), 1.f);
+	meshList[GEO_MAIN_MENU]->textureID = LoadTGA("Image/mainmenu/main_menu.tga");
+
+	meshList[GEO_SINGLE_PLAYER] = MeshBuilder::GenerateQuad("single player", Color(1, 1, 1), 1.f);
+	meshList[GEO_SINGLE_PLAYER]->textureID = LoadTGA("Image/mainmenu/play2.tga");
+
+	meshList[GEO_SINGLE_PLAYER_SELECTED] = MeshBuilder::GenerateQuad("single player", Color(1, 1, 1), 1.f);
+	meshList[GEO_SINGLE_PLAYER_SELECTED]->textureID = LoadTGA("Image/mainmenu/play_selected.tga");
+
+	meshList[GEO_SHOP] = MeshBuilder::GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
+	meshList[GEO_SHOP]->textureID = LoadTGA("Image/mainmenu/shop.tga");
+
+	meshList[GEO_SHOP_SELECTED] = MeshBuilder::GenerateQuad("SHOP", Color(1, 1, 1), 1.f);
+	meshList[GEO_SHOP_SELECTED]->textureID = LoadTGA("Image/mainmenu/shop_selected.tga");
+
+	meshList[GEO_EXIT] = MeshBuilder::GenerateQuad("exit", Color(1, 1, 1), 1.f);
+	meshList[GEO_EXIT]->textureID = LoadTGA("Image/mainmenu/exit.tga");
+
+	meshList[GEO_EXIT_SELECTED] = MeshBuilder::GenerateQuad("exit", Color(1, 1, 1), 1.f);
+	meshList[GEO_EXIT_SELECTED]->textureID = LoadTGA("Image/mainmenu/exit_selected.tga");
+
+	meshList[GEO_GALAXY] = MeshBuilder::GenerateOBJ("galaxy", "OBJ/galaxy.obj");
+	meshList[GEO_GALAXY]->textureID = LoadTGA("Image/mainmenu/galaxy.tga");
+
+
 
 	// Lighting 1
 	light[0].position.Set(4, 4, 0);
@@ -149,11 +175,16 @@ void SceneMainMenu::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1); // Make sure you pass uniform parameters after glUseProgram()
 
+	////create cargoship
+	//_CargoShip = new CargoShip(this, Vector3(0, 0, 20));
+	//_CargoShip->setCollision(true);
+	//objBuilder.createObject(_CargoShip, td_OBJ_TYPE::TYPE_OBJECTIVE);
 }
 
 void SceneMainMenu::Update(double dt) {
 
 	_dt = dt;
+	objBuilder.objInteractor.updateInteraction();
 
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
@@ -276,7 +307,7 @@ void SceneMainMenu::Render() {
 	modelStack.LoadIdentity();
 
 
-	RenderSkybox();
+
 
 	std::string newLine = "";
 	std::string title = "Title";
@@ -284,12 +315,76 @@ void SceneMainMenu::Render() {
 	std::string option2 = "Option 2";
 	std::string option3 = "Option 3";
 
+
+	Vector3 plane(45, 1, 45);
+	modelStack.PushMatrix();
+	textManager.RenderMeshOnScreen(meshList[GEO_MAIN_MENU], 40, 40, Vector3(90, 0, 0), plane);
+	modelStack.PopMatrix();
+
 	if (isMenuOutside)
 	{
+
+		glDisable(GL_DEPTH_TEST);
+
 		title = "SPACE FIGHTER 27";
 		option1 = (_outsideSelected == 0) ? ">Play<" : "Play";
 		option2 = (_outsideSelected == 1) ? ">Shop<" : "Shop";
 		option3 = (_outsideSelected == 2) ? ">Quit<" : "Quit";
+
+
+		if (_outsideSelected == 0)
+		{
+			Vector3 Scale(5, 20, 2);
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER_SELECTED], 20, 39, Vector3(90, 0, 0), Scale);
+			modelStack.PopMatrix();
+		}
+		if (_outsideSelected == 1)
+		{
+			Vector3 Scale(5, 20, 2);
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_SHOP_SELECTED], 60, 49, Vector3(90, 0, 0), Scale);
+			modelStack.PopMatrix();
+		}
+
+		if (_outsideSelected == 2)
+		{
+			Vector3 Scale(5, 20, 2);
+			rotate += 90 * (float)_dt;
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_EXIT_SELECTED], 68, 20, Vector3(90, 0, 0), Scale);
+			modelStack.PopMatrix();
+		}
+
+		if (_outsideSelected >= 0)
+		{
+
+			Vector3 Scale(5, 20, 2);
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER], 20, 39, Vector3(90, 0, 0), Scale);
+			modelStack.PopMatrix();
+
+			Vector3 Scale1(5, 20, 2);
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_SHOP], 60, 49, Vector3(90, 0, 0), Scale1);
+			modelStack.PopMatrix();
+
+			Vector3 Scale2(5, 20, 2);
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_EXIT], 68, 20, Vector3(90, 0, 0), Scale2);
+			modelStack.PopMatrix();
+
+			Vector3 Scale3(5, 5, 5);
+			rotate += 10 * (float)_dt;
+			modelStack.PushMatrix();
+			textManager.RenderMeshOnScreen(meshList[GEO_GALAXY], 68, 12, Vector3(0, 0, rotate), Scale3);
+			modelStack.PopMatrix();
+
+			glEnable(GL_DEPTH_TEST);
+
+		}
+
+
 
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(0.37f, 0.84f, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -301,7 +396,8 @@ void SceneMainMenu::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
-		textManager.reset();
+
+
 	}
 	else
 	{
@@ -315,7 +411,7 @@ void SceneMainMenu::Render() {
 		option1 = (_insideSelected == 0) ? ">0) Tutorial<" : "0) Tutorial";
 		option2 = (_insideSelected == 1) ? ">1) Dog Fight<" : "1) Dog Fight";
 		option3 = (_insideSelected == 2) ? ">2) Escort Cargo Ship<" : "2) Escort Cargo Ship";
-		option4 = (_insideSelected == 3) ? ">3) Assault on Destroyer-01<" : "3) Attack on Destroyer-01";
+		option4 = (_insideSelected == 3) ? ">3) Attack on Destroyer-01<" : "3) Attack on Destroyer-01";
 		option5 = (_insideSelected == 4) ? ">back<" : "back";
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -330,9 +426,13 @@ void SceneMainMenu::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.reset();
+
+
+
 	}
 
+	objBuilder.renderObjects();
+	textManager.reset();
 }
 
 void SceneMainMenu::RenderSkybox() {

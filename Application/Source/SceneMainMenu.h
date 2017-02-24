@@ -51,8 +51,11 @@ private:
 	bool canPressDown = false;
 	bool canPressEnter = false;
 	bool isMenuOutside = true;
+	float rotate = 0;
 	unsigned _outsideSelected = 0;
 	unsigned _insideSelected = 0;
+
+	
 
 
 };

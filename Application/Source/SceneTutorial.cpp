@@ -187,8 +187,13 @@ void SceneTutorial::Init() {
 	meshList[GEO_WAYPOINT]->textureID = LoadTGA("Image/waypoint.tga");
 
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
+	meshList[GEO_HP_FOREGROUND]->textureID = LoadTGA("Image/health_fg.tga");//texture for health
+
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.8f, 0.0f, 0.0f));
+	meshList[GEO_HP_BACKGROUND]->textureID = LoadTGA("Image/white_bg.tga");//transparency bg
+
 	meshList[GEO_SHIELD_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 1.0f));
+	meshList[GEO_SHIELD_FOREGROUND]->textureID = LoadTGA("Image/shield_fg.tga");//texture for shield
 
 	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("UI Background", Color(1, 1, 1), 10, 12);
 

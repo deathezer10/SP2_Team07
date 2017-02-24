@@ -26,12 +26,6 @@ void ObjectInteractor::updateInteraction() {
 			Vector3 hitpos;
 			Collider collider = temp->getCollider();
 
-			if (collider.checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
-				hitpos.Normalize();
-				temp->_scene->camera.setVelocity(-1);
-				temp->collisionHit(hitpos);
-			}
-
 			// Render Box Collider onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
 			if (UIManager::showDebugInfo == true){
 
@@ -45,6 +39,13 @@ void ObjectInteractor::updateInteraction() {
 				});
 
 			}
+
+			if (collider.checkCollision(temp->_scene->camera.getCollider(), &hitpos)) {
+				hitpos.Normalize();
+				temp->_scene->camera.setVelocity(-1);
+				temp->collisionHit(hitpos);
+			}
+
 		}
 
 		if (!_iteratorUpdated) {

@@ -2,7 +2,7 @@
 #include "CargoShip.h"
 #include "SceneManager.h"
 #include "SceneGameOver.h"
-
+#include "PlayerDataManager.h"
 
 Vector3* CargoShip::HyperPosition;
 
@@ -25,7 +25,8 @@ bool CargoShip::checkInteract() {
 	Destination -= _currentVelocity * _scene->_dt;
 
 	if (Destination <= 0) {
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP));
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 		return true;
 	}
 
@@ -55,7 +56,7 @@ bool CargoShip::checkInteract() {
 	//destroyed part
 	if (currentHP <= 0) {
 		_scene->objBuilder.destroyObject(this);
-		SceneManager::getInstance()->changeScene(new SceneGameover("You failed: The Cargo Ship was destroyed!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_CARGOSHIP));
+		SceneManager::getInstance()->changeScene(new SceneGameover("You failed: The Cargo Ship was destroyed!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_CARGOSHIP, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned/2));
 		return true;
 	}
 	return false;

@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "EnemyXF-04AI.h"
 #include "CargoShip.h"
-
+#include "PlayerDataManager.h"
 unsigned EnemyXF_04AI::EnemyXF_04AICount = 0;
 Vector3* EnemyXF_04AI::NearestEnemyXF_04AIPos = nullptr;
 
@@ -89,6 +89,7 @@ bool EnemyXF_04AI::checkInteract() {
 	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
 
 	if (currentHP <= 0) {
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned+=100;
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}

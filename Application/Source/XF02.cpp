@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "XF02.h"
 #include "CargoShip.h"
-
+#include "PlayerDataManager.h"
 
 unsigned XF02::XF02Count = 0;
 Vector3* XF02::NearestXF02Pos = nullptr;
@@ -129,6 +129,7 @@ bool XF02::checkInteract() {
 	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;
 
 	if (currentHP <= 0) {
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 50;
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}

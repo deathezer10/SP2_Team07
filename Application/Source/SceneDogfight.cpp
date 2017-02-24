@@ -299,6 +299,7 @@ void SceneDogfight::Update(double dt) {
 
 	std::ostringstream objDist;
 	std::ostringstream objCount;
+	std::ostringstream currency;
 
 	waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
@@ -310,6 +311,8 @@ void SceneDogfight::Update(double dt) {
 	objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
 	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
+	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
+	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
 		objBuilder.createObject(new XF02(this, Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1))), td_OBJ_TYPE::TYPE_ENEMY);
@@ -317,7 +320,8 @@ void SceneDogfight::Update(double dt) {
 	}
 
 	if (XF02::XF02Count == 0) {
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT));
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned+=500;
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 		return;
 	}
 

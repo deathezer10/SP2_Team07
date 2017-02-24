@@ -150,6 +150,7 @@ void SceneGameover::Init() {
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1); // Make sure you pass uniform parameters after glUseProgram()
 	camera.allowMovement(false);
 
+	PlayerDataManager::getInstance()->getPlayerData()->currency += _currencyEarned;
 }
 
 void SceneGameover::Update(double dt) {

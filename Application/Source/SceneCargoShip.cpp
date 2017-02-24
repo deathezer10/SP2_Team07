@@ -436,6 +436,9 @@ void SceneCargoShip::Render() {
 		pauseManager.RenderPauseMenu();
 		return;
 	}
+	std::ostringstream currency;
+	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
+	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	textManager.renderPlayerHUD();
 

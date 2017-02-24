@@ -201,7 +201,7 @@ void PlayerDataManager::damagePlayer(int amount) {
 		pStat.getStatData()->current_shield = 0;
 
 	if (pStat.getStatData()->current_health <= 0) {
-		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your Space Fighter was destroyed!", SceneGameover::MENU_GAMEOVER, SceneManager::getInstance()->getCurrentScene()->sceneType));
+		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your Space Fighter was destroyed!", SceneGameover::MENU_GAMEOVER, SceneManager::getInstance()->getCurrentScene()->sceneType, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned / 2));
 		return;
 	}
 }

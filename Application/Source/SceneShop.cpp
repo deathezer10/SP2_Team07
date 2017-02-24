@@ -587,7 +587,7 @@ void SceneShop::Render() {
 
 		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.0f, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(1.0f, 0.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(0.8f, 1.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
 
 		break;
 	case 2:
@@ -595,7 +595,7 @@ void SceneShop::Render() {
 
 		Speed << "Speed: Normal";
 		Damage << "Damage: High";
-		Shield << "Shield: Low";
+		Shield << "Shield: Very Low";
 
 		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
@@ -608,7 +608,7 @@ void SceneShop::Render() {
 		Damage << "Damage: Normal";
 		Shield << "Shield: High";
 	
-		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(1.0f, 0.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(Speed.str(), Color(0.8f, 1.0f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(Damage.str(), Color(0.0f, 0.8f, 0.0f), UIManager::ANCHOR_TOP_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(Shield.str(), Color(0.0f, 0.5f, 1.0f), UIManager::ANCHOR_TOP_CENTER));
 		break;

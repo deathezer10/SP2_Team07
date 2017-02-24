@@ -2,7 +2,7 @@
 #include "XF02.h"
 #include "CargoShip.h"
 #include "PlayerDataManager.h"
-
+#include "SceneDogfight.h"
 unsigned XF02::XF02Count = 0;
 Vector3* XF02::NearestXF02Pos = nullptr;
 
@@ -19,6 +19,8 @@ XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 
 XF02::~XF02() {
 	--XF02Count;
+
+	SceneDogfight::killcount+=1;
 
 	if (NearestXF02Pos == &position) {
 		NearestXF02Pos = &Vector3(0, 0, 0);

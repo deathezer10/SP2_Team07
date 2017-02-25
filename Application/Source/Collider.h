@@ -16,6 +16,8 @@ public:
 	float bboxHeight = 0;
 	float bboxDepth = 0;
 
+	Vector3& getPosition() { return *position; };
+
 	// Does this Collider push the player back?
 	bool isTrigger() { return _isTrigger; };
 

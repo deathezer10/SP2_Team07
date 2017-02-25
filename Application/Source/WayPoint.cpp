@@ -26,5 +26,5 @@ void WayPoint::RotateTowards(Vector3& target) {
 
 
 void WayPoint::RenderArrow() {
-	_scene->textManager.RenderMeshOnScreen(_scene->meshList[Scene::GEO_WAYPOINT], Application::_windowWidth / 20, Application::_windowHeight / 12, arrowRotation, arrowSize);
+	_scene->textManager.RenderMeshOnScreen(_scene->meshList[Scene::GEO_WAYPOINT], (float)Application::windowWidth() / 20, (float)Application::windowHeight() / 12, arrowRotation, arrowSize);
 }

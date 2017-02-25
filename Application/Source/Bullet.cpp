@@ -26,7 +26,7 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (sce
 
 	setCollision(true);
 	collider.setTrigger(true);
-	collider.setBoundingBoxSize(Vector3(scale * 2, scale * 2, scale * 2));
+	collider.setBoundingBoxSize(Vector3(scale * 3, scale * 2, scale * 3));
 
 }
 

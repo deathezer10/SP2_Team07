@@ -251,7 +251,7 @@ void SceneGameover::Update(double dt) {
 
 
 	//////////////////////////////////////////////////////////vvvvvvvvvvvvvCHANGE GAME STATEvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////
-	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_GAMEOVER) {
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_GAMEOVER) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change Scene
@@ -264,7 +264,7 @@ void SceneGameover::Update(double dt) {
 			break;
 		}
 	}
-	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_MAIN) {
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_MAIN) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu()); // Change Scene
@@ -275,7 +275,7 @@ void SceneGameover::Update(double dt) {
 			break;
 		}
 	}
-	if (Application::IsKeyPressed(VK_RETURN) && _menuType == MENU_VICTORY) {
+	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_VICTORY) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change Scene

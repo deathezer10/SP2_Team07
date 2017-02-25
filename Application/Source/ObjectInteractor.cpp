@@ -16,23 +16,24 @@ ObjectInteractor::~ObjectInteractor() {
 
 void ObjectInteractor::updateInteraction() {
 
+	Object* obj;
 	objIterator = _objects.begin();
 
 	for (objIterator; objIterator != _objects.end();) {
 
-		Object* obj = objIterator->second;
+		obj = objIterator->second;
 
 		if (obj->update() == false && obj->isCollidable() == true) { // Process collision
 			Vector3 hitpos;
 			Collider collider = obj->getCollider();
 
-			// Render Box Collider onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
-			if (UIManager::showDebugInfo == true){
+			// Render Box Collider of all Objects onto screen, Mesh: Cube Size: 0.5f, 0.5f, 0.5f
+			if (UIManager::showDebugInfo == true) {
 
 				obj->_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
 
 					obj->_scene->meshList[Scene::GEO_CUBE],
-					obj->position,
+					collider.getPosition(),
 					Vector3(0, 0, 0),
 					Vector3(collider.bboxWidth, collider.bboxHeight, collider.bboxDepth)
 
@@ -40,7 +41,9 @@ void ObjectInteractor::updateInteraction() {
 
 			}
 
+			// Check for collision and only resolve it if the Object is not a Trigger
 			if (collider.checkCollision(obj->_scene->camera.getCollider(), &hitpos) == true && collider.isTrigger() == false) {
+
 				hitpos.Normalize();
 				obj->_scene->camera.setVelocity(-1);
 				obj->collisionHit(hitpos);
@@ -56,6 +59,7 @@ void ObjectInteractor::updateInteraction() {
 			_iteratorUpdated = false;
 		}
 	}
+
 }
 
 

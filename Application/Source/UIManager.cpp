@@ -27,10 +27,10 @@ UIManager::UIManager(Scene* scene) : radar(scene) {
 
 	anchor_offset[ANCHOR_BOT_LEFT] = 0;
 	anchor_offset[ANCHOR_BOT_RIGHT] = 0;
-	anchor_offset[ANCHOR_TOP_LEFT] = (Application::_windowHeight / 10) - 2;
-	anchor_offset[ANCHOR_TOP_RIGHT] = (Application::_windowHeight / 10) - 2;
+	anchor_offset[ANCHOR_TOP_LEFT] = (Application::windowHeight() / 10) - 2;
+	anchor_offset[ANCHOR_TOP_RIGHT] = (Application::windowHeight() / 10) - 2;
 	anchor_offset[ANCHOR_BOT_CENTER] = 0;
-	anchor_offset[ANCHOR_TOP_CENTER] = (Application::_windowHeight / 10) - 2;
+	anchor_offset[ANCHOR_TOP_CENTER] = (Application::windowHeight() / 10) - 2;
 	anchor_offset[ANCHOR_CENTER_CENTER] = 0;
 
 }
@@ -58,12 +58,13 @@ bool UIManager::LoadFontWidth(std::string fontPath) {
 
 
 //Render the mesh onto the world
-void UIManager::queueRenderMesh(MeshQueue meshQueue){
+void UIManager::queueRenderMesh(MeshQueue meshQueue) {
 	currentMeshQueue.push(meshQueue);
 }
 
 void UIManager::dequeueMesh() {
-	// Print all the queued Texts
+
+	// Render all queued meshes
 	while (!currentMeshQueue.empty()) {
 
 		MeshQueue mesh = currentMeshQueue.front();
@@ -104,7 +105,7 @@ void UIManager::renderTextOnScreen(Text text) {
 	glDisable(GL_DEPTH_TEST);
 
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, Application::windowWidth() / 10, 0, Application::windowHeight() / 10, -10, 10); //size of screen UI
 	_scene->projectionStack.PushMatrix();
 	_scene->projectionStack.LoadMatrix(ortho);
 	_scene->viewStack.PushMatrix();
@@ -139,7 +140,7 @@ void UIManager::renderTextOnScreen(Text text) {
 		break;
 
 	case ANCHOR_BOT_RIGHT:
-		tX = (Application::_windowWidth / 10) - totalWidth;
+		tX = (Application::windowWidth() / 10) - totalWidth;
 		tY = (float)anchor_offset[ANCHOR_BOT_RIGHT];
 		anchor_offset[ANCHOR_BOT_RIGHT] += 2;
 		break;
@@ -150,26 +151,26 @@ void UIManager::renderTextOnScreen(Text text) {
 		break;
 
 	case ANCHOR_TOP_RIGHT:
-		tX = (Application::_windowWidth / 10) - totalWidth;
+		tX = (Application::windowWidth() / 10) - totalWidth;
 		tY = (float)anchor_offset[ANCHOR_TOP_RIGHT];
 		anchor_offset[ANCHOR_TOP_RIGHT] -= 2;
 		break;
 
 	case ANCHOR_BOT_CENTER:
-		tX = (Application::_windowWidth / 20) - (totalWidth / 2);
+		tX = (Application::windowWidth() / 20) - (totalWidth / 2);
 		tY = (float)anchor_offset[ANCHOR_BOT_CENTER];
 		anchor_offset[ANCHOR_BOT_CENTER] += 2;
 		break;
 
 	case ANCHOR_TOP_CENTER:
-		tX = (Application::_windowWidth / 20) - (totalWidth / 2);
+		tX = (Application::windowWidth() / 20) - (totalWidth / 2);
 		tY = (float)anchor_offset[ANCHOR_TOP_CENTER];
 		anchor_offset[ANCHOR_TOP_CENTER] -= 2;
 		break;
 
 	case ANCHOR_CENTER_CENTER:
-		tX = (Application::_windowWidth / 20) - (totalWidth / 2);
-		tY = (Application::_windowHeight / 20) - (float)anchor_offset[ANCHOR_CENTER_CENTER];
+		tX = (Application::windowWidth() / 20) - (totalWidth / 2);
+		tY = (Application::windowHeight() / 20) - (float)anchor_offset[ANCHOR_CENTER_CENTER];
 		anchor_offset[ANCHOR_CENTER_CENTER] += 2;
 		break;
 
@@ -243,7 +244,17 @@ void UIManager::renderPlayerHUD() {
 		std::ostringstream yaw;
 		yaw << "Yaw: " << _scene->camera.getYaw();
 		renderTextOnScreen(UIManager::Text(yaw.str(), Color(0, 1, 0), UIManager::ANCHOR_TOP_LEFT));
-		
+
+		Collider collider = _scene->camera.getCollider();
+
+		queueRenderMesh(UIManager::MeshQueue{
+
+			_scene->meshList[Scene::GEO_CUBE],
+			collider.getPosition(),
+			Vector3(0, 0, 0),
+			Vector3(collider.bboxWidth, collider.bboxHeight, collider.bboxDepth)
+
+		});
 	}
 
 	std::ostringstream strHealth;
@@ -257,30 +268,35 @@ void UIManager::renderPlayerHUD() {
 	float healthScale = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_health / 100;
 	float shieldScale = (float)PlayerDataManager::getInstance()->getPlayerStats()->current_shield / (float)PlayerDataManager::getInstance()->getPlayerStats()->current_shield_capacity;
 
-	float winHeight = Application::_windowHeight / 10;
-	float winWidth = Application::_windowWidth / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
+	float winWidth = (float)Application::windowWidth() / 10;
 
+	// Health Bar
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * healthScale, 1, 1));
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
 
+	// Shield Bar
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_SHIELD_FOREGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10 * shieldScale, 1, 1));
 	RenderMeshOnScreen(_scene->meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.75f, winHeight * 0.01f, Vector3(0, 0, 90), Vector3(10, 1, 1));
 
+	// Speed
 	std::ostringstream velocity;
 	velocity << "Speed: " << (int)_scene->camera.getCurrentVelocity() << "m/s";
 	renderTextOnScreen(UIManager::Text(velocity.str(), Color(1, 1, 1), UIManager::ANCHOR_BOT_RIGHT));
 
 	// Crosshair
+	renderTextOnScreen(UIManager::Text("", Color(0, 0, 0), UIManager::ANCHOR_CENTER_CENTER));
 	renderTextOnScreen(UIManager::Text("+", Color(0, 1, 0), UIManager::ANCHOR_CENTER_CENTER));
 
-	radar.RenderRadar(winWidth * 0.1f, winHeight * 0.125f);
+	// Radar
+	radar.RenderRadar(winWidth * 0.075f, winHeight * 0.125f);
 
 }
 
 void UIManager::RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale) {
 	// glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -100, 100); //size of screen UI
+	ortho.SetToOrtho(0, Application::windowWidth() / 10, 0, Application::windowHeight() / 10, -100, 100); //size of screen UI
 	_scene->projectionStack.PushMatrix();
 	_scene->projectionStack.LoadMatrix(ortho);
 	_scene->viewStack.PushMatrix();
@@ -303,10 +319,10 @@ void UIManager::reset() {
 
 	anchor_offset[ANCHOR_BOT_LEFT] = 0;
 	anchor_offset[ANCHOR_BOT_RIGHT] = 0;
-	anchor_offset[ANCHOR_TOP_LEFT] = (Application::_windowHeight / 10) - 2;
-	anchor_offset[ANCHOR_TOP_RIGHT] = (Application::_windowHeight / 10) - 2;
+	anchor_offset[ANCHOR_TOP_LEFT] = (Application::windowHeight() / 10) - 2;
+	anchor_offset[ANCHOR_TOP_RIGHT] = (Application::windowHeight() / 10) - 2;
 	anchor_offset[ANCHOR_BOT_CENTER] = 0;
-	anchor_offset[ANCHOR_TOP_CENTER] = (Application::_windowHeight / 10) - 2;
+	anchor_offset[ANCHOR_TOP_CENTER] = (Application::windowHeight() / 10) - 2;
 	anchor_offset[ANCHOR_CENTER_CENTER] = 0;
 
 }

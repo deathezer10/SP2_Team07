@@ -41,25 +41,17 @@ bool Collider::checkCollision(Collider &other, Vector3* hitDirection) {
 
 	// Check if the box intercepts
 	// I don't think nesting if-statements helps since C++ does short-circuit evaluations, but why not give it a shot :D
-	if (myMax.x > otherMin.x) {
-		if (myMin.x < otherMax.x) {
-			if (myMax.y > otherMin.y) {
-				if (myMin.y < otherMax.y) {
-					if (myMax.z > otherMin.z) {
-						if (myMin.z < otherMax.z) {
+	if (myMax.x > otherMin.x && myMin.x < otherMax.x &&
+		myMax.y > otherMin.y && myMin.y < otherMax.y &&
+		myMax.z > otherMin.z && myMin.z < otherMax.z) {
 
-							Vector3 hitDir = (*other.position) - (*position);
+		Vector3 hitDir = (*other.position) - (*position);
 
-							if (hitDirection != nullptr)
-								(*hitDirection) = hitDir.Normalized();
+		if (hitDirection != nullptr)
+			(*hitDirection) = hitDir.Normalized();
 
-							return true;
+		return true;
 
-						}
-					}
-				}
-			}
-		}
 	}
 
 	return false;

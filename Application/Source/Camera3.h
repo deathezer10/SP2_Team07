@@ -11,7 +11,7 @@ class Scene;
 
 // Space Fighter Camera
 class Camera3 : public Camera2 {
-	
+
 public:
 	Camera3(Scene* scene);
 	~Camera3();
@@ -23,7 +23,7 @@ public:
 	const float skyboxBound = 10000.f; // Clamps position of the Camera to this value
 
 	Vector3& getRight() { return right; };
-	Vector3& getView(){ return view; };
+	Vector3& getView() { return view; };
 	float& getYaw() { return yaw; };
 	float& getPitch() { return pitch; };
 	float& getRoll() { return roll; };
@@ -44,13 +44,15 @@ public:
 	void allowYaw(bool toggle) { canYaw = toggle; };
 	void allowPitch(bool toggle) { canPitch = toggle; };
 	void allowRoll(bool toggle) { canRoll = toggle; };
-	
-	// Player Box Collider
-	const float bboxWidth = 2;
-	const float bboxHeight = 1;
-	const float bboxDepth = 2;
 
-	void setVelocity(float speed){ currentVelocity = speed; };
+	// Player Box Collider
+	const float bboxWidth = 1;
+	const float bboxHeight = 1;
+	const float bboxDepth = 1;
+
+	void setViewOffsetToMax() { currentViewOffsetDistance = viewOffsetMaxLength; };
+
+	void setVelocity(float speed) { currentVelocity = speed; };
 	float getMaxVelocity() { return velocityMax; };
 
 	Vector3 playerView; // Player model offset, used for indicating that the player has moved
@@ -61,7 +63,7 @@ public:
 private:
 	Scene* _scene;
 
-	Vector3 view;	
+	Vector3 view;
 	Vector3 right;
 	Vector3 defaultRight;
 

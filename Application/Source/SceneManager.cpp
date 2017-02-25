@@ -20,8 +20,6 @@ void SceneManager::Update(){
 
     m_timer.startTimer(); // Start timer to calculate how long it takes to render this frame
 
-	//while (!glfwWindowShouldClose(glfwGetCurrentContext()) && !Application::IsKeyPressed(VK_ESCAPE)) orginal code for if statement below in case needed
-
     while (!glfwWindowShouldClose(glfwGetCurrentContext()))
     {
         currentScene->Update(m_timer.getElapsedTime());
@@ -41,7 +39,7 @@ void SceneManager::Update(){
             _hasPendingScene = false;
             pendingScene = nullptr;
         }
-    } //Check if the ESC key had been pressed or if the window had been closed
+    }
 
     currentScene->Exit();
     delete currentScene;

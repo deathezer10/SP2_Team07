@@ -34,19 +34,9 @@ public:
 	virtual void Exit();
 
 
-private:
-	double _dt;
-
-	float translateX;
-	float scaleAll;
-
-	const float camera_width = 75;
-	const float camera_height = 75;
-	
+private:		
 	Light light[1];	
-
-	void RenderSkybox();
-	
+		
 	bool canPressUp = false;
 	bool canPressDown = false;
 	bool canPressEnter = false;
@@ -54,9 +44,6 @@ private:
 	float rotate = 0;
 	unsigned _outsideSelected = 0;
 	unsigned _insideSelected = 0;
-
-	
-
 
 };
 

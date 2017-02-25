@@ -96,6 +96,7 @@ void SkillManager::processPowerUp() {
 	else if (isSpeedBoostActive) {
 		_scene->textManager.queueRenderText(UIManager::Text{ "Speed Boost Active", Color(0.97f, 1, 0.46f), UIManager::ANCHOR_TOP_LEFT });
 		_scene->camera.setVelocity(_scene->camera.getMaxVelocity()); // constantly set speed to maximum
+		_scene->camera.setViewOffsetToMax();
 	}
 
 }

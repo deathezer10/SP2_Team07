@@ -20,8 +20,7 @@
 
 
 
-SceneMainMenu::SceneMainMenu() : Scene(SCENE_MAINMENU)
-{
+SceneMainMenu::SceneMainMenu() : Scene(SCENE_MAINMENU) {
 	_outsideSelected = 0;
 	_insideSelected = 0;
 }
@@ -183,7 +182,7 @@ void SceneMainMenu::Init() {
 
 void SceneMainMenu::Update(double dt) {
 
-	_dt = dt;
+	_dt = (float)dt;
 	objBuilder.objInteractor.updateInteraction();
 
 	if (Application::IsKeyPressed('1')) {
@@ -235,7 +234,7 @@ void SceneMainMenu::Update(double dt) {
 
 	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter == true) {
 
-		if (isMenuOutside){
+		if (isMenuOutside) {
 
 			switch (_outsideSelected) {
 			case 0:
@@ -252,8 +251,7 @@ void SceneMainMenu::Update(double dt) {
 			}
 		}
 		else {
-			switch (_insideSelected)
-			{
+			switch (_insideSelected) {
 			case 0: // Tutorial
 				SceneManager::getInstance()->changeScene(new SceneTutorial()); // Change Scene
 				break;
@@ -302,8 +300,8 @@ void SceneMainMenu::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-		camera.position.z, camera.target.x, camera.target.y,
-		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+					 camera.position.z, camera.target.x, camera.target.y,
+					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -315,77 +313,44 @@ void SceneMainMenu::Render() {
 	std::string option2 = "Option 2";
 	std::string option3 = "Option 3";
 
+	float winWidth = (float)Application::windowWidth() / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
 
-	Vector3 plane(45, 1, 45);
-	modelStack.PushMatrix();
-	textManager.RenderMeshOnScreen(meshList[GEO_MAIN_MENU], 40, 40, Vector3(90, 0, 0), plane);
-	modelStack.PopMatrix();
+	textManager.RenderMeshOnScreen(meshList[GEO_MAIN_MENU], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
 
-	if (isMenuOutside)
-	{
-
-		glDisable(GL_DEPTH_TEST);
+	if (isMenuOutside) {
 
 		title = "SPACE FIGHTER 27";
 		option1 = (_outsideSelected == 0) ? ">Play<" : "Play";
 		option2 = (_outsideSelected == 1) ? ">Shop<" : "Shop";
 		option3 = (_outsideSelected == 2) ? ">Quit<" : "Quit";
 
+		glDisable(GL_DEPTH_TEST);
 
-		if (_outsideSelected == 0)
-		{
-			Vector3 Scale(5, 20, 2);
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER_SELECTED], 20, 39, Vector3(90, 0, 0), Scale);
-			modelStack.PopMatrix();
-		}
-		if (_outsideSelected == 1)
-		{
-			Vector3 Scale(5, 20, 2);
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_SHOP_SELECTED], 60, 49, Vector3(90, 0, 0), Scale);
-			modelStack.PopMatrix();
+		Vector3 selectionScale(5, 20, 2);
+
+		textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER], winWidth * 0.25f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_SHOP], winWidth * 0.5f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_EXIT], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+
+		if (_outsideSelected == 0) {
+			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER_SELECTED], winWidth * 0.25f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		}
 
-		if (_outsideSelected == 2)
-		{
-			Vector3 Scale(5, 20, 2);
-			rotate += 90 * (float)_dt;
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_EXIT_SELECTED], 68, 20, Vector3(90, 0, 0), Scale);
-			modelStack.PopMatrix();
+		if (_outsideSelected == 1) {
+			textManager.RenderMeshOnScreen(meshList[GEO_SHOP_SELECTED], winWidth * 0.5f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		}
 
-		if (_outsideSelected >= 0)
-		{
-
-			Vector3 Scale(5, 20, 2);
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER], 20, 39, Vector3(90, 0, 0), Scale);
-			modelStack.PopMatrix();
-
-			Vector3 Scale1(5, 20, 2);
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_SHOP], 60, 49, Vector3(90, 0, 0), Scale1);
-			modelStack.PopMatrix();
-
-			Vector3 Scale2(5, 20, 2);
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_EXIT], 68, 20, Vector3(90, 0, 0), Scale2);
-			modelStack.PopMatrix();
-
-			Vector3 Scale3(5, 5, 5);
-			rotate += 10 * (float)_dt;
-			modelStack.PushMatrix();
-			textManager.RenderMeshOnScreen(meshList[GEO_GALAXY], 68, 12, Vector3(0, 0, rotate), Scale3);
-			modelStack.PopMatrix();
-
-			glEnable(GL_DEPTH_TEST);
-
+		if (_outsideSelected == 2) {
+			rotate += 90 * _dt;
+			textManager.RenderMeshOnScreen(meshList[GEO_EXIT_SELECTED], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		}
 
+		Vector3 galaxyScale(5, 5, 5);
+		rotate += 10 * _dt;
+		textManager.RenderMeshOnScreen(meshList[GEO_GALAXY], winWidth * 0.75f, winHeight * 0.55f, Vector3(0, 0, rotate), galaxyScale);
 
-
+		glEnable(GL_DEPTH_TEST);
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(0.37f, 0.84f, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -396,11 +361,8 @@ void SceneMainMenu::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
-
-
 	}
-	else
-	{
+	else {
 		std::string option1 = "Tutorial";
 		std::string option2 = "level 1";
 		std::string option3 = "level 2";
@@ -426,68 +388,11 @@ void SceneMainMenu::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-
-
-
+		
 	}
 
 	objBuilder.renderObjects();
 	textManager.reset();
-}
-
-void SceneMainMenu::RenderSkybox() {
-
-	modelStack.PushMatrix();
-
-	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -1000);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 1000);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_BACK], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-1000, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_LEFT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1000, 0, 0);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_RIGHT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 1000, 0);
-	modelStack.Rotate(180, 0, 0, 1);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_TOP], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1000, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
-
-	modelStack.PopMatrix();
-
 }
 
 void SceneMainMenu::Exit() {

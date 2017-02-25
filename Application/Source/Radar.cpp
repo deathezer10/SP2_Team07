@@ -21,7 +21,7 @@ void Radar::removeUnit(NPC* unit) {
 void Radar::RenderRadar(float x, float y) {
 
 	Mtx44 ortho;
-	ortho.SetToOrtho(0, Application::_windowWidth / 10, 0, Application::_windowHeight / 10, -10, 10); //size of screen UI
+	ortho.SetToOrtho(0, Application::windowWidth() / 10, 0, Application::windowHeight() / 10, -10, 10); //size of screen UI
 	_scene->projectionStack.PushMatrix();
 	_scene->projectionStack.LoadMatrix(ortho);
 	_scene->viewStack.PushMatrix();

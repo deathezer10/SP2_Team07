@@ -186,7 +186,7 @@ void SceneCargoShip::Init() {
 
 	meshList[GEO_XF4] = MeshBuilder::GenerateOBJ("enwmy", "OBJ/xf04.obj");
 	meshList[GEO_XF4]->textureID = LoadTGA("Image/xf04.tga");
-	
+
 	meshList[GEO_HP_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 0.0f));
 	meshList[GEO_HP_FOREGROUND]->textureID = LoadTGA("Image/health_fg.tga");//texture for health
 
@@ -254,14 +254,13 @@ void SceneCargoShip::Init() {
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-		gg->setCollision(true);
 		objBuilder.createObject(gg);
 	}
 
 	const int powerCount = 100;
 
 	for (size_t i = 0; i < powerCount; i++) {
-		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 3)));
+		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
 		objBuilder.createObject(gg);
 	}
 
@@ -273,7 +272,6 @@ void SceneCargoShip::Init() {
 }
 
 void SceneCargoShip::Update(double dt) {
-	const float randomrange1 = 450;
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
@@ -328,6 +326,7 @@ void SceneCargoShip::Update(double dt) {
 	Distleft << "Distance left: " << (int)(_CargoShip->Destination) << "m";
 	textManager.queueRenderText(UIManager::Text(Distleft.str(), Color(0, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
+	const float randomrange1 = 300;
 
 	//create xf-04
 	if (_elapsedTime >= _NextXF04SpawnTime) {
@@ -362,13 +361,13 @@ void SceneCargoShip::Render() {
 		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
 
 		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
-			camera.target.x, camera.target.y, camera.target.z,
-			camera.up.x, camera.up.y, camera.up.z);
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-			camera.target.x, camera.target.y, camera.target.z,
-			camera.up.x, camera.up.y, camera.up.z);
+						 camera.target.x, camera.target.y, camera.target.z,
+						 camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();
@@ -420,7 +419,6 @@ void SceneCargoShip::Render() {
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90.0f, 0, 1, 0);
-
 	modelStack.Translate(1850, 0, 0);
 	RenderMesh(meshList[GEO_SPACESTATION], true);
 	modelStack.PopMatrix();
@@ -443,9 +441,11 @@ void SceneCargoShip::Render() {
 
 	textManager.renderTextOnScreen(UIManager::Text("Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
-
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20 * _CargoShip->hp, 1, 1));
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], Application::_windowWidth / 40, Application::_windowHeight / 10 - 3, Vector3(0, 0, 0), Vector3(20, 1, 1));
+	// Cargo Ship health bar
+	float winWidth = (float)Application::windowWidth() / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25 * _CargoShip->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25, 1, 1));
 
 	// Render all pending text onto screen
 	textManager.dequeueMesh();

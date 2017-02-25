@@ -8,6 +8,7 @@
 
 
 Camera3::Camera3(Scene* scene) : _scene(scene), collider(&playerView, bboxWidth, bboxHeight, bboxDepth) {
+	glfwSetWindowUserPointer(glfwGetCurrentContext(), this);
 }
 
 Camera3::~Camera3() {
@@ -15,7 +16,7 @@ Camera3::~Camera3() {
 
 void cbMouseEvent(GLFWwindow* window, int button, int action, int mods) {
 
-	// Toggle cursor on right click
+	// Toggle cursor on middle click
 	if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_RELEASE) {
 		if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // Hide cursor
@@ -60,6 +61,12 @@ void Camera3::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera3::updateCursor(double dt) {
 
+	// Prevent the cursor from moving when window is resized
+	if (Application::IsWindowValid() == false) {
+		Application::ValidateWindow();
+		return;
+	}
+
 	double currentX = 0;
 	double currentY = 0;
 
@@ -83,7 +90,7 @@ void Camera3::updateCursor(double dt) {
 
 	lastX = currentX;
 	lastY = currentY;
-
+	
 }
 
 void Camera3::Update(double dt) {
@@ -96,8 +103,8 @@ void Camera3::Update(double dt) {
 		return;
 	}
 
-	// Cursor is shown, stop rotating the camera
-	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_RBUTTON)) {
+	// Stop rotating the Camera if Cursor is shown or Window is switching modes
+	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_MBUTTON)) {
 		updateCursor(dt);
 	}
 	else {
@@ -170,23 +177,23 @@ void Camera3::Update(double dt) {
 	/*
 	// Camera Move Up / Down
 	if (Application::IsKeyPressed('Z')) { // Thrust Up
-		position = position + up  * CAMERA_LEFT_RIGHT_SPEED;
-		target = position + view;
+	position = position + up  * CAMERA_LEFT_RIGHT_SPEED;
+	target = position + view;
 	}
 	else if (Application::IsKeyPressed('X')) { // Thrust Down
-		position = position - up * CAMERA_LEFT_RIGHT_SPEED;
-		target = position + view;
+	position = position - up * CAMERA_LEFT_RIGHT_SPEED;
+	target = position + view;
 	}
 	*/
 
 	/*
 	if (Application::IsKeyPressed('Q')) { // Strafe Left
-		position = position - right * CAMERA_LEFT_RIGHT_SPEED;
-		target = position + view;
+	position = position - right * CAMERA_LEFT_RIGHT_SPEED;
+	target = position + view;
 	}
 	else if (Application::IsKeyPressed('E')) { // Strafe Right
-		position = position + right * CAMERA_LEFT_RIGHT_SPEED;
-		target = position + view;
+	position = position + right * CAMERA_LEFT_RIGHT_SPEED;
+	target = position + view;
 	}
 	*/
 
@@ -230,7 +237,7 @@ void Camera3::Update(double dt) {
 		}
 	}
 
-	if (std::abs(position.x) >= skyboxBound || std::abs(position.y) >= skyboxBound || std::abs(position.z) >= skyboxBound){
+	if (std::abs(position.x) >= skyboxBound || std::abs(position.y) >= skyboxBound || std::abs(position.z) >= skyboxBound) {
 		currentVelocity = -10;
 	}
 

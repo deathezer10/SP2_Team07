@@ -618,8 +618,8 @@ void SceneShop::Render() {
 
 
 	rotShip.y += 45 * (float)_dt;
-	float spaceShipX = (float)Application::_windowWidth / 20;
-	float spaceShipY = (float)Application::_windowHeight / 15;
+	float spaceShipX = (float)Application::windowWidth() / 20;
+	float spaceShipY = (float)Application::windowHeight() / 15;
 
 	Vector3 scaleShip(35, 35, 35);
 

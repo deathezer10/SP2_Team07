@@ -4,6 +4,10 @@
 #include "PlayerDataManager.h"
 #include "SceneDogfight.h"
 
+#include <map>
+
+using std::multimap;
+
 
 unsigned XF02::XF02Count = 0;
 Vector3* XF02::NearestXF02Pos = nullptr;
@@ -15,7 +19,7 @@ XF02::XF02(Scene* scene, Vector3 pos) : NPC(scene, pos) {
 	scale = 2.0f;
 	isLightingEnabled = false;
 	++XF02Count;
-	
+
 	setCollision(true);
 	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
 }
@@ -85,8 +89,7 @@ bool XF02::update() {
 		if (thisToCameraHorizontalLength >= _RetreatMaxDistance) {
 			unitDistance.SetZero();
 		}
-		else
-		{
+		else {
 			unitDistance *= -1; // Fly away from player
 		}
 		break;
@@ -94,12 +97,10 @@ bool XF02::update() {
 	case AI_STATE::AI_CHASE:
 		// TODO: Insert checking of units beside this NPC to prevent 'converging'
 
-		if (thisToCameraHorizontalLength >= _AttackMaxDistance)
-		{
+		if (thisToCameraHorizontalLength >= _AttackMaxDistance) {
 			unitDistance *= 2;
 		}
-		else
-		{
+		else {
 			unitDistance.SetZero();
 		}
 
@@ -109,17 +110,31 @@ bool XF02::update() {
 
 		float dirX = Math::RadianToDegree(atan2(thisToCamera.y, thisToCamera.HorizontalLength()));
 
-		if (thisToCameraHorizontalLength <= _AttackMaxDistance)
-		{
+		if (thisToCameraHorizontalLength <= _AttackMaxDistance) {
 			if (_scene->_elapsedTime >= _NextDamageTime) {
 				_scene->objBuilder.createObject(new Bullet(_scene, position, _AttackDamage, Vector3(dirX, rotationY + 90, 0), unitDistance));
 				_NextDamageTime = _scene->_elapsedTime + _DamageInterval;
 			}
 
-			unitDistance.SetZero(); // Stay stationary while firing
+			 unitDistance.SetZero(); // Stay stationary while firing
 		}
 
 		break;
+
+	}
+
+	// Prevent this unit from merging with others
+	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+
+	for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+
+		Object* obj = it->second;
+		Vector3 hitDir;
+
+		// Detect collision for all other enemies
+		if (obj != this && collider.checkCollision(obj->getCollider(), &hitDir) == true) {
+			position += -hitDir * _scene->_dt;
+		}
 
 	}
 

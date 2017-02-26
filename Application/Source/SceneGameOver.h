@@ -12,11 +12,10 @@ class SceneGameover : public Scene {
 public:
 	enum TYPE_MENU {
 
-		MENU_MAIN = 0,
-		MENU_GAMEOVER,
+		MENU_GAMEOVER = 0,
 		MENU_VICTORY
 
-	};	
+	};
 
 	SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene, int currencyEarned = 0);
 	~SceneGameover();
@@ -32,11 +31,16 @@ private:
 
 	void RenderSkybox();
 
-	TYPE_SCENE _previousScene;
-	TYPE_MENU _menuType;
-	unsigned _menuSelected;
 	string _title;
+
+	unsigned _menuSelected;
+	TYPE_MENU _menuType;
+	TYPE_SCENE _previousScene;
+
 	int _currencyEarned;
+
+	bool canPressEnter = false;
+	bool canPressUpDown = false;
 
 };
 

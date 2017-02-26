@@ -89,7 +89,22 @@ bool XF04::update() {
 			position.y -= 1.f;
 		}
 	}
-	
+
+	// Prevent this unit from merging with others
+	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+
+	for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+
+		Object* obj = it->second;
+		Vector3 hitDir;
+
+		// Detect collision for all other enemies
+		if (obj != this && collider.checkCollision(obj->getCollider(), &hitDir) == true) {
+			position += -hitDir * _scene->_dt;
+		}
+
+	}
+
 	position.x += unitDistance.x * _currentVelocity * _scene->_dt;
 	position.y += unitDistance.y  * _currentVelocity * _scene->_dt;
 	position.z += unitDistance.z  * _currentVelocity * _scene->_dt;

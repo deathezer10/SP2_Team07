@@ -206,8 +206,8 @@ Resulting matrix
 /******************************************************************************/
 Mtx44 Mtx44::operator*(const Mtx44& rhs) const {
 	Mtx44 ret;
-	for (int i = 0; i < 4; i++)
-		for (int j = 0; j < 4; j++)
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 4; ++j)
 			ret.a[i * 4 + j] = a[0 * 4 + j] * rhs.a[i * 4 + 0] + a[1 * 4 + j] * rhs.a[i * 4 + 1] + a[2 * 4 + j] * rhs.a[i * 4 + 2] + a[3 * 4 + j] * rhs.a[i * 4 + 3];
 	return ret;
 }
@@ -316,22 +316,22 @@ Thrown if rotation axis is a zero vector
 */
 /******************************************************************************/
 void Mtx44::SetToRotation(float degrees, float axisX, float axisY, float axisZ) throw(DivideByZero) {
-	double mag = sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
-	if (Math::FAbs((float)mag) < Math::EPSILON)
+	float mag = sqrtf(axisX * axisX + axisY * axisY + axisZ * axisZ);
+	if (Math::FAbs(mag) < Math::EPSILON)
 		throw DivideByZero();
-	double x = axisX / mag, y = axisY / mag, z = axisZ / mag;
-	double c = cos(degrees * Math::PI / 180), s = sin(degrees * Math::PI / 180);
-	a[0] = (float)(x * x * (1.f - c) + c);
-	a[1] = (float)(y * x * (1.f - c) + z * s);
-	a[2] = (float)(x * z * (1.f - c) - y * s);
+	float x = axisX / mag, y = axisY / mag, z = axisZ / mag;
+	float c = cos(degrees * Math::PI / 180), s = sin(degrees * Math::PI / 180);
+	a[0] = (x * x * (1.f - c) + c);
+	a[1] = (y * x * (1.f - c) + z * s);
+	a[2] = (x * z * (1.f - c) - y * s);
 	a[3] = 0;
-	a[4] = (float)(x * y * (1.f - c) - z * s);
-	a[5] = (float)(y * y * (1.f - c) + c);
-	a[6] = (float)(y * z * (1.f - c) + x * s);
+	a[4] = (x * y * (1.f - c) - z * s);
+	a[5] = (y * y * (1.f - c) + c);
+	a[6] = (y * z * (1.f - c) + x * s);
 	a[7] = 0;
-	a[8] = (float)(x * z * (1.f - c) + y * s);
-	a[9] = (float)(y * z * (1.f - c) - x * s);
-	a[10] = (float)(z * z * (1.f - c) + c);
+	a[8] = (x * z * (1.f - c) + y * s);
+	a[9] = (y * z * (1.f - c) - x * s);
+	a[10] = (z * z * (1.f - c) + c);
 	a[11] = 0;
 	a[12] = 0;
 	a[13] = 0;

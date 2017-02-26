@@ -16,7 +16,7 @@
 #include <sstream>
 
 
-SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene, int currency) : Scene(SCENE_GAMEOVER_VICTORY){
+SceneGameover::SceneGameover(string title, TYPE_MENU type, TYPE_SCENE previousScene, int currency) : Scene(SCENE_GAMEOVER_VICTORY) {
 	_previousScene = previousScene;
 	_menuSelected = 0;
 	_menuType = type;
@@ -89,17 +89,12 @@ void SceneGameover::Init() {
 
 	// Init Camera
 	camera.Init(Vector3(0, 0, 10), Vector3(0, 0, 0), Vector3(0, 1, 0));
-	camera.disableMouse();
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 5.12f / 3.6f, 0.1f, 2000.f); // far clipping
 	projectionStack.LoadMatrix(projection);
 
 	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball1", Color(1, 1, 0), 16, 16, 0.25f);
-
 	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
 	meshList[GEO_FRONT]->textureID = LoadTGA("Image//skybox//front.tga");
 
@@ -154,7 +149,7 @@ void SceneGameover::Init() {
 }
 
 void SceneGameover::Update(double dt) {
-	
+
 	if (Application::IsKeyPressed('1')) {
 		glEnable(GL_CULL_FACE);
 	}
@@ -169,124 +164,85 @@ void SceneGameover::Update(double dt) {
 	}
 
 	camera.Update(dt);
-	static bool delay = true;
-	static bool delay2 = true;
-	//////////////////////////////////////////vvvvvvvvvvvvvvvvvvvARROW CONTROL FOR MAIN MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////////////////////
-	if (_menuType == MENU_MAIN) {
-		if (Application::IsKeyPressed(VK_UP)) {
-			_menuSelected = 0;
-		}
 
-		if (!Application::IsKeyPressed(VK_DOWN)) {
-			delay = true;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && delay) {
-			_menuSelected = 1;
-			delay = false;
-		}
+
+
+	if (!Application::IsKeyPressed(VK_UP) && !Application::IsKeyPressed(VK_DOWN)) {
+		canPressUpDown = true;
 	}
-	//////////////////////////////////////////^^^^^^^^^^^^^^^^^^^^^ARROW CONTROL FOR MAIN MENU^^^^^^^^^^^^^^^^^^^^^^^^^//////////////////////////////////////////////////////////////
-
-
-
-
-
-
 
 	///////////////////////////////////////////////vvvvvvvvvvvvvvvvvvARROW CONTROL FOR VICTORY MENUvvvvvvvvvvvvvvvvvvvvvvv/////////////////////////////////////////
 	if (_menuType == MENU_VICTORY) {
-		if (!Application::IsKeyPressed(VK_UP)) {
-			delay2 = true;
-		}
-		if (Application::IsKeyPressed(VK_UP) && delay2) {
+		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
-				delay2 = false;
+				canPressUpDown = false;
 			}
 		}
-
-		if (!Application::IsKeyPressed(VK_DOWN)) {
-			delay = true;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && delay) {
+		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected += 1;
-				delay = false;
+				canPressUpDown = false;
 			}
 		}
 	}
 	///////////////////////////////////////////^^^^^^^^^^^^^^^^^^^^^ARROW CONTROL FOR VICTORY MENU^^^^^^^^^^^^^^^^^^^/////////////////////////////////////////////
 
-
-
-
-
-
-
 	////////////////////////////////////////////////////////vvvvvvvvvvvvARROWS CONTROL FOR GAME OVER MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////
 	if (_menuType == MENU_GAMEOVER) {
-		if (!Application::IsKeyPressed(VK_UP)) {
-			delay2 = true;
-		}
-		if (Application::IsKeyPressed(VK_UP) && delay2) {
+		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
-				delay2 = false;
+				canPressUpDown = false;
 			}
 		}
-		if (!Application::IsKeyPressed(VK_DOWN)) {
-			delay = true;
-		}
-		if (Application::IsKeyPressed(VK_DOWN) && delay) {
+		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected += 1;
-				delay = false;
+				canPressUpDown = false;
 			}
 		}
 	}
 	/////////////////////////////////////////////////////////^^^^^^^^^^^^^^^^ARROWS CONTROL FOR GAME OVER MENU^^^^^^^^^^^^^^//////////////////////////////
+	
 
-
-
-
+	if (!Application::IsKeyPressed(VK_RETURN)) {
+		canPressEnter = true;
+	}
 
 	//////////////////////////////////////////////////////////vvvvvvvvvvvvvCHANGE GAME STATEvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_GAMEOVER) {
+	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_GAMEOVER) {
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change Scene
+			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change to previous Scene
 			break;
 		case 1:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu());
 			break;
 		case 2:
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Flag application to quit
 			break;
 		}
-	}
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_MAIN) {
-		switch (_menuSelected) {
-		case 0:
-			SceneManager::getInstance()->changeScene(new SceneMainMenu()); // Change Scene
-			break;
 
-		case 1:
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
-			break;
-		}
+		canPressEnter = false;
+
 	}
-	if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_ENTER) == GLFW_RELEASE && _menuType == MENU_VICTORY) {
+
+	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY) {
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change Scene
+			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change to previous Scene
 			break;
 		case 1:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu());
 			break;
 		case 2:
-			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Toggle this to true
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Flag application to quit
 			break;
 		}
+
+		canPressEnter = false;
+
 	}
 	/////////////////////////////////////////////////////////////////^^^^^^^^^^^^^^CHANGE GAME STATE^^^^^^^^^^^^^^^^^^//////////////////////////////////////////////
 
@@ -328,12 +284,8 @@ void SceneGameover::Render() {
 	std::string title = _title;
 	std::string option1 = "Option 1";
 	std::string option2 = "Option 2";
-	switch (_menuType) {
 
-	case TYPE_MENU::MENU_MAIN:
-		option1 = (_menuSelected == 0) ? ">Play<" : "Play";
-		option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
-		break;
+	switch (_menuType) {
 
 	case TYPE_MENU::MENU_GAMEOVER:
 		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
@@ -345,8 +297,6 @@ void SceneGameover::Render() {
 		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
 
-	default:
-		break;
 	}
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

@@ -42,7 +42,7 @@ bool Rock::update() {
 
 void Rock::collisionHit(Vector3& hitPos) {
 
-	PlayerDataManager::getInstance()->damagePlayer(_PlayerCollisionDamage);
+	PlayerDataManager::getInstance()->damagePlayer(_scene,_PlayerCollisionDamage);
 	_scene->objBuilder.destroyObject(this);
 	return;
 

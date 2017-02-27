@@ -196,10 +196,16 @@ void SceneDogfight::Init() {
 	meshList[GEO_HP_BACKGROUND]->textureID = LoadTGA("Image/white_bg.tga");//transparency bg
 	
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga",true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
+
+	meshList[GEO_DMGINDICATOR_BLUE] = MeshBuilder::GenerateQuad("dmg indicator blue", Color(1, 0, 0));
+	meshList[GEO_DMGINDICATOR_BLUE]->textureID = LoadTGA("Image/dmgindicator-blue.tga");
+
+	meshList[GEO_DMGINDICATOR_RED] = MeshBuilder::GenerateQuad("dmg indicator red", Color(1, 0, 0));
+	meshList[GEO_DMGINDICATOR_RED]->textureID = LoadTGA("Image/dmgindicator-red.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");

@@ -4,6 +4,8 @@
 #include "PlayerStats.h"
 
 
+class Scene;
+
 struct PlayerSaveData {
 	int currency;
 
@@ -78,7 +80,7 @@ public:
 	PlayerStat* getPlayerStats() { return pStat.getStatData(); }
 
 	// Reduces the player's Shield (if available) or Health
-	void damagePlayer(int amount);
+	void damagePlayer(Scene* _scene,int amount);
 
 private:
 	PlayerDataManager();

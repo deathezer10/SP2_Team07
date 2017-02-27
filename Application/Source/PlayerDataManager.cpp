@@ -7,6 +7,7 @@
 #include "PlayerDataManager.h"
 #include "SceneManager.h"
 #include "SceneGameOver.h"
+#include "Scene.h"
 
 using std::ofstream;
 using std::ifstream;
@@ -182,13 +183,33 @@ void PlayerDataManager::ResetPlayerStats() {
 	pStat.ResetPlayerStats(pSaveData.currentFighter);
 }
 
-void PlayerDataManager::damagePlayer(int amount) {
+void PlayerDataManager::damagePlayer(Scene* _scene, int amount) {
+
+	UIManager::MeshQueue blueindicator{
+
+		_scene->meshList[Scene::GEO_DMGINDICATOR_BLUE],
+		Vector3(Application::windowWidth() / 10 * 0.5f, Application::windowHeight() / 10 * 0.5f, 0),
+		Vector3(90, 0, 0),
+		Vector3(Application::windowWidth() / 10 * 0.75f, 1, Application::windowHeight() / 10 * 0.75f)
+
+	};
+
+	UIManager::MeshQueue redindicator{
+
+		_scene->meshList[Scene::GEO_DMGINDICATOR_RED],
+		Vector3(Application::windowWidth() / 10 * 0.5f, Application::windowHeight() / 10 * 0.5f, 0),
+		Vector3(90, 0, 0),
+		Vector3(Application::windowWidth() / 10 * 0.75f, 1, Application::windowHeight() / 10 * 0.75f)
+
+	};
 
 	// Minus shield first
 	if (pStat.getStatData()->current_shield > 0) {
+		_scene->textManager.addTimedMeshToScreen(blueindicator, 0.5f);
 		pStat.getStatData()->current_shield -= amount;
 	}
 	else {
+		_scene->textManager.addTimedMeshToScreen(redindicator, 0.5f);
 		pStat.getStatData()->current_health -= amount;
 	}
 

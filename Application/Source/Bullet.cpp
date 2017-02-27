@@ -89,7 +89,7 @@ bool Bullet::update() {
 
 		// Bullet hit the player?
 		if (collider.checkCollision(_scene->camera.getCollider()) == true) {
-			PlayerDataManager::getInstance()->damagePlayer(_bulletDamage);
+			PlayerDataManager::getInstance()->damagePlayer(_scene,_bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
 		}

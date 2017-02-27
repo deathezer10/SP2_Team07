@@ -22,6 +22,7 @@ public:
 	const float skyboxSize = 1001.0f; // Distance of each skybox textures from the origin
 	const float skyboxBound = 10000.f; // Clamps position of the Camera to this value
 
+	Vector3 getForward() { return up.Cross(right); };
 	Vector3& getRight() { return right; };
 	Vector3& getView() { return view; };
 	float& getYaw() { return yaw; };

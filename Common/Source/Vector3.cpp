@@ -15,9 +15,32 @@ bool Vector3::IsEqual(float a, float b) const {
 	return a - b <= Math::EPSILON && b - a <= Math::EPSILON;
 }
 
+
 /******************************************************************************/
 /*!
 \brief	Vector3 default constructor
+
+\param	xyz
+xyz value
+*/
+/******************************************************************************/
+Vector3::Vector3() : x(0), y(0), z(0) {
+}
+
+/******************************************************************************/
+/*!
+\brief	Vector3 lazy constructor
+
+\param	xyz
+xyz value
+*/
+/******************************************************************************/
+Vector3::Vector3(float xyz) : x(xyz), y(xyz), z(xyz) {
+}
+
+/******************************************************************************/
+/*!
+\brief	Vector3 constructor
 
 \param	a
 x value
@@ -98,6 +121,28 @@ Vector3& Vector3::SetZero(void) {
 /******************************************************************************/
 bool Vector3::IsZero(void) const {
 	return IsEqual(x, 0.f) && IsEqual(y, 0.f) && IsEqual(z, 0.f);
+}
+
+/*
+\brief
+Check if this vector is facing the point with the given field of vision cone
+
+\param point
+Point that this Vector is comparing to
+
+\param forward
+Forward Vector of your position
+
+\param fovDegrees
+Field of View cone in Degrees
+
+\return
+TRUE if vector is facing the point
+FALSE if vector is not facing the point
+*/
+bool Vector3::IsFacingVector(Vector3& point, Vector3& forward, float fovDegrees) {
+	Vector3 direction = (point - *this).Normalized();
+	return (forward.Dot(direction) >= cos(Math::DegreeToRadian(fovDegrees)));
 }
 
 /******************************************************************************/

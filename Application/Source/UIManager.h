@@ -49,12 +49,13 @@ public:
 	};
 
 	struct MeshQueue {
-		MeshQueue(Mesh* mesh, Vector3 position, Vector3 rotation, Vector3 scaling, bool lighting = false) {
+		MeshQueue(Mesh* mesh, Vector3 position, Vector3 rotation, Vector3 scaling, bool lighting = false , bool wireframe = true) {
 			this->mesh = mesh;
 			this->position = position;
 			this->rotation = rotation;
 			this->scaling = scaling;
 			this->lighting = lighting;
+			this->wireframe = wireframe;
 		}
 
 		// GG man, to allow map to compare whether both struct are the same
@@ -68,6 +69,7 @@ public:
 		Vector3 rotation;
 		Vector3 scaling;
 		bool lighting;
+		bool wireframe;
 	};
 
 	UIManager(Scene* scene);

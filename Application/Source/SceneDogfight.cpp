@@ -444,13 +444,13 @@ void SceneDogfight::Render() {
 
 
 
-	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 	// Render all pending text onto screen
 	textManager.dequeueMesh();
 	textManager.dequeueText();
+	textManager.renderPlayerHUD();
 	textManager.reset();
 }
 

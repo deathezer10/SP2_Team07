@@ -76,9 +76,15 @@ void UIManager::dequeueMesh() {
 		_scene->modelStack.Rotate(mesh.rotation.y, 0, 1, 0);
 		_scene->modelStack.Rotate(mesh.rotation.z, 0, 0, 1);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //default fill mode
-		_scene->RenderMesh(mesh.mesh, mesh.lighting);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+		if (mesh.wireframe == true) {
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //default fill mode
+			_scene->RenderMesh(mesh.mesh, mesh.lighting);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+		}
+		else {
+			_scene->RenderMesh(mesh.mesh, mesh.lighting);
+		}
+
 		_scene->modelStack.PopMatrix();
 
 		currentMeshQueue.pop();

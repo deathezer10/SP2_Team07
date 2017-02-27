@@ -4,6 +4,7 @@
 
 
 class Scene;
+class Object;
 struct PlayerStat;
 
 class SkillManager {
@@ -18,6 +19,7 @@ public:
 
 	// Processes skill logic every frame, should only be called in Update()
 	void processSkills(double dt);
+
 
 	// Reduces the Fighter's bullet interval by (arg0) for the given duration in Seconds
 	void activateBarrage(float speed, float duration);
@@ -36,7 +38,7 @@ private:
 
 	void processPassiveSkill();
 
-	// Helper variables
+	// Misc. Helper variables
 	double _elapsedTime = 0;
 	double _nextBulletShootTime = 0;
 	double _nextSpeedBoostResetTime = 0;
@@ -45,8 +47,7 @@ private:
 
 	float translateLeft = 0;
 	float translateRight = 0;
-
-
+	
 	// Recovers Shield by this amount per second
 	const float shieldRecoveryAmount = 10;
 	bool isShieldRecovering = false;
@@ -58,6 +59,17 @@ private:
 	bool isSpeedBoostActive = false;
 	bool isGodmodeActive = false;
 	bool canGodmodePress = false;
+
+	// Rocket Helper variables
+	Object* lockedOnNPC = nullptr;
+	const float rocketCooldownTime = 5; // Rocket cooldown time
+	const float rocketTargetThreshold = 25.0f; // Only target NPC within this square cone of vision
+	const float rocketTargetMaxSize = 10;
+	const float rocketTargetMinSize = 1;
+	float rocketTargetCurrentSize = rocketTargetMaxSize;
+	float rocketNextShootTime = 0;
+	bool isTargetFullyLocked = false;
+
 
 };
 #endif

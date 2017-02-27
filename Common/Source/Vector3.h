@@ -26,7 +26,9 @@ struct Vector3 {
 	float x, y, z;
 	bool IsEqual(float a, float b) const;
 
-	Vector3(float a = 0.0, float b = 0.0, float c = 0.0);
+	Vector3();
+	Vector3(float xyz);
+	Vector3(float a, float b, float c);
 	Vector3(const Vector3 &rhs);
 	~Vector3();
 
@@ -35,6 +37,8 @@ struct Vector3 {
 	Vector3& Set(float a = 0, float b = 0, float c = 0); //Set all data
 	Vector3& SetZero(void); //Set all data to zero
 	bool IsZero(void) const; //Check if data is zero
+
+	bool IsFacingVector(Vector3& point, Vector3& forward, float fovDegrees);
 
 	Vector3 operator+(const Vector3& rhs) const; //Vector addition
 	Vector3& operator+=(const Vector3& rhs);

@@ -41,9 +41,7 @@ private:
 	bool canChangeMenuBack = false;
 
 	Light light[1];
-
-	void RenderSkybox();
-
+	
 	PlayerSaveData* pData;
 
 	Application* _app;

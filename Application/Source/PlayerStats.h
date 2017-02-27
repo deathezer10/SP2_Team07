@@ -67,13 +67,13 @@ public:
 
 	// Minimum Stats
 	const int minimum_bullet_damage = 10;
-	const int minimum_bullet_speed = 350;
+	const int minimum_bullet_speed = 150;
 	const int minimum_shield_capacity = 25;
 	const int minimum_base_speed = 5;
 
 	// Multiplier for each Upgrades level
 	const int multiplier_bullet_damage = 20;
-	const int multiplier_bullet_speed = 25;
+	const int multiplier_bullet_speed = 20;
 	const int multiplier_shield_capacity = 20;
 
 	// Cooldown time, dont forget there's a minimum value for these 

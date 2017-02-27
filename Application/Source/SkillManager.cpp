@@ -1,8 +1,14 @@
 #include "Application.h"
 #include "SkillManager.h"
 #include "PlayerDataManager.h"
+#include "Missile.h"
+
+#include <map>
 
 #include "GLFW\glfw3.h"
+
+
+using std::multimap;
 
 
 SkillManager::SkillManager(Scene* scene) {
@@ -12,6 +18,7 @@ SkillManager::SkillManager(Scene* scene) {
 
 void SkillManager::processSkills(double dt) {
 
+	float _dt = (float)dt;
 	_elapsedTime += dt;
 
 	if (skillEnabled == false)
@@ -20,54 +27,139 @@ void SkillManager::processSkills(double dt) {
 	processPowerUp();
 	processPassiveSkill();
 
+	// Start of Bullet logic
 	// Using GLFW to get Mouse Down because Application::IsKeyPressed() is sometimes unreliable
 	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_1)) {
-	
+
 		Vector3 right = _scene->camera.playerView + (_scene->camera.getRight() * 0.8f);
 		Vector3 left = _scene->camera.playerView - (_scene->camera.getRight() * 0.8f);
 		float row = _scene->camera.getRoll();
 
-		if (Application::IsKeyPressed('A')){
-			translateRight += (float)dt;
-			translateLeft -= (float)dt;
+		if (Application::IsKeyPressed('A')) {
+			translateRight += _dt * 2;
+			translateLeft -= _dt * 2;
 
 			translateRight = Math::Clamp<float>(translateRight, 0, 0.6f);
 			translateLeft = Math::Clamp<float>(translateLeft, -1.2f, 0.5f);
 		}
 
-		if (Application::IsKeyPressed('D')){
-			translateRight -= (float)dt;
-			translateLeft += (float)dt;
+		if (Application::IsKeyPressed('D')) {
+			translateRight -= _dt * 2;
+			translateLeft += _dt * 2;
 
 			translateRight = Math::Clamp<float>(translateRight, -1.2f, 0.6f);
 			translateLeft = Math::Clamp<float>(translateLeft, 0, 0.6f);
 		}
 
-		if (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')){
-			translateLeft = 0;
+		if (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) {
 			translateRight = 0;
+			translateLeft = 0;
 		}
 
 		right += _scene->camera.getUp() * translateRight;
 		left += _scene->camera.getUp() * translateLeft;
 
-		if (_elapsedTime >= _nextBulletShootTime){
+		if (_elapsedTime >= _nextBulletShootTime) {
 
-			if (isShootingRight == true){
+			if (isShootingRight == true) {
 				_scene->objBuilder.createObject(new Bullet(_scene, right, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
-				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown * 2;
+				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 			}
 			else {
 				_scene->objBuilder.createObject(new Bullet(_scene, left, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
-				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown * 2;
+				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
 			}
 			isShootingRight = !isShootingRight;
 		}
+	}
+	// End of Bullet logic
 
+	// Start of Missle logic
+	if (isTargetFullyLocked == true && lockedOnNPC != nullptr && !Application::IsKeyPressed(VK_SPACE)) { // Target is fully locked and <Spacebar> was released, fire missile!
 
+		_scene->objBuilder.createObject(new Missile(_scene, _scene->camera.playerView, &lockedOnNPC->position, true), td_OBJ_TYPE::TYPE_SOLID);
 
+		lockedOnNPC = nullptr;
+		isTargetFullyLocked = false;
+		rocketTargetCurrentSize = rocketTargetMaxSize; // Reset mesh to default size
+		rocketNextShootTime = _scene->_elapsedTime + rocketCooldownTime; // Induce cooldown
 
 	}
+	else if (Application::IsKeyPressed(VK_SPACE) && rocketNextShootTime <= _scene->_elapsedTime) { // Begin locking-on sequence
+
+		// Search for a valid target if no NPC is locked on
+		if (lockedOnNPC == nullptr) {
+
+			float nearestDistanceSquared = 999999; // cache nearest distance of the current npc
+
+			// Retrieve all values that from key 'Enemy'
+			auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+
+			// Iterate through to find the nearest enemy NPC & if it's within field of vision
+			for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+
+				Object* obj = it->second;
+				float distance = (obj->position - _scene->camera.playerView).LengthSquared(); // distance between this object and the player
+
+				// No need for sqrt since we don't need absolute distance
+				if (distance < nearestDistanceSquared) {
+
+					// Select the NPC that is within FOV
+					if (_scene->camera.playerView.IsFacingVector(obj->position, _scene->camera.getForward(), rocketTargetThreshold)) {
+						lockedOnNPC = obj;
+						nearestDistanceSquared = distance;
+					}
+
+				}
+
+			}
+		}
+		else { // Here we process locking on to the NPC
+
+
+			if (isTargetFullyLocked == true) { // Target is fully locked on but <Spacebar> is still pressed
+				// Render locked on Mesh on the NPC
+				_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
+					_scene->meshList[Scene::GEO_CUBE],
+					lockedOnNPC->position,
+					Vector3(0),
+					Vector3(5),
+					false,
+					false // disable wire frame
+				});
+
+			}
+			// Constantly check if NPC is inside FOV
+			else if (_scene->camera.playerView.IsFacingVector(lockedOnNPC->position, _scene->camera.getForward(), rocketTargetThreshold)) {
+
+				// Render targeting Mesh on the NPC
+				_scene->textManager.queueRenderMesh(UIManager::MeshQueue{
+					_scene->meshList[Scene::GEO_CUBE],
+					lockedOnNPC->position,
+					Vector3(0),
+					Vector3(rocketTargetCurrentSize)
+				});
+
+				rocketTargetCurrentSize -= _scene->_dt * 5; // Reduce targeting mesh size every frame
+
+				if (rocketTargetCurrentSize <= rocketTargetMinSize) { // Check if target is fully locked on
+					isTargetFullyLocked = true; // so that we stop rendering this mesh
+					rocketTargetCurrentSize = rocketTargetMinSize; // Clamp it first
+				}
+
+			}
+			else {
+				lockedOnNPC = nullptr;
+				rocketTargetCurrentSize = rocketTargetMaxSize;
+			}
+		}
+
+	}
+	else { // Reset locking system if player didn't fully locked on
+		lockedOnNPC = nullptr;
+		rocketTargetCurrentSize = rocketTargetMaxSize;
+	}
+	// End of Missile logic
 
 	// Start of Godmode Activation
 	if (!Application::IsKeyPressed('V')) {
@@ -97,8 +189,16 @@ void SkillManager::processPassiveSkill() {
 		isShieldRecovering = true;
 	}
 	else if (isShieldRecovering == true && _elapsedTime >= _nextShieldRecoverTime) {
-		pStat->current_shield += shieldRecoveryAmount * _scene->_dt; // Regenerate this amount every second
-		shieldLastDamagedAmount += shieldRecoveryAmount * _scene->_dt;
+
+		// Player got damaged again, reset the counter
+		if (pStat->current_shield < shieldLastDamagedAmount) {
+			shieldLastDamagedAmount = pStat->current_shield;
+			_nextShieldRecoverTime = _elapsedTime + pStat->current_shield_recoveryRate; // Set cooldown time
+		}
+		else {
+			pStat->current_shield += shieldRecoveryAmount * _scene->_dt; // Regenerate this amount every second
+			shieldLastDamagedAmount += shieldRecoveryAmount * _scene->_dt;
+		}
 
 		// Shield is full now, clamp to max value and break out
 		if (pStat->current_shield >= pStat->initial_shield_capacity) {
@@ -107,11 +207,7 @@ void SkillManager::processPassiveSkill() {
 		}
 	}
 
-	// Player got damaged again, reset the counter
-	if (pStat->current_shield < shieldLastDamagedAmount) {
-		shieldLastDamagedAmount = pStat->current_shield;
-		_nextShieldRecoverTime = _elapsedTime + pStat->current_shield_recoveryRate; // Set cooldown time
-	}
+
 	// End of Shield Regeneration Logic
 
 }

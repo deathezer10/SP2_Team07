@@ -443,7 +443,6 @@ void SceneCargoShip::Render() {
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
-	textManager.renderPlayerHUD();
 
 	textManager.renderTextOnScreen(UIManager::Text("Escort Cargo Ship", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
@@ -456,6 +455,7 @@ void SceneCargoShip::Render() {
 	// Render all pending text onto screen
 	textManager.dequeueMesh();
 	textManager.dequeueText();
+	textManager.renderPlayerHUD();
 	textManager.reset();
 }
 

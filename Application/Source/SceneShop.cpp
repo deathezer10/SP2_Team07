@@ -98,28 +98,6 @@ void SceneShop::Init() {
 	projection.SetToPerspective(45.f, 5.12f / 3.6f, 0.1f, 2000.f); // far clipping
 	projectionStack.LoadMatrix(projection);
 
-	//remove all glGenBuffers, glBindBuffer, glBufferData code
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference", 1000, 1000, 1000);
-
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball1", Color(1, 1, 0), 16, 16, 0.25f);
-
-	meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1), 1.f);
-	meshList[GEO_FRONT]->textureID = LoadTGA("Image//skybox//front.tga");
-
-	meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1), 1.f);
-	meshList[GEO_BACK]->textureID = LoadTGA("Image//skybox//back.tga");
-
-	meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1), 1.f);
-	meshList[GEO_TOP]->textureID = LoadTGA("Image//skybox//top.tga");
-
-	meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1), 1.f);
-	meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//skybox//bottom.tga");
-
-	meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1), 1.f);
-	meshList[GEO_LEFT]->textureID = LoadTGA("Image///skybox/left.tga");
-
-	meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1), 1.f);
-	meshList[GEO_RIGHT]->textureID = LoadTGA("Image///skybox/right.tga");
 
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
@@ -458,10 +436,6 @@ void SceneShop::Render() {
 		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
-
-	RenderSkybox();
-
-
 	std::string newLine = "";
 	std::string title = "Welcome to the Upgrade Shop";
 	//name
@@ -682,64 +656,6 @@ void SceneShop::Render() {
 	
 
 	textManager.reset();
-}
-
-void SceneShop::RenderSkybox() {
-
-	modelStack.PushMatrix();
-
-	modelStack.Translate(camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, -1000);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_FRONT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 0, 1000);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_BACK], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-1000, 0, 0);
-	modelStack.Rotate(90, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_LEFT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(1000, 0, 0);
-	modelStack.Rotate(-90, 0, 1, 0);
-	modelStack.Rotate(90, 1, 0, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_RIGHT], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, 1000, 0);
-	modelStack.Rotate(180, 0, 0, 1);
-	modelStack.Rotate(180, 0, 1, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_TOP], false);
-	modelStack.PopMatrix();
-
-	modelStack.PushMatrix();
-	modelStack.Translate(0, -1000, 0);
-	modelStack.Scale(camera.skyboxSize, 1, camera.skyboxSize);
-	RenderMesh(meshList[GEO_BOTTOM], false);
-	modelStack.PopMatrix();
-
-
-
-
-	modelStack.PopMatrix();
-
 }
 
 void SceneShop::Exit() {

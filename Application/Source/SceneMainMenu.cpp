@@ -145,10 +145,7 @@ void SceneMainMenu::Init() {
 
 	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("TITLE", Color(1, 1, 1), 1.f);
 	meshList[GEO_TITLE]->textureID = LoadTGA("Image/mainmenu/SPACE_FIGHTER2.tga");
-
-	meshList[GEO_HANGER] = MeshBuilder::GenerateQuad("HANGER", Color(1, 1, 1), 1.f);
-	meshList[GEO_HANGER]->textureID = LoadTGA("Image/shop/hanger.tga");
-
+	
 	meshList[GEO_MONEY] = MeshBuilder::GenerateOBJ("MONEY", "OBJ/money.obj");
 	meshList[GEO_MONEY]->textureID = LoadTGA("Image/mainmenu/money.tga");
 

@@ -9,7 +9,7 @@
 using std::multimap;
 
 // Player Bullet
-Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (scene->camera.getView().Normalized() * 4.5f)) {
+Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (scene->camera.getView().Normalized()*3.5f)) {
 	type = Scene::GEO_BULLET;
 
 	_bulletDamage = damage;
@@ -26,9 +26,8 @@ Bullet::Bullet(Scene* scene, Vector3 pos, int damage) : Object(scene, pos + (sce
 
 	setCollision(true);
 	collider.setTrigger(true);
-	collider.setBoundingBoxSize(Vector3(scale * 3, scale * 2, scale * 3));
-
-}
+	collider.setBoundingBoxSize(Vector3(scale * 3, scale * 3, scale * 3));
+}	
 
 // Enemy Bullet
 Bullet::Bullet(Scene* scene, Vector3 pos, int damage, Vector3 rotation, Vector3 direction) : Object(scene, pos) {
@@ -89,7 +88,7 @@ bool Bullet::update() {
 
 		// Bullet hit the player?
 		if (collider.checkCollision(_scene->camera.getCollider()) == true) {
-			PlayerDataManager::getInstance()->damagePlayer(_scene,_bulletDamage);
+			PlayerDataManager::getInstance()->damagePlayer(_scene, _bulletDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
 		}
@@ -118,7 +117,7 @@ bool Bullet::update() {
 			}
 
 		}
-		
+
 	}
 
 	// Move bullet at the end so it doesn't "clip" through object in front of it

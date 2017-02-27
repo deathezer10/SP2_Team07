@@ -38,15 +38,21 @@ private:
 
 	// Helper variables
 	double _elapsedTime = 0;
-	double _nextShootTime = 0;
+	double _nextBulletShootTime = 0;
 	double _nextSpeedBoostResetTime = 0;
 	double _nextBarrageResetTime = 0;
 	double _nextShieldRecoverTime = 0;
+
+	float translateLeft = 0;
+	float translateRight = 0;
+
 
 	// Recovers Shield by this amount per second
 	const float shieldRecoveryAmount = 10;
 	bool isShieldRecovering = false;
 	float shieldLastDamagedAmount = 0;
+
+	bool isShootingRight = false;
 
 	bool isBarrageActive = false;
 	bool isSpeedBoostActive = false;

@@ -22,10 +22,51 @@ void SkillManager::processSkills(double dt) {
 
 	// Using GLFW to get Mouse Down because Application::IsKeyPressed() is sometimes unreliable
 	if (glfwGetMouseButton(glfwGetCurrentContext(), GLFW_MOUSE_BUTTON_1)) {
-		if (_elapsedTime >= _nextShootTime) {
-			_scene->objBuilder.createObject(new Bullet(_scene, _scene->camera.position, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
-			_nextShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown;
+	
+		Vector3 right = _scene->camera.playerView + (_scene->camera.getRight() * 0.8f);
+		Vector3 left = _scene->camera.playerView - (_scene->camera.getRight() * 0.8f);
+		float row = _scene->camera.getRoll();
+
+		if (Application::IsKeyPressed('A')){
+			translateRight += (float)dt;
+			translateLeft -= (float)dt;
+
+			translateRight = Math::Clamp<float>(translateRight, 0, 0.6f);
+			translateLeft = Math::Clamp<float>(translateLeft, -1.2f, 0.5f);
 		}
+
+		if (Application::IsKeyPressed('D')){
+			translateRight -= (float)dt;
+			translateLeft += (float)dt;
+
+			translateRight = Math::Clamp<float>(translateRight, -1.2f, 0.6f);
+			translateLeft = Math::Clamp<float>(translateLeft, 0, 0.6f);
+		}
+
+		if (!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')){
+			translateLeft = 0;
+			translateRight = 0;
+		}
+
+		right += _scene->camera.getUp() * translateRight;
+		left += _scene->camera.getUp() * translateLeft;
+
+		if (_elapsedTime >= _nextBulletShootTime){
+
+			if (isShootingRight == true){
+				_scene->objBuilder.createObject(new Bullet(_scene, right, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
+				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown * 2;
+			}
+			else {
+				_scene->objBuilder.createObject(new Bullet(_scene, left, PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage));
+				_nextBulletShootTime = _elapsedTime + PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_cooldown * 2;
+			}
+			isShootingRight = !isShootingRight;
+		}
+
+
+
+
 	}
 
 	// Start of Godmode Activation

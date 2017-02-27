@@ -2,7 +2,9 @@
 #define UIMANAGER_H
 
 
+#include <tuple>
 #include <string>
+#include <map>
 #include <queue>
 #include <vector>
 
@@ -55,6 +57,12 @@ public:
 			this->lighting = lighting;
 		}
 
+		// GG man, to allow map to compare whether both struct are the same
+		bool operator< (const MeshQueue& other) const {
+			return (std::tie(mesh, position.x, position.y, position.z, rotation.x, rotation.y, rotation.z, scaling.x, scaling.y, scaling.z, lighting) <
+				std::tie(other.mesh, other.position.x, other.position.y, other.position.z, other.rotation.x, other.rotation.y, other.rotation.z, other.scaling.x, other.scaling.y, other.scaling.z, other.lighting));
+		}
+
 		Mesh* mesh;
 		Vector3 position;
 		Vector3 rotation;
@@ -96,13 +104,18 @@ public:
 	//Render the mesh onto the screen with the given Screen Coordinates
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale);
 
+	//Render the mesh onto the screen with the given Screen Coordinates for a given duration
+	void RenderMeshOnScreen(Mesh* mesh, float x, float y, Vector3 rotate, Vector3 scale, float duration);
+
+	// Renders the Mesh on screen for a set duration, duration is refresh upon calling it using the same Meshqueue again
+	void addTimedMeshToScreen(MeshQueue mesh, float duration);
+
 	Radar radar;
 
 	static bool showDebugInfo;
 
 private:
 	Scene* _scene;
-
 
 	std::vector<unsigned> currentFontWidth;
 
@@ -111,8 +124,10 @@ private:
 	// Pending Texts waiting to be printed
 	std::queue<Text> currentTextQueue;
 	std::queue<MeshQueue> currentMeshQueue;
+	std::map<MeshQueue, float> currentTimeMeshes;
 
-	
+	// Renders the Mesh and reduces the duration of the key inside the map
+	void RenderTimedMeshOnScreen();
 
 };
 #endif

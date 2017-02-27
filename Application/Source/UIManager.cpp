@@ -34,6 +34,7 @@ UIManager::UIManager(Scene* scene) : radar(scene) {
 	anchor_offset[ANCHOR_CENTER_CENTER] = 0;
 
 }
+
 bool UIManager::LoadFontWidth(std::string fontPath) {
 
 	// Clear vector if it's loaded
@@ -55,7 +56,6 @@ bool UIManager::LoadFontWidth(std::string fontPath) {
 
 	return true;
 }
-
 
 //Render the mesh onto the world
 void UIManager::queueRenderMesh(MeshQueue meshQueue) {
@@ -290,6 +290,32 @@ void UIManager::renderPlayerHUD() {
 
 	// Radar
 	radar.RenderRadar(winWidth * 0.075f, winHeight * 0.125f);
+
+	RenderTimedMeshOnScreen();
+}
+
+
+void UIManager::addTimedMeshToScreen(MeshQueue mesh, float duration){
+	currentTimeMeshes[mesh] = duration;
+}
+
+
+void UIManager::RenderTimedMeshOnScreen(){
+
+
+	for (auto &it = currentTimeMeshes.begin(); it != currentTimeMeshes.end();){
+
+		MeshQueue mq = it->first;
+
+		if (it->second > 0){
+			RenderMeshOnScreen(mq.mesh, mq.position.x, mq.position.y, mq.rotation, mq.scaling);
+			it->second -= _scene->_dt;
+			++it;
+		}
+		else {
+			it = currentTimeMeshes.erase(it);
+		}
+	}
 
 }
 

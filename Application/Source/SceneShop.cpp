@@ -481,18 +481,18 @@ void SceneShop::Render() {
 
 	float winWidth = (float)Application::windowWidth() / 10;
 	float winHeight = (float)Application::windowHeight() / 10;
-	Vector3 tileScale(25, 8, 20);
+	Vector3 tileScale(25, 8, 23);
 	Vector3 tileScale2(20, 8, 10);
-	Vector3 tileScale3(10, 8, 10);
+	Vector3 tileScale3(10, 8, 3);
 
 
 	glDisable(GL_DEPTH_TEST);
 
 	textManager.RenderMeshOnScreen(meshList[GEO_HANGER], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
-	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.30f, Vector3(90, 0, 0), tileScale);
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.28f, Vector3(90, 0, 0), tileScale);
 
-	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.90f, Vector3(90, 0, 0), tileScale2);
-	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.07f, winHeight * 0.99f, Vector3(90, 0, 0), tileScale3);
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.92f, Vector3(90, 0, 0), tileScale2);
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.07f, winHeight * 0.97f, Vector3(90, 0, 0), tileScale3);
 
 	if (column == 0)
 	{

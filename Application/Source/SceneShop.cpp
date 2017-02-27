@@ -138,6 +138,12 @@ void SceneShop::Init() {
 	meshList[GEO_A10] = MeshBuilder::GenerateOBJ("a10", "OBJ/a10.obj");
 	meshList[GEO_A10]->textureID = LoadTGA("Image/a10.tga");
 
+	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
+	meshList[GEO_UI]->textureID = LoadTGA("Image/shop/ui.tga");
+
+	meshList[GEO_HANGER] = MeshBuilder::GenerateQuad("HANGER", Color(1, 1, 1), 1.f);
+	meshList[GEO_HANGER]->textureID = LoadTGA("Image/shop/hanger2.tga");
+
 	// Lighting 1
 	light[0].position.Set(4, 4, 0);
 	light[0].type = Light::LIGHT_SPOT;
@@ -473,6 +479,21 @@ void SceneShop::Render() {
 	std::string option8 = "Money: $";
 	option8 += std::to_string(pData->currency);
 
+	float winWidth = (float)Application::windowWidth() / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
+	Vector3 tileScale(25, 8, 20);
+	Vector3 tileScale2(20, 8, 10);
+	Vector3 tileScale3(10, 8, 10);
+
+
+	glDisable(GL_DEPTH_TEST);
+
+	textManager.RenderMeshOnScreen(meshList[GEO_HANGER], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.30f, Vector3(90, 0, 0), tileScale);
+
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.90f, Vector3(90, 0, 0), tileScale2);
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.07f, winHeight * 0.99f, Vector3(90, 0, 0), tileScale3);
+
 	if (column == 0)
 	{
 		option1 = (_menuSelected == 0) ? ">Equipped Fighter: " : "Equipped Fighter: ";
@@ -658,7 +679,7 @@ void SceneShop::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option7, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
-
+	
 
 	textManager.reset();
 }

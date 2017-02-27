@@ -143,6 +143,18 @@ void SceneMainMenu::Init() {
 	meshList[GEO_EXIT_SELECTED] = MeshBuilder::GenerateQuad("exit", Color(1, 1, 1), 1.f);
 	meshList[GEO_EXIT_SELECTED]->textureID = LoadTGA("Image/mainmenu/exit_selected.tga");
 
+	meshList[GEO_TITLE] = MeshBuilder::GenerateQuad("TITLE", Color(1, 1, 1), 1.f);
+	meshList[GEO_TITLE]->textureID = LoadTGA("Image/mainmenu/SPACE_FIGHTER2.tga");
+
+	meshList[GEO_HANGER] = MeshBuilder::GenerateQuad("HANGER", Color(1, 1, 1), 1.f);
+	meshList[GEO_HANGER]->textureID = LoadTGA("Image/shop/hanger.tga");
+
+	meshList[GEO_MONEY] = MeshBuilder::GenerateOBJ("MONEY", "OBJ/money.obj");
+	meshList[GEO_MONEY]->textureID = LoadTGA("Image/mainmenu/money.tga");
+
+	meshList[GEO_PLANET] = MeshBuilder::GenerateOBJ("PLANET", "OBJ/planet.obj");
+	meshList[GEO_PLANET]->textureID = LoadTGA("Image/mainmenu/planet.tga");
+
 	meshList[GEO_GALAXY] = MeshBuilder::GenerateOBJ("galaxy", "OBJ/galaxy.obj");
 	meshList[GEO_GALAXY]->textureID = LoadTGA("Image/mainmenu/galaxy.tga");
 
@@ -201,10 +213,10 @@ void SceneMainMenu::Update(double dt) {
 	camera.Update(dt);
 
 
-	if (!Application::IsKeyPressed(VK_UP)) {
+	if (!Application::IsKeyPressed(VK_UP)&&!Application::IsKeyPressed(VK_LEFT)) {
 		canPressUp = true;
 	}
-	if (Application::IsKeyPressed(VK_UP) && canPressUp == true) {
+	if (Application::IsKeyPressed(VK_UP) && canPressUp == true || Application::IsKeyPressed(VK_LEFT) && canPressUp == true) {
 		if (isMenuOutside)
 			_outsideSelected--;
 		else
@@ -212,10 +224,10 @@ void SceneMainMenu::Update(double dt) {
 
 		canPressUp = false;
 	}
-	if (!Application::IsKeyPressed(VK_DOWN)) {
+	if (!Application::IsKeyPressed(VK_DOWN)&&!Application::IsKeyPressed(VK_RIGHT)) {
 		canPressDown = true;
 	}
-	if (Application::IsKeyPressed(VK_DOWN) && canPressDown == true) {
+	if ((Application::IsKeyPressed(VK_DOWN) && canPressDown == true)||(Application::IsKeyPressed(VK_RIGHT) && canPressDown == true)) {
 		if (isMenuOutside)
 			_outsideSelected++;
 		else
@@ -328,41 +340,46 @@ void SceneMainMenu::Render() {
 		glDisable(GL_DEPTH_TEST);
 
 		Vector3 selectionScale(5, 20, 2);
+		Vector3 tileScale(20, 80, 8);
 
 		textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER], winWidth * 0.25f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
-		textManager.RenderMeshOnScreen(meshList[GEO_SHOP], winWidth * 0.5f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
-		textManager.RenderMeshOnScreen(meshList[GEO_EXIT], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_SHOP], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_EXIT], winWidth * 0.75f, winHeight * 0.30f, Vector3(90, 0, 0), selectionScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_TITLE], winWidth * 0.50f, winHeight * 0.90f, Vector3(90, 0, 0), tileScale);
 
 		if (_outsideSelected == 0) {
+			rotate_planet += 20 * _dt;
 			textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER_SELECTED], winWidth * 0.25f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		}
 
 		if (_outsideSelected == 1) {
-			textManager.RenderMeshOnScreen(meshList[GEO_SHOP_SELECTED], winWidth * 0.5f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+			rotate_money += 90 * _dt;
+			textManager.RenderMeshOnScreen(meshList[GEO_SHOP_SELECTED], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		}
 
 		if (_outsideSelected == 2) {
 			rotate += 90 * _dt;
-			textManager.RenderMeshOnScreen(meshList[GEO_EXIT_SELECTED], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
+			textManager.RenderMeshOnScreen(meshList[GEO_EXIT_SELECTED], winWidth * 0.75f, winHeight * 0.30f, Vector3(90, 0, 0), selectionScale);
 		}
 
 		Vector3 galaxyScale(5, 5, 5);
 		rotate += 10 * _dt;
-		textManager.RenderMeshOnScreen(meshList[GEO_GALAXY], winWidth * 0.75f, winHeight * 0.55f, Vector3(0, 0, rotate), galaxyScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_GALAXY], winWidth * 0.75f, winHeight * 0.20f, Vector3(0, 0, rotate), galaxyScale);
 
+		rotate_money += 40 * _dt;
+		textManager.RenderMeshOnScreen(meshList[GEO_MONEY], winWidth * 0.75f, winHeight * 0.55f, Vector3(0, 90 + rotate_money, 0), galaxyScale);
 		glEnable(GL_DEPTH_TEST);
 
-		textManager.renderTextOnScreen(UIManager::Text(title, Color(0.37f, 0.84f, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		rotate_planet += 40 * _dt;
+		textManager.RenderMeshOnScreen(meshList[GEO_PLANET], winWidth * 0.25f, winHeight * 0.50f, Vector3(0, rotate_planet, -10), galaxyScale);
+		glEnable(GL_DEPTH_TEST);
+
+		
 
 	}
 	else {
+
+		glDisable(GL_DEPTH_TEST);
 		std::string option1 = "Tutorial";
 		std::string option2 = "level 1";
 		std::string option3 = "level 2";
@@ -388,7 +405,6 @@ void SceneMainMenu::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option5, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-		
 	}
 
 	objBuilder.renderObjects();

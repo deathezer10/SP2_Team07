@@ -42,6 +42,8 @@ private:
 	bool canPressEnter = false;
 	bool isMenuOutside = true;
 	float rotate = 0;
+	float rotate_money = 0;
+	float rotate_planet = 0;
 	unsigned _outsideSelected = 0;
 	unsigned _insideSelected = 0;
 

@@ -264,7 +264,7 @@ void SceneDogfight::Init() {
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
 		gg->setCollision(true);
-		objBuilder.createObject(gg);
+		objBuilder.createObject(gg,td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
 	const int powerCount = 100;

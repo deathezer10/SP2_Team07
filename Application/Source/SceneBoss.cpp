@@ -284,11 +284,7 @@ void SceneBoss::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
-	currenttime -= dt;
-	double seconds, minutes;
-	seconds = currenttime;
-
-	minutes = seconds / 60;
+	
 
 	const float randomrange1 = 600;
 	const unsigned int fighterlimit = 12;
@@ -333,9 +329,20 @@ void SceneBoss::Update(double dt) {
 
 	objCount << "Enemies Around: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+	if (!Application::IsKeyPressed(0x1B))
+	{
+		currenttime -= dt;
+		double seconds, minutes;
+		seconds = currenttime;
 
-	timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
-	textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+		minutes = seconds / 60;
+		timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
+		textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+	}
+	else
+	{
+		currenttime = currenttime;
+	}
 
 	killtracker << "Killcount: " << (int)SceneBoss::killcount << " /20";
 	textManager.queueRenderText(UIManager::Text(killtracker.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
@@ -355,11 +362,11 @@ void SceneBoss::Update(double dt) {
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 	}
 
-	/*if (killcount == _maxKillcount) {
+	if (killcount == _maxKillcount) {
 		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
 		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 		return;
-	}*/
+	}
 
 	if (currenttime <= 0)
 	{

@@ -1,11 +1,11 @@
-currency|0
+currency|225
 level01|1
 level02|1
 level03|0
 SF-1|0
 DF-6|1
 A-10|0
-FG6_bullet_damage|0
+FG6_bullet_damage|5
 FG6_bullet_speed|0
 FG6_Bullet_rof|0
 FG6_shield_level|0
@@ -25,4 +25,4 @@ A10_bullet_speed|0
 A10_Bullet_rof|0
 A10_shield_level|0
 A10_shield_recharge|0
-currentFighter|2
+currentFighter|0

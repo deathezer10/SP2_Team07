@@ -117,6 +117,11 @@ void SceneGameover::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
+	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
+	meshList[GEO_UI]->textureID = LoadTGA("Image/shop/ui.tga");
+
+	meshList[GEO_GAMEOVER] = MeshBuilder::GenerateQuad("game over", Color(1, 1, 1), 1.f);
+	meshList[GEO_GAMEOVER]->textureID = LoadTGA("Image//game_over.tga");
 
 	// Lighting 1
 	light[0].position.Set(4, 4, 0);
@@ -280,6 +285,18 @@ void SceneGameover::Render() {
 
 
 	RenderSkybox();
+
+
+	float winWidth = (float)Application::windowWidth() / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
+	Vector3 tileScale(25, 8, 23);
+	glDisable(GL_DEPTH_TEST);
+	//textManager.RenderMeshOnScreen(meshList[GEO_GAMEOVER], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
+	
+	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.28f, Vector3(90, 0, 0), tileScale);
+	
+	glEnable(GL_DEPTH_TEST);
+
 
 	std::string newLine = "";
 	std::string title = _title;

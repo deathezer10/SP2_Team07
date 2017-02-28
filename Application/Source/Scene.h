@@ -92,7 +92,12 @@ public:
 		GEO_HANGER,
 		GEO_UI,
 		GEO_GALAXY,
+
+		// TRANSISITON SCREENS
+		GEO_GAMEOVER,
 		NUM_GEOMETRY
+
+
 	};
 
 	enum UNIFORM_TYPE {

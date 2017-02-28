@@ -9,7 +9,7 @@ using std::multimap;
 
 
 Missile::Missile(Scene* scene, Vector3 pos, Vector3* target, bool isPlayer) : NPC(scene, pos, (isPlayer) ? false : true) {
-	type = Scene::GEO_XF2;
+	type = Scene::GEO_MISSILE;
 
 	_MissileTarget = target;
 

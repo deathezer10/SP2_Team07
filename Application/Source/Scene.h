@@ -61,6 +61,7 @@ public:
 		GEO_XF4,
 		GEO_D01,
 		GEO_CARGOSHIP,
+		GEO_MISSILE,
 
 		GEO_SLIME,
 		GEO_ROCK1,

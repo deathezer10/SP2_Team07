@@ -150,6 +150,8 @@ void SceneCargoShip::Init() {
 		break;
 
 	}
+	meshList[GEO_MISSILE] = MeshBuilder::GenerateOBJ("missile", "OBJ/missile.obj");
+	meshList[GEO_MISSILE]->textureID = LoadTGA("Image/missile.tga");
 
 	meshList[GEO_REGEN] = MeshBuilder::GenerateOBJ("regen", "OBJ/regen.obj");
 	meshList[GEO_REGEN]->textureID = LoadTGA("Image/regen.tga");

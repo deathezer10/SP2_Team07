@@ -159,6 +159,9 @@ void SceneTutorial::Init() {
 
 	}
 
+	meshList[GEO_MISSILE] = MeshBuilder::GenerateOBJ("missile", "OBJ/missile.obj");
+	meshList[GEO_MISSILE]->textureID = LoadTGA("Image/missile.tga");
+
 	meshList[GEO_TDUMMY] = MeshBuilder::GenerateOBJ("enemy", "OBJ/drone.obj");
 	meshList[GEO_TDUMMY]->textureID = LoadTGA("Image/drone.tga");
 

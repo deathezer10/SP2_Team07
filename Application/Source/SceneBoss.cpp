@@ -12,7 +12,7 @@
 #include "Tdummy.h"
 #include "XF02.h"
 
-#include "SceneDogfight.h"
+#include "SceneBoss.h"
 #include "SceneManager.h"
 #include "SceneMainMenu.h"
 #include "SceneGameOver.h"
@@ -20,14 +20,14 @@
 #include <sstream>
 
 
-unsigned SceneDogfight::killcount = 0;
+unsigned SceneBoss::killcount = 0;
 
-SceneDogfight::SceneDogfight() : Scene(SCENE_DOGFIGHT) {
+SceneBoss::SceneBoss() : Scene(SCENE_DOGFIGHT) {
 }
 
-SceneDogfight::~SceneDogfight() {}
+SceneBoss::~SceneBoss() {}
 
-void SceneDogfight::Init() {
+void SceneBoss::Init() {
 
 	pData = PlayerDataManager::getInstance()->getPlayerData();
 
@@ -194,12 +194,12 @@ void SceneDogfight::Init() {
 
 	meshList[GEO_SHIELD_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 1.0f));
 	meshList[GEO_SHIELD_FOREGROUND]->textureID = LoadTGA("Image/shield_fg.tga");//texture for shield
-	
+
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(1.f, 1.0f, 1.0f));
 	meshList[GEO_HP_BACKGROUND]->textureID = LoadTGA("Image/white_bg.tga");//transparency bg
-	
+
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga",true);
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
@@ -280,7 +280,7 @@ void SceneDogfight::Init() {
 	killcount = 0;
 }
 
-void SceneDogfight::Update(double dt) {
+void SceneBoss::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
@@ -337,7 +337,7 @@ void SceneDogfight::Update(double dt) {
 	timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
 	textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 
-	killtracker << "Killcount: " << (int)SceneDogfight::killcount<<" /20";
+	killtracker << "Killcount: " << (int)SceneBoss::killcount << " /20";
 	textManager.queueRenderText(UIManager::Text(killtracker.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 	objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
@@ -347,28 +347,28 @@ void SceneDogfight::Update(double dt) {
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
-		Vector3 spawnPos1 =   Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
-		Vector3 spawnPos2 =  Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		Vector3 spawnPos1 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		Vector3 spawnPos2 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 
 		objBuilder.createObject(new XF02(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
 		objBuilder.createObject(new XF02(this, spawnPos2), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 	}
 
-	if (killcount ==_maxKillcount) {
-		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned+=500;
+	/*if (killcount == _maxKillcount) {
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
 		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 		return;
-	}
-	
-	if (currenttime<=0)
+	}*/
+
+	if (currenttime <= 0)
 	{
 		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your time limit expired", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
 		return;
 	}
 }
 
-void SceneDogfight::Render() {
+void SceneBoss::Render() {
 	// Render VBO here
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -378,14 +378,14 @@ void SceneDogfight::Render() {
 
 		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
 
-		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z, 
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();
@@ -457,7 +457,7 @@ void SceneDogfight::Render() {
 	textManager.reset();
 }
 
-void SceneDogfight::RenderSkybox() {
+void SceneBoss::RenderSkybox() {
 
 	modelStack.PushMatrix();
 
@@ -513,7 +513,7 @@ void SceneDogfight::RenderSkybox() {
 
 }
 
-void SceneDogfight::Exit() {
+void SceneBoss::Exit() {
 
 	for (int i = 0; i < NUM_GEOMETRY; ++i) {
 		if (meshList[i] != nullptr) {

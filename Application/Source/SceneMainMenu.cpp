@@ -11,6 +11,7 @@
 #include "SceneTutorial.h"
 #include "SceneDogfight.h"
 #include "SceneCargoShip.h"
+#include "SceneBoss.h"
 #include "MeshBuilder.h"
 #include "Utility.h"
 #include "LoadTGA.h"
@@ -281,7 +282,7 @@ void SceneMainMenu::Update(double dt) {
 			case 3: // Boss
 				if (pData->level03_unlocked == true)
 				{
-					SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
+					SceneManager::getInstance()->changeScene(new SceneBoss()); // Change Scene
 				}
 				break;
 			case 4: // Back button

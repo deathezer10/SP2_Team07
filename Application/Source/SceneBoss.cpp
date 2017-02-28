@@ -11,6 +11,7 @@
 #include "LoadTGA.h"
 #include "Tdummy.h"
 #include "XF02.h"
+#include "D01.h"
 
 #include "SceneBoss.h"
 #include "SceneManager.h"
@@ -22,7 +23,7 @@
 
 unsigned SceneBoss::killcount = 0;
 
-SceneBoss::SceneBoss() : Scene(SCENE_DOGFIGHT) {
+SceneBoss::SceneBoss() : Scene(SCENE_BOSS) {
 }
 
 SceneBoss::~SceneBoss() {}
@@ -280,6 +281,7 @@ void SceneBoss::Init() {
 	// Create NPCs
 	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 400)), td_OBJ_TYPE::TYPE_ENEMY);
 	objBuilder.createObject(new XF02(this, Vector3(25, -20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
+	objBuilder.createObject(new D01(this, Vector3(10, 10, 300)), td_OBJ_TYPE::TYPE_ENEMY);
 	killcount = 0;
 }
 
@@ -356,14 +358,14 @@ void SceneBoss::Update(double dt) {
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
-	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
+	/*if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
 		Vector3 spawnPos1 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 		Vector3 spawnPos2 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 
 		objBuilder.createObject(new XF02(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
 		objBuilder.createObject(new XF02(this, spawnPos2), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
-	}
+	}*/
 
 	if (killcount == _maxKillcount) {
 		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
@@ -454,6 +456,9 @@ void SceneBoss::Render() {
 		pauseManager.RenderPauseMenu();
 		return;
 	}
+
+
+
 
 
 

@@ -14,14 +14,14 @@ Vector3* D01::NearestD01Pos = nullptr;
 
 
 D01::D01(Scene* scene, Vector3 pos) : NPC(scene, pos) {
-	setHealth(200);
-	type = Scene::GEO_XF2;
-	scale = 2.0f;
+	setHealth(6000);
+	type = Scene::GEO_D01;
+	scale = 1.0f;
 	isLightingEnabled = false;
 	++D01Count;
 
 	setCollision(true);
-	collider.setBoundingBoxSize(Vector3(scale, scale, scale));
+	collider.setBoundingBoxSize(Vector3(6.0f, 3.0f, 6.0f));
 }
 
 D01::~D01() {

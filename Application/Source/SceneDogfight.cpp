@@ -318,7 +318,8 @@ void SceneDogfight::Update(double dt) {
 
 	objCount << "Enemies Around: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-	if (!Application::IsKeyPressed(0x1B))
+
+	if (!Application::IsKeyPressed(0x1B)) // Prevent timer from ticking when paused
 	{
 		currenttime -= dt;
 		double seconds, minutes;
@@ -327,10 +328,6 @@ void SceneDogfight::Update(double dt) {
 		minutes = seconds / 60;
 		timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
 		textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
-	}
-	else
-	{
-		currenttime = currenttime;
 	}
 
 	killtracker << "Killcount: " << (int)SceneDogfight::killcount<<" /20";
@@ -370,7 +367,7 @@ void SceneDogfight::Update(double dt) {
 	
 	if (currenttime<=0)
 	{
-		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your time limit expired", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
+		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
 		return;
 	}
 }

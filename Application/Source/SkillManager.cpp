@@ -111,6 +111,9 @@ void SkillManager::processSkills(double dt) {
 					if (_scene->camera.playerView.IsFacingVector(obj->position, _scene->camera.getForward(), rocketTargetThreshold)) {
 						lockedOnNPC = static_cast<NPC*>(obj);
 						nearestDistanceSquared = distance;
+						rocketTargetMaxSize = lockedOnNPC->getCollider().bboxHeight * 2;
+						rocketTargetMinSize = lockedOnNPC->getCollider().bboxHeight / 2;
+						rocketTargetCurrentSize = rocketTargetMaxSize;
 					}
 
 				}
@@ -125,7 +128,7 @@ void SkillManager::processSkills(double dt) {
 					_scene->meshList[Scene::GEO_CUBE],
 					lockedOnNPC->position,
 					Vector3(0),
-					Vector3(5),
+					Vector3(rocketTargetMaxSize),
 					false,
 					false // disable wire frame
 				});
@@ -142,7 +145,7 @@ void SkillManager::processSkills(double dt) {
 					Vector3(rocketTargetCurrentSize)
 				});
 
-				rocketTargetCurrentSize -= _scene->_dt * 5; // Reduce targeting mesh size every frame
+				rocketTargetCurrentSize -= ((rocketTargetMaxSize * 0.5f) * _scene->_dt); // Reduce targeting mesh size every frame
 
 				if (rocketTargetCurrentSize <= rocketTargetMinSize) { // Check if target is fully locked on
 					isTargetFullyLocked = true; // so that we stop rendering this mesh
@@ -272,7 +275,6 @@ void SkillManager::activateSpeedBoost(float duration) {
 	_scene->camera.setVelocity(_scene->camera.getMaxVelocity()); // set speed to maximum
 }
 
-float SkillManager::getCooldownTime()
-{
-  return  Math::Clamp<float>(rocketNextShootTime - _scene->_elapsedTime, 0.0f, 20.f);
+float SkillManager::getCooldownTime() {
+	return  Math::Clamp<float>(rocketNextShootTime - _scene->_elapsedTime, 0.0f, 20.f);
 }

@@ -8,6 +8,7 @@
 
 struct PlayerSaveData;
 
+class D01;
 
 class SceneBoss : public Scene {
 
@@ -30,6 +31,8 @@ private:
 	double currenttime = 361;
 
 	int currentObjective = 0;
+
+	D01* _Boss;
 
 };
 

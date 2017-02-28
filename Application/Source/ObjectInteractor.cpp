@@ -23,7 +23,7 @@ void ObjectInteractor::updateInteraction() {
 
 		obj = objIterator->second;
 
-		if (obj->update() == false && obj->isCollidable() == true) { // Process collision
+		if (obj->isActive() && obj->update() == false && obj->isCollidable() == true) { // Process collision
 			Vector3 hitpos;
 			Collider collider = obj->getCollider();
 

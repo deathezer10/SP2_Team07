@@ -25,9 +25,9 @@ public:
 
 	// No bounds checking
 	void reduceVelocity(float value);
-
+	
 	// Toggle health bar visibility
-	void toggleHealthbar(bool toggle){ _isHealthBarEnabled = toggle; };
+	void toggleHealthbar(bool toggle) { _isHealthBarEnabled = toggle; };
 
 	bool isInsideRadar() { return _isInsideRadar; };
 

@@ -100,9 +100,11 @@ bool XF04::update() {
 
 		// Detect collision for all other enemies
 		if (obj != this && collider.checkCollision(obj->getCollider(), &hitDir) == true) {
+			if (hitDir.IsZero()) { // Possibility that it spawn on top of another unit;
+				hitDir.y = 1 * _scene->_dt;
+			}
 			position += -hitDir * _scene->_dt;
 		}
-
 	}
 
 	position.x += unitDistance.x * _currentVelocity * _scene->_dt;

@@ -48,7 +48,7 @@ private:
 
 	float translateLeft = 0;
 	float translateRight = 0;
-	
+
 	// Recovers Shield by this amount per second
 	const float shieldRecoveryAmount = 10;
 	bool isShieldRecovering = false;
@@ -65,9 +65,9 @@ private:
 	NPC* lockedOnNPC = nullptr;
 	const float rocketCooldownTime = 5; // Rocket cooldown time
 	const float rocketTargetThreshold = 25.0f; // Only target NPC within this square cone of vision
-	const float rocketTargetMaxSize = 10;
-	const float rocketTargetMinSize = 1;
-	float rocketTargetCurrentSize = rocketTargetMaxSize;
+	float rocketTargetMaxSize;
+	float rocketTargetMinSize;
+	float rocketTargetCurrentSize;
 	float rocketNextShootTime = 0;
 	bool isTargetFullyLocked = false;
 

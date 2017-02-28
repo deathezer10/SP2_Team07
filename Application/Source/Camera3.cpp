@@ -173,7 +173,7 @@ void Camera3::Update(double dt) {
 		}
 	}
 
-	/*
+	
 	// Camera Move Up / Down
 	if (Application::IsKeyPressed('Z')) { // Thrust Up
 	position = position + up  * CAMERA_LEFT_RIGHT_SPEED;
@@ -183,9 +183,9 @@ void Camera3::Update(double dt) {
 	position = position - up * CAMERA_LEFT_RIGHT_SPEED;
 	target = position + view;
 	}
-	*/
+	
 
-	/*
+	
 	if (Application::IsKeyPressed('Q')) { // Strafe Left
 	position = position - right * CAMERA_LEFT_RIGHT_SPEED;
 	target = position + view;
@@ -194,7 +194,7 @@ void Camera3::Update(double dt) {
 	position = position + right * CAMERA_LEFT_RIGHT_SPEED;
 	target = position + view;
 	}
-	*/
+	
 
 
 	// Positional bounds check

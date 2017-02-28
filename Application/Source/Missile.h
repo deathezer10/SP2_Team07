@@ -9,15 +9,16 @@ class Missile : public NPC {
 
 
 public:
+	// Player Missile
 	Missile(Scene* scene, Vector3 pos, NPC* target);
-	Missile(Scene* scene, Vector3 pos, Vector3* target);
+
+	// Enemy Missile
+	Missile(Scene* scene, Vector3 pos, Vector3* target, int health, int damage);
 	~Missile() {};
 
 	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
-
-
-
+	
 
 private:
 	float _BossAcceleration = 10.0f;

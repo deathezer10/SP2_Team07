@@ -27,33 +27,41 @@ Missile::Missile(Scene* scene, Vector3 pos, NPC* target) : NPC(scene, pos, false
 }
 
 // Boss Missile
-Missile::Missile(Scene* scene, Vector3 pos, Vector3* playerPosition) : NPC(scene, pos, true) {
+Missile::Missile(Scene* scene, Vector3 pos, Vector3* playerPosition, int health,int damage) : NPC(scene, pos, true) {
 	type = Scene::GEO_MISSILE;
 
 	_MissileTargetPos = playerPosition;
 
 	_IsPlayerMissile = false;
 
+	scale = 2;
+
 	setCollision(true);
 	collider.setTrigger(true); // Don't knockback player
-	collider.setBoundingBoxSize(Vector3(5, 5, 5));
+	collider.setBoundingBoxSize(Vector3(5,5,5));
 
-	setHealth(50);
+	setHealth(health);
 	_currentVelocity = 0;
-	_AttackDamage = 50; // Boss Damage
+	_AttackDamage = damage; // Boss Damage
 }
 
 bool Missile::update() {
 
-	if (_IsPlayerMissile == true){
-		if (_MissileTarget->getCurrentHealth() <= 0) {
+	if (_IsPlayerMissile == true) {
+		if (_MissileTarget->getCurrentHealth() <= 0) { // Enemy died before missile reached
+			_scene->objBuilder.destroyObject(this);
+			return true;
+		}
+	}
+	else {
+		if (currentHP <= 0) { // Player destroyed missile
 			_scene->objBuilder.destroyObject(this);
 			return true;
 		}
 	}
 
 	// Accelerate the missile over time
-	if (_currentVelocity < _MaxVelocity){
+	if (_currentVelocity < _MaxVelocity) {
 		_currentVelocity += ((_IsPlayerMissile == true) ? _PlayerAcceleration : _BossAcceleration) * _scene->_dt;
 	}
 
@@ -65,25 +73,35 @@ bool Missile::update() {
 	Vector3 unitDistance = missileToTarget.Normalized(); // unit distance to travel
 
 	// Retrieve all values that from key 'Enemy'
-	auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
+	if (_IsPlayerMissile) { // Player missile
+		auto mappy = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_ENEMY);
 
-	for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
+		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy.first; it != mappy.second; ++it) {
 
-		Object* obj = it->second;
+			Object* obj = it->second;
 
-		// NPC bullet collision
-		if (collider.checkCollision(obj->getCollider()) == true) {
+			// NPC bullet collision
+			if (collider.checkCollision(obj->getCollider()) == true) {
 
-			NPC* npc = static_cast<NPC*>(obj);
+				NPC* npc = static_cast<NPC*>(obj);
 
-			// Damage the enemy and then remove this missile
-			npc->reduceHealth(_AttackDamage);
+				// Damage the enemy and then remove this missile
+				npc->reduceHealth(_AttackDamage);
 
+				_scene->objBuilder.destroyObject(this);
+				return true;
+			}
+
+		}
+	}
+	else { // Enemy missile
+		if (collider.checkCollision(_scene->camera.getCollider()) == true) {
+			PlayerDataManager::getInstance()->damagePlayer(_scene, _AttackDamage);
 			_scene->objBuilder.destroyObject(this);
 			return true;
 		}
-
 	}
+
 
 	position.x += unitDistance.x * _currentVelocity * _scene->_dt;
 	position.y += unitDistance.y * _currentVelocity * _scene->_dt;

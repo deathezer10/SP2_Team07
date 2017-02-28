@@ -15,7 +15,8 @@ public:
 		_scene(scene),
 		position(pos),
 		collidable(colisionEnabled),
-		collider(this, boxWidth, boxHeight, boxDepth){};
+		collider(this, boxWidth, boxHeight, boxDepth) {
+	};
 
 	virtual ~Object() {};
 
@@ -45,12 +46,19 @@ public:
 	// Toggle Collision checking for this Object
 	void setCollision(bool enabled) { collidable = enabled; }
 
+	// Is this Object's logic enabled?
+	bool isActive() { return _isActive; };
+
+	// Toggle whether to process this Object Update function
+	void toggleActive(bool toggle) { _isActive = toggle; };
+
 	Scene* _scene;
 
 protected:
 	Collider collider;
 	bool collidable;
 	bool isLightingEnabled = true;
+	bool _isActive = true;
 
 };
 #endif

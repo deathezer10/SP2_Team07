@@ -270,13 +270,15 @@ void SceneBoss::Init() {
 
 	const int powerCount = 100;
 
+	// Spawn power ups
 	for (size_t i = 0; i < powerCount; i++) {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
 		objBuilder.createObject(gg);
 	}
 
 	// Create NPCs
-	objBuilder.createObject(new D01(this, Vector3(10, 10, 100)), td_OBJ_TYPE::TYPE_ENEMY);
+	_Boss = new D01(this, Vector3(0, 0, 35));
+	objBuilder.createObject(_Boss, td_OBJ_TYPE::TYPE_ENEMY);
 }
 
 void SceneBoss::Update(double dt) {
@@ -302,7 +304,7 @@ void SceneBoss::Update(double dt) {
 	std::ostringstream currency;
 	std::ostringstream timer;
 
-	waypoint.RotateTowards(*D01::NearestD01Pos);
+	waypoint.RotateTowards(_Boss->position);
 
 	textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
@@ -319,17 +321,14 @@ void SceneBoss::Update(double dt) {
 		timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
 		textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 	}
-	else
-	{
-		currenttime = currenttime;
-	}
+
 
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	if (currenttime <= 0)
 	{
-		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your time limit expired", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
+		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
 		return;
 	}
 }
@@ -477,7 +476,7 @@ void SceneBoss::RenderSkybox() {
 }
 
 void SceneBoss::Exit() {
-
+	
 	for (int i = 0; i < NUM_GEOMETRY; ++i) {
 		if (meshList[i] != nullptr) {
 			delete meshList[i];

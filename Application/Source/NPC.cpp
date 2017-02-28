@@ -4,7 +4,7 @@
 
 #include "GL\glew.h"
 
-NPC::NPC(Scene* scene, Vector3 pos, bool showOnRadar) : Object(scene, pos){
+NPC::NPC(Scene* scene, Vector3 pos, bool showOnRadar) : Object(scene, pos) {
 
 	_isInsideRadar = showOnRadar;
 
@@ -12,7 +12,7 @@ NPC::NPC(Scene* scene, Vector3 pos, bool showOnRadar) : Object(scene, pos){
 		scene->textManager.radar.addUnit(this);
 };
 
-NPC::~NPC(){
+NPC::~NPC() {
 	if (_isInsideRadar)
 		_scene->textManager.radar.removeUnit(this);
 };
@@ -26,14 +26,14 @@ void NPC::render() {
 	_scene->modelStack.Scale(scale, scale, scale);
 	_scene->RenderMesh(_scene->meshList[type], isLightingEnabled);
 
-	if (_isHealthBarEnabled){
+	if (_isHealthBarEnabled) {
 
 		glDisable(GL_CULL_FACE);
 		glDisable(GL_DEPTH_TEST);
 
 		const float overallSize = 0.5f;
 		float barSize = ((float)currentHP / (float)defaultHP) * overallSize;
-		
+
 		// Background
 		_scene->modelStack.PushMatrix();
 		{
@@ -43,7 +43,7 @@ void NPC::render() {
 			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], false);
 		}
 		_scene->modelStack.PopMatrix();
-		
+
 		// Foreground
 		_scene->modelStack.PushMatrix();
 		{
@@ -53,7 +53,7 @@ void NPC::render() {
 			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], false);
 		}
 		_scene->modelStack.PopMatrix();
-		
+
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 

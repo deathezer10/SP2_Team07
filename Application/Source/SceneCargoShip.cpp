@@ -273,7 +273,7 @@ void SceneCargoShip::Init() {
 	}
 
 	//create cargoship
-	_CargoShip = new CargoShip(this, Vector3(0, 0, 20));
+	_CargoShip = new CargoShip(this, Vector3(0, 0, 40));
 	_CargoShip->setCollision(true);
 	objBuilder.createObject(_CargoShip, td_OBJ_TYPE::TYPE_OBJECTIVE);
 
@@ -415,7 +415,7 @@ void SceneCargoShip::Render() {
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90.0f, 0, 1, 0);
-	modelStack.Translate(1850, 0, 0);
+	modelStack.Translate(2050, 0, 0);
 	RenderMesh(meshList[GEO_SPACESTATION], true);
 	modelStack.PopMatrix();
 

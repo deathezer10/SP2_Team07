@@ -80,11 +80,13 @@ public:
 	PlayerStat* getPlayerStats() { return pStat.getStatData(); }
 
 	// Reduces the player's Shield (if available) or Health
-	void damagePlayer(Scene* _scene,int amount);
+	void damagePlayer(Scene* _scene, int amount);
+
+	void Exit();
 
 private:
 	PlayerDataManager();
-	~PlayerDataManager() { delete _instance; };
+	~PlayerDataManager() { };
 
 	PlayerSaveData pSaveData;
 	PlayerStats pStat;

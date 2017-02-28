@@ -16,7 +16,7 @@ using std::cout;
 using std::string;
 
 
-PlayerDataManager *PlayerDataManager::_instance = 0; // Singleton Handle
+PlayerDataManager *PlayerDataManager::_instance = nullptr; // Singleton Handle
 
 
 PlayerDataManager* PlayerDataManager::getInstance() {
@@ -225,4 +225,10 @@ void PlayerDataManager::damagePlayer(Scene* _scene, int amount) {
 		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: Your Space Fighter was destroyed!", SceneGameover::MENU_GAMEOVER, SceneManager::getInstance()->getCurrentScene()->sceneType, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned / 2));
 		return;
 	}
+}
+
+
+void PlayerDataManager::Exit(){
+	if (_instance != nullptr)
+		delete _instance;
 }

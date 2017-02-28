@@ -53,7 +53,9 @@ void SceneManager::Update(){
 	currentScene->Exit();
 	delete currentScene;
 
+	// Cleaning up, chances are that the Application is terminating after this
 	Exit();
+	PlayerDataManager::getInstance()->Exit();
 }
 
 void SceneManager::changeScene(Scene* scene){

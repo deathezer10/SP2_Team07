@@ -27,6 +27,7 @@ public:
 	// Set the Fighter's current speed to maximum for the given duration in Seconds
 	void activateSpeedBoost(float duration);
 
+	float getCooldownTime();
 private:
 	Scene* _scene;
 	PlayerStat* pStat;

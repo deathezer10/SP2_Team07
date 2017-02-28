@@ -3,7 +3,9 @@
 
 
 #include "NPC.h"
+#include "PlayerDataManager.h"
 
+class PlayerDataManager;
 class CargoShip : public NPC {
 
 public:
@@ -29,6 +31,9 @@ private:
 	const float _DamageInterval = 0.0f; // Cooldown between each attacks
 
 	float _NextDamageTime = 0; // DamageInterval's helper variable
+
+
+	PlayerSaveData* pData;
 
 };
 

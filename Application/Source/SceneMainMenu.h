@@ -7,11 +7,13 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "UIManager.h"
+#include "PlayerDataManager.h"
+
 
 #include <vector>
 
 class Application;
-
+class PlayerDataManager;
 
 class SceneMainMenu : public Scene {
 
@@ -33,7 +35,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-
+	
 private:		
 	Light light[1];	
 		
@@ -46,6 +48,8 @@ private:
 	float rotate_planet = 0;
 	unsigned _outsideSelected = 0;
 	unsigned _insideSelected = 0;
+
+	PlayerSaveData* pData;
 
 };
 

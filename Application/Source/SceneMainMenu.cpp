@@ -15,6 +15,7 @@
 #include "Utility.h"
 #include "LoadTGA.h"
 #include "CargoShip.h"
+#include "PlayerDataManager.h"
 
 #include <sstream>
 
@@ -29,6 +30,7 @@ SceneMainMenu::~SceneMainMenu() {
 }
 
 void SceneMainMenu::Init() {
+	pData = PlayerDataManager::getInstance()->getPlayerData();
 
 	//Load vertex and fragment shadersm
 	m_programID = LoadShaders("Shader//Texture.vertexshader", "Shader//Text.fragmentshader");
@@ -265,13 +267,22 @@ void SceneMainMenu::Update(double dt) {
 				SceneManager::getInstance()->changeScene(new SceneTutorial()); // Change Scene
 				break;
 			case 1: // Dog fight
+				if (pData->level01_unlocked == true)
+				{ 
 				SceneManager::getInstance()->changeScene(new SceneDogfight()); // Change Scene
+				}
 				break;
 			case 2: // Payload
-				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
+				if (pData->level02_unlocked == true)
+				{
+					SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
+				}
 				break;
 			case 3: // Boss
-				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
+				if (pData->level03_unlocked == true)
+				{
+					SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change Scene
+				}
 				break;
 			case 4: // Back button
 				_insideSelected = 0;
@@ -385,9 +396,31 @@ void SceneMainMenu::Render() {
 
 		title = "Level Select";
 		option1 = (_insideSelected == 0) ? ">0) Tutorial<" : "0) Tutorial";
-		option2 = (_insideSelected == 1) ? ">1) Dog Fight<" : "1) Dog Fight";
+		if (pData->level01_unlocked == true)
+		{
+			option2 = (_insideSelected == 1) ? ">1) Dog Fight<" : "1) Dog Fight";
+		}
+		if (pData->level01_unlocked == false)
+		{
+			option2 = (_insideSelected == 1) ? ">1) Locked<" : "1) Locked";
+		}
+		if (pData->level02_unlocked == true)
+		{
 		option3 = (_insideSelected == 2) ? ">2) Escort Cargo Ship<" : "2) Escort Cargo Ship";
-		option4 = (_insideSelected == 3) ? ">3) Attack on Destroyer-01<" : "3) Attack on Destroyer-01";
+		}
+		if (pData->level02_unlocked == false)
+		{
+			option3 = (_insideSelected == 2) ? ">2) Locked<" : "2) Locked";
+		}
+		if (pData->level03_unlocked == true)
+		{
+			option4 = (_insideSelected == 3) ? ">3) Attack on Destroyer-01<" : "3) Attack on Destroyer-01";
+		}
+		if (pData->level03_unlocked == false)
+		{
+			option4 = (_insideSelected == 3) ? ">3) Locked<" : "3) Locked";
+		}
+
 		option5 = (_insideSelected == 4) ? ">back<" : "back";
 
 		textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "Light.h"
+#include "PlayerDataManager.h"
 
 
 
@@ -26,7 +27,7 @@ private:
 	Light light[2];
 
 	void RenderSkybox();
-	unsigned int _maxKillcount=20;
+	unsigned int _maxKillcount=5;
 	bool showDebugInfo = false;
 	
 	float _NextXF02SpawnTime = 0.0f;

@@ -363,9 +363,14 @@ void SceneDogfight::Update(double dt) {
 	}
 
 	if (killcount ==_maxKillcount) {
-		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned+=500;
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
-		return;
+		if (PlayerDataManager::getInstance()->getPlayerData()->level02_unlocked == false)
+		{
+			PlayerDataManager::getInstance()->getPlayerData()->level02_unlocked = true;
+			PlayerDataManager::getInstance()->SaveData();
+			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+			return;
+		}
 	}
 	
 	if (currenttime<=0)

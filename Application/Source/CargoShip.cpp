@@ -24,9 +24,15 @@ bool CargoShip::update() {
 	Destination -= _currentVelocity * _scene->_dt;
 
 	if (Destination <= 0) {
-		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
-		return true;
+		if (PlayerDataManager::getInstance()->getPlayerData()->level03_unlocked == false)
+		{
+			PlayerDataManager::getInstance()->getPlayerData()->level03_unlocked = true;
+			PlayerDataManager::getInstance()->SaveData();
+
+			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 3 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_CARGOSHIP, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+			return true;
+		}
 	}
 
 	Vector3 distance = (position);//

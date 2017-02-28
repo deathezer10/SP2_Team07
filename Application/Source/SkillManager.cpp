@@ -156,7 +156,6 @@ void SkillManager::processSkills(double dt) {
 
 	}
 	else { // Reset locking system if player didn't fully locked on
-		lockedOnNPC = nullptr;
 		rocketTargetCurrentSize = rocketTargetMaxSize;
 	}
 	// End of Missile logic

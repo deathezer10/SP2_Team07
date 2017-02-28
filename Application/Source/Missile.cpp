@@ -35,6 +35,11 @@ Missile::~Missile() {
 
 bool Missile::update() {
 
+	if (_MissileTarget == nullptr) {
+		_scene->objBuilder.destroyObject(this);
+		return true;
+	}
+
 	// Accelerate the missile over time
 	if (_currentVelocity < _MaxVelocity)
 		_currentVelocity += _Acceleration * _scene->_dt;

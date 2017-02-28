@@ -9,8 +9,9 @@ class Missile : public NPC {
 
 
 public:
-	Missile(Scene* scene, Vector3 pos, Vector3* target, bool isPlayer);
-	~Missile();
+	Missile(Scene* scene, Vector3 pos, NPC* target);
+	Missile(Scene* scene, Vector3 pos, Vector3* target);
+	~Missile() {};
 
 	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
@@ -19,12 +20,15 @@ public:
 
 
 private:
-	float _Acceleration = 50.0f;
+	float _BossAcceleration = 10.0f;
+	float _PlayerAcceleration = 50.0f;
 	float _MaxVelocity = 500.0f;
+	bool _IsPlayerMissile;
 
 	int _AttackDamage;
 
-	Vector3* _MissileTarget;
+	NPC* _MissileTarget = nullptr;
+	Vector3* _MissileTargetPos;
 
 
 };

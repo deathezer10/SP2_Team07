@@ -8,45 +8,57 @@
 using std::multimap;
 
 
-Missile::Missile(Scene* scene, Vector3 pos, Vector3* target, bool isPlayer) : NPC(scene, pos, (isPlayer) ? false : true) {
+// Player Missile
+Missile::Missile(Scene* scene, Vector3 pos, NPC* target) : NPC(scene, pos, false) {
 	type = Scene::GEO_MISSILE;
 
 	_MissileTarget = target;
+	_MissileTargetPos = &target->position;
+
+	_IsPlayerMissile = true;
 
 	toggleHealthbar(false);
 	setCollision(true);
 	collider.setTrigger(true); // Don't knockback player
 	collider.setBoundingBoxSize(Vector3(5, 5, 5));
 
-	if (isPlayer) {
-		_currentVelocity = Math::FAbs(scene->camera.getCurrentVelocity()); // Speed must be at least faster than player		
-		_AttackDamage = PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage * 3; // Triple of the player's bullet damage
-	}
-	else {
-		setHealth(50);
-		_AttackDamage = 50; // Boss Damage
-	}
-
+	_currentVelocity = Math::FAbs(scene->camera.getCurrentVelocity()); // Speed must be at least faster than player		
+	_AttackDamage = PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage * 3; // Triple of the player's bullet damage
 }
 
-Missile::~Missile() {
-}
+// Boss Missile
+Missile::Missile(Scene* scene, Vector3 pos, Vector3* playerPosition) : NPC(scene, pos, true) {
+	type = Scene::GEO_MISSILE;
 
+	_MissileTargetPos = playerPosition;
+
+	_IsPlayerMissile = false;
+
+	setCollision(true);
+	collider.setTrigger(true); // Don't knockback player
+	collider.setBoundingBoxSize(Vector3(5, 5, 5));
+
+	setHealth(50);
+	_currentVelocity = 0;
+	_AttackDamage = 50; // Boss Damage
+}
 
 bool Missile::update() {
 
-	if (_MissileTarget == nullptr) {
-		_scene->objBuilder.destroyObject(this);
-		return true;
+	if (_IsPlayerMissile == true){
+		if (_MissileTarget->getCurrentHealth() <= 0) {
+			_scene->objBuilder.destroyObject(this);
+			return true;
+		}
 	}
 
 	// Accelerate the missile over time
-	if (_currentVelocity < _MaxVelocity)
-		_currentVelocity += _Acceleration * _scene->_dt;
-
+	if (_currentVelocity < _MaxVelocity){
+		_currentVelocity += ((_IsPlayerMissile == true) ? _PlayerAcceleration : _BossAcceleration) * _scene->_dt;
+	}
 
 	// Rotate towards target
-	Vector3 missileToTarget = *_MissileTarget - position;
+	Vector3 missileToTarget = *_MissileTargetPos - position;
 	rotationY = -Math::RadianToDegree(atan2(missileToTarget.z, missileToTarget.x)) + 180;
 	rotationZ = -Math::RadianToDegree(atan2(missileToTarget.y, missileToTarget.HorizontalLength()));
 

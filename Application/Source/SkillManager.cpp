@@ -74,10 +74,10 @@ void SkillManager::processSkills(double dt) {
 	}
 	// End of Bullet logic
 
-	// Start of Missle logic
+	// Start of Missile logic
 	if (isTargetFullyLocked == true && lockedOnNPC != nullptr && !Application::IsKeyPressed(VK_SPACE)) { // Target is fully locked and <Spacebar> was released, fire missile!
 
-		_scene->objBuilder.createObject(new Missile(_scene, _scene->camera.playerView, &lockedOnNPC->position, true), td_OBJ_TYPE::TYPE_SOLID);
+		_scene->objBuilder.createObject(new Missile(_scene, _scene->camera.playerView, static_cast<NPC*>(lockedOnNPC)), td_OBJ_TYPE::TYPE_SOLID);
 
 		lockedOnNPC = nullptr;
 		isTargetFullyLocked = false;
@@ -114,8 +114,7 @@ void SkillManager::processSkills(double dt) {
 
 			}
 		}
-		else { // Here we process locking on to the NPC
-
+		else if (static_cast<NPC*>(lockedOnNPC)->getCurrentHealth() > 0) { // Here we process locking on to the NPC
 
 			if (isTargetFullyLocked == true) { // Target is fully locked on but <Spacebar> is still pressed
 				// Render locked on Mesh on the NPC
@@ -149,13 +148,25 @@ void SkillManager::processSkills(double dt) {
 
 			}
 			else {
+				// Reset locking system if NPC got out of sight
 				lockedOnNPC = nullptr;
+				isTargetFullyLocked = false;
 				rocketTargetCurrentSize = rocketTargetMaxSize;
+
 			}
+		}
+		else {
+			// Reset locking system if enemy died
+			lockedOnNPC = nullptr;
+			isTargetFullyLocked = false;
+			rocketTargetCurrentSize = rocketTargetMaxSize;
 		}
 
 	}
-	else { // Reset locking system if player didn't fully locked on
+	else {
+		// Reset locking if player released <Spacebar> before locking on
+		lockedOnNPC = nullptr;
+		isTargetFullyLocked = false;
 		rocketTargetCurrentSize = rocketTargetMaxSize;
 	}
 	// End of Missile logic

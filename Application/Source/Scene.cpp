@@ -8,6 +8,7 @@
 #include "SceneGameOver.h"
 #include "SceneDogfight.h"
 #include "SceneCargoShip.h"
+#include "SceneBoss.h"
 
 Scene::Scene(TYPE_SCENE type) :
 pauseManager(this),
@@ -34,6 +35,7 @@ Scene* Scene::createScene(TYPE_SCENE type) {
 	case Scene::SCENE_CARGOSHIP:
 		return new SceneCargoShip();
 	case Scene::SCENE_BOSS:
+		return new SceneBoss();
 		break;
 	}
 

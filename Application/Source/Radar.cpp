@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "NPC.h"
 
+#include "GL\glew.h"
+
 #include <algorithm>
 
 
@@ -19,7 +21,7 @@ void Radar::removeUnit(NPC* unit) {
 }
 
 void Radar::RenderRadar(float x, float y) {
-
+	glDisable(GL_DEPTH_TEST);
 	Mtx44 ortho;
 	ortho.SetToOrtho(0, Application::windowWidth() / 10, 0, Application::windowHeight() / 10, -10, 10); //size of screen UI
 	_scene->projectionStack.PushMatrix();
@@ -59,4 +61,5 @@ void Radar::RenderRadar(float x, float y) {
 	_scene->projectionStack.PopMatrix();
 	_scene->viewStack.PopMatrix();
 	_scene->modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
 }

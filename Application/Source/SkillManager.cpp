@@ -77,15 +77,18 @@ void SkillManager::processSkills(double dt) {
 	// Start of Missile logic
 	if (isTargetFullyLocked == true && lockedOnNPC != nullptr && !Application::IsKeyPressed(VK_SPACE)) { // Target is fully locked and <Spacebar> was released, fire missile!
 
-		_scene->objBuilder.createObject(new Missile(_scene, _scene->camera.playerView, static_cast<NPC*>(lockedOnNPC)), td_OBJ_TYPE::TYPE_SOLID);
+		Vector3 missileSpawn = (_scene->camera.position + _scene->camera.getView().Normalized() * 2); // Spawn location for missile
+		missileSpawn.y -= 1;
+		_scene->objBuilder.createObject(new Missile(_scene, missileSpawn, lockedOnNPC), td_OBJ_TYPE::TYPE_SOLID);
 
+		// Reset variables and add missile cooldown
 		lockedOnNPC = nullptr;
 		isTargetFullyLocked = false;
 		rocketTargetCurrentSize = rocketTargetMaxSize; // Reset mesh to default size
 		rocketNextShootTime = _scene->_elapsedTime + rocketCooldownTime; // Induce cooldown
 
 	}
-	else if (Application::IsKeyPressed(VK_SPACE) && rocketNextShootTime <= _scene->_elapsedTime) { // Begin locking-on sequence
+	else if (Application::IsKeyPressed(VK_SPACE) && rocketNextShootTime <= _scene->_elapsedTime) { // Find a valid NPC to target
 
 		// Search for a valid target if no NPC is locked on
 		if (lockedOnNPC == nullptr) {
@@ -106,7 +109,7 @@ void SkillManager::processSkills(double dt) {
 
 					// Select the NPC that is within FOV
 					if (_scene->camera.playerView.IsFacingVector(obj->position, _scene->camera.getForward(), rocketTargetThreshold)) {
-						lockedOnNPC = obj;
+						lockedOnNPC = static_cast<NPC*>(obj);
 						nearestDistanceSquared = distance;
 					}
 
@@ -114,7 +117,7 @@ void SkillManager::processSkills(double dt) {
 
 			}
 		}
-		else if (static_cast<NPC*>(lockedOnNPC)->getCurrentHealth() > 0) { // Here we process locking on to the NPC
+		else if (lockedOnNPC->getCurrentHealth() > 0) { // Here we process locking on to the NPC
 
 			if (isTargetFullyLocked == true) { // Target is fully locked on but <Spacebar> is still pressed
 				// Render locked on Mesh on the NPC

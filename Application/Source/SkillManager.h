@@ -4,7 +4,7 @@
 
 
 class Scene;
-class Object;
+class NPC;
 struct PlayerStat;
 
 class SkillManager {
@@ -61,7 +61,7 @@ private:
 	bool canGodmodePress = false;
 
 	// Rocket Helper variables
-	Object* lockedOnNPC = nullptr;
+	NPC* lockedOnNPC = nullptr;
 	const float rocketCooldownTime = 5; // Rocket cooldown time
 	const float rocketTargetThreshold = 25.0f; // Only target NPC within this square cone of vision
 	const float rocketTargetMaxSize = 10;

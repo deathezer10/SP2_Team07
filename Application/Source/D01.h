@@ -37,7 +37,7 @@ private:
 	const float _DamageInterval = 1.0f; // Cooldown between each attacks
 	float _NextDamageTime = 0; // DamageInterval's helper variable
 
-	
+	AI_STATE _currentState = AI_CHASE;
 
 };
 #endif

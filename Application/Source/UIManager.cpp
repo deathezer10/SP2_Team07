@@ -232,6 +232,18 @@ void UIManager::renderPlayerHUD() {
 		showDebugInfo = !showDebugInfo;
 	}
 
+	if (Application::IsKeyPressed(VK_F1)) {
+		glEnable(GL_CULL_FACE);
+	}
+	if (Application::IsKeyPressed(VK_F2)) {
+		glDisable(GL_CULL_FACE);
+	}
+	if (Application::IsKeyPressed(VK_F3)) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
+	}
+	if (Application::IsKeyPressed(VK_F4)) {
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
+	}
 	// Display debugging information
 	if (showDebugInfo) {
 
@@ -296,6 +308,22 @@ void UIManager::renderPlayerHUD() {
 
 	// Radar
 	radar.RenderRadar(winWidth * 0.075f, winHeight * 0.125f);
+
+	//Missile cooldown
+	std::ostringstream Cooldown;
+	if (_scene->skillManager.getCooldownTime() != 0)
+	{
+		Cooldown << "Missile ready in: " << 1 + (int)_scene->skillManager.getCooldownTime() << "secs";
+		renderTextOnScreen(UIManager::Text(Cooldown.str(), Color(1, 0, 0), UIManager::ANCHOR_BOT_RIGHT));
+	}
+	else
+	{
+		Cooldown << "Missile ready";
+		renderTextOnScreen(UIManager::Text(Cooldown.str(), Color(0, 1, 0), UIManager::ANCHOR_BOT_RIGHT));
+	}
+
+
+
 
 	RenderTimedMeshOnScreen();
 }

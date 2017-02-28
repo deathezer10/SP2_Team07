@@ -271,3 +271,8 @@ void SkillManager::activateSpeedBoost(float duration) {
 
 	_scene->camera.setVelocity(_scene->camera.getMaxVelocity()); // set speed to maximum
 }
+
+float SkillManager::getCooldownTime()
+{
+  return  Math::Clamp<float>(rocketNextShootTime - _scene->_elapsedTime, 0.0f, 20.f);
+}

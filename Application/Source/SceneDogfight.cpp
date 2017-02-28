@@ -295,18 +295,7 @@ void SceneDogfight::Update(double dt) {
 		return;
 	}
 
-	if (Application::IsKeyPressed(VK_F1)) {
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_F2)) {
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_F3)) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_F4)) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
+
 
 
 	camera.Update(dt);

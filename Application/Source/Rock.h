@@ -3,10 +3,10 @@
 
 
 #include "Object.h"
-
+#include "NPC.h"
 
 // Interactable Rock, pickable and harvestable
-class Rock : public Object {
+class Rock : public NPC {
 	
 public:
 	Rock(Scene* scene, Vector3 pos);

@@ -205,11 +205,11 @@ void PlayerDataManager::damagePlayer(Scene* _scene, int amount) {
 
 	// Minus shield first
 	if (pStat.getStatData()->current_shield > 0) {
-		_scene->textManager.addTimedMeshToScreen(blueindicator, 0.5f);
+		_scene->textManager.addTimedMeshToScreen(blueindicator, 0.25f);
 		pStat.getStatData()->current_shield -= amount;
 	}
 	else {
-		_scene->textManager.addTimedMeshToScreen(redindicator, 0.5f);
+		_scene->textManager.addTimedMeshToScreen(redindicator, 0.25f);
 		pStat.getStatData()->current_health -= amount;
 	}
 

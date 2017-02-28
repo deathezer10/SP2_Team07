@@ -5,13 +5,14 @@
 
 unsigned Rock::RockCount = 0;
 
-Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
+Rock::Rock(Scene* scene, Vector3 pos) : NPC(scene, pos,false) {
 
 	++RockCount;
 	rotationY = Math::RandFloatMinMax(0, 360);
 	const int sizeOffset = 4;
 	scale = 5;
-
+	toggleHealthbar(false);
+	setHealth(100);
 	setCollision(true);
 	collider.setBoundingBoxSize(Vector3(scale + sizeOffset, scale + sizeOffset, scale + sizeOffset));
 
@@ -36,6 +37,15 @@ Rock::Rock(Scene* scene, Vector3 pos) : Object(scene, pos) {
 bool Rock::update() {
 
 	rotationY += Math::RandFloatMinMax(1, 10)* _scene->_dt;
+	if (currentHP <= 80)
+	{
+		scale = 2;
+	}
+	if (currentHP <= 0)
+	{
+		_scene->objBuilder.destroyObject(this);
+		return true;
+	}
 	
 	return false;
 }

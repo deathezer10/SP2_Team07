@@ -117,6 +117,25 @@ bool Bullet::update() {
 			}
 
 		}
+		auto mappy2 = _scene->objBuilder.objInteractor._objects.equal_range(td_OBJ_TYPE::TYPE_SHOOTABLE);
+
+		for (multimap<td_OBJ_TYPE, Object*>::iterator it = mappy2.first; it != mappy2.second; ++it) {
+
+			Object* obj = it->second;
+
+			// NPC bullet collision
+			if (collider.checkCollision(obj->getCollider()) == true) {
+
+				NPC* npc = static_cast<NPC*>(obj);
+
+				// Damage the enemy and then remove this bullet
+				npc->reduceHealth(_bulletDamage);
+
+				_scene->objBuilder.destroyObject(this);
+				return true;
+			}
+
+		}
 
 	}
 

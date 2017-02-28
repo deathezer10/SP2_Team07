@@ -20,7 +20,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 
 	switch (currentFighter) {
 	case 0:
-		pStat.initial_bullet_damage = Ship_Stats[(3 * currentFighter) + 1] + save->FG6_Bullet_damage;
+		pStat.initial_bullet_damage =save->FG6_Bullet_damage;
 		pStat.initial_bullet_speed = save->FG6_Bullet_speed;
 		pStat.initial_bullet_cooldown = (float)save->FG6_Bullet_ROF;
 		pStat.initial_shield_capacity = (float)Ship_Stats[(3 * currentFighter) + 2] + save->FG6_Shield_hp;
@@ -28,7 +28,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 		break;
 
 	case 1:
-		pStat.initial_bullet_damage = Ship_Stats[(3 * currentFighter) + 1] + +save->SF1_Bullet_damage;
+		pStat.initial_bullet_damage =save->SF1_Bullet_damage;
 		pStat.initial_bullet_speed = save->SF1_Bullet_speed;
 		pStat.initial_bullet_cooldown = (float)save->SF1_Bullet_ROF;
 		pStat.initial_shield_capacity = (float)Ship_Stats[(3 * currentFighter) + 2] + save->SF1_Shield_hp;
@@ -36,7 +36,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 		break;
 
 	case 2:
-		pStat.initial_bullet_damage = Ship_Stats[(3 * currentFighter) + 1] + save->DF6_Bullet_damage;
+		pStat.initial_bullet_damage = save->DF6_Bullet_damage;
 		pStat.initial_bullet_speed = save->DF6_Bullet_speed;
 		pStat.initial_bullet_cooldown = (float)save->DF6_Bullet_ROF;
 		pStat.initial_shield_capacity = (float)Ship_Stats[(3 * currentFighter) + 2] + save->DF6_Shield_hp;
@@ -44,7 +44,7 @@ void PlayerStats::ResetPlayerStats(int currentFighter) {
 		break;
 
 	case 3:
-		pStat.initial_bullet_damage = Ship_Stats[(3 * currentFighter) + 1] + save->A10_Bullet_damage;
+		pStat.initial_bullet_damage = save->A10_Bullet_damage;
 		pStat.initial_bullet_speed = save->A10_Bullet_speed;
 		pStat.initial_bullet_cooldown = (float)save->A10_Bullet_ROF;
 		pStat.initial_shield_capacity = (float)Ship_Stats[(3 * currentFighter) + 2] + save->A10_Shield_hp;

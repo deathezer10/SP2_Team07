@@ -162,6 +162,9 @@ void SceneBoss::Init() {
 	meshList[GEO_TDUMMY] = MeshBuilder::GenerateOBJ("enemy", "OBJ/drone.obj");
 	meshList[GEO_TDUMMY]->textureID = LoadTGA("Image/drone.tga");
 
+	meshList[GEO_D01] = MeshBuilder::GenerateOBJ("boss", "OBJ/destroyer01.obj");
+	meshList[GEO_D01]->textureID = LoadTGA("Image/destroyer01.tga");
+
 	meshList[GEO_XF2] = MeshBuilder::GenerateOBJ("enemy", "OBJ/xf02.obj");
 	meshList[GEO_XF2]->textureID = LoadTGA("Image/xf02.tga");
 

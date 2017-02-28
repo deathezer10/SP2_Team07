@@ -32,16 +32,16 @@ struct PlayerStat {
 const int Ship_Stats[12] {
 
 	    // Default: 
-	    3, 1, 3,
+	    3, 2, 3,
 
 		// SF-1
-		5, 1, 1,
+		5, 2, 1,
 
 		// DF-6
-		2, 3, 0,
+		2, 4, 0,
 
 		// A-10
-		1, 1, 5
+		1, 2, 5
 
 };
 

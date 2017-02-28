@@ -146,6 +146,7 @@ void SceneGameover::Init() {
 	camera.allowMovement(false);
 
 	PlayerDataManager::getInstance()->getPlayerData()->currency += _currencyEarned;
+	PlayerDataManager::getInstance()->SaveData();
 }
 
 void SceneGameover::Update(double dt) {

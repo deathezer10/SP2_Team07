@@ -371,6 +371,12 @@ void SceneDogfight::Update(double dt) {
 			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 			return;
 		}
+		else
+		{
+			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+			return;
+		}
 	}
 	
 	if (currenttime<=0)

@@ -21,8 +21,6 @@
 #include <sstream>
 
 
-unsigned SceneBoss::killcount = 0;
-
 SceneBoss::SceneBoss() : Scene(SCENE_BOSS) {
 }
 
@@ -236,7 +234,6 @@ void SceneBoss::Init() {
 
 
 	// Lighting 2
-	//light[1].type = Light::LIGHT_POINT;
 	light[1].type = Light::LIGHT_DIRECTIONAL;
 	light[1].position.Set(0, 10, -5);
 	light[1].color.Set(1.0f, 1.0f, 1.0f);
@@ -268,7 +265,7 @@ void SceneBoss::Init() {
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
 		gg->setCollision(true);
-		objBuilder.createObject(gg,td_OBJ_TYPE::TYPE_SHOOTABLE);
+		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
 	const int powerCount = 100;
@@ -279,40 +276,19 @@ void SceneBoss::Init() {
 	}
 
 	// Create NPCs
-	objBuilder.createObject(new XF02(this, Vector3(-25, 0, 400)), td_OBJ_TYPE::TYPE_ENEMY);
-	objBuilder.createObject(new XF02(this, Vector3(25, -20, 400)), td_OBJ_TYPE::TYPE_ENEMY);
-	objBuilder.createObject(new D01(this, Vector3(10, 10, 300)), td_OBJ_TYPE::TYPE_ENEMY);
-	killcount = 0;
+	objBuilder.createObject(new D01(this, Vector3(10, 10, 100)), td_OBJ_TYPE::TYPE_ENEMY);
 }
 
 void SceneBoss::Update(double dt) {
 
 	_dt = (float)dt;
 	_elapsedTime += _dt;
-	
-
-	const float randomrange1 = 600;
-	const unsigned int fighterlimit = 12;
 
 	pauseManager.UpdatePauseMenu((float)dt);
 
 	if (pauseManager.isPaused()) {
 		return;
 	}
-
-	if (Application::IsKeyPressed(VK_F1)) {
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_F2)) {
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed(VK_F3)) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed(VK_F4)) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
-
 
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
@@ -322,19 +298,18 @@ void SceneBoss::Update(double dt) {
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
-	std::ostringstream objDist;
 	std::ostringstream objCount;
 	std::ostringstream currency;
 	std::ostringstream timer;
-	std::ostringstream killtracker;
 
-	waypoint.RotateTowards(*XF02::NearestXF02Pos);
+	waypoint.RotateTowards(*D01::NearestD01Pos);
 
-	textManager.queueRenderText(UIManager::Text("Survive and Destroy 20 hostile XF-02 fighters!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
-	objCount << "Enemies Around: " << XF02::XF02Count;
+	objCount << "XF02 Count: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-	if (!Application::IsKeyPressed(0x1B))
+
+	if (!Application::IsKeyPressed(0x1B)) // Prevent timer from ticking when paused
 	{
 		currenttime -= dt;
 		double seconds, minutes;
@@ -349,29 +324,8 @@ void SceneBoss::Update(double dt) {
 		currenttime = currenttime;
 	}
 
-	killtracker << "Killcount: " << (int)SceneBoss::killcount << " /20";
-	textManager.queueRenderText(UIManager::Text(killtracker.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-	objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
-	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
-
-	/*if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
-		Vector3 spawnPos1 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
-		Vector3 spawnPos2 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
-
-		objBuilder.createObject(new XF02(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
-		objBuilder.createObject(new XF02(this, spawnPos2), td_OBJ_TYPE::TYPE_ENEMY);
-		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
-	}*/
-
-	if (killcount == _maxKillcount) {
-		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
-		return;
-	}
 
 	if (currenttime <= 0)
 	{
@@ -456,12 +410,6 @@ void SceneBoss::Render() {
 		pauseManager.RenderPauseMenu();
 		return;
 	}
-
-
-
-
-
-
 
 	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 

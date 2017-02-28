@@ -8,7 +8,6 @@
 
 
 Camera3::Camera3(Scene* scene) : _scene(scene), collider(&playerView, bboxWidth, bboxHeight, bboxDepth) {
-	glfwSetWindowUserPointer(glfwGetCurrentContext(), this);
 }
 
 Camera3::~Camera3() {

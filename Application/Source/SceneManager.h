@@ -20,20 +20,21 @@ public:
     void changeScene(Scene* scene);
     
 	Scene* getCurrentScene() { return currentScene; };
-    
+	    
 protected:
     SceneManager(){};
-    ~SceneManager() { delete _instance; };
+	~SceneManager();
 
 private:
-    Scene* currentScene = 0;
-    Scene* pendingScene = 0;
+    Scene* currentScene = nullptr;
+	Scene* pendingScene = nullptr;
 
     bool _hasPendingScene = false;    
 
     StopWatch m_timer;
 
-    void Update();
+	void Update();
+	void Exit();
 
 };
 #endif

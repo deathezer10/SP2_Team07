@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-
+#include "DetectMermoryLeak.h"
 #include "Camera3.h"
 #include "WayPoint.h"
 #include "UIManager.h"

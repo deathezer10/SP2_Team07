@@ -221,7 +221,7 @@ void SceneGameover::Update(double dt) {
 		}
 		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
-				_menuSelected += 1;
+				_menuSelected = 1;
 				canPressUpDown = false;
 			}
 		}
@@ -383,7 +383,7 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	}
-	if (_previousScene != Scene::SCENE_BOSS)
+	if (_previousScene != Scene::SCENE_BOSS&&_menuType==MENU_VICTORY)
 	{
 		std::string option3 = "Option 3";
 		std::string option4 = "Currency earned: ";
@@ -392,7 +392,7 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	    textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
 
 	if (_menuType == MENU_GAMEOVER) {

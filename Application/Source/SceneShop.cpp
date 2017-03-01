@@ -104,16 +104,16 @@ void SceneShop::Init() {
 	textManager.LoadFontWidth("Image//arial.csv");
 
 	//OBJ SPACESHIP
-	meshList[GEO_FG6] = MeshBuilder::GenerateOBJ("fG6", "OBJ/fG6.obj");
+	meshList[GEO_FG6] = MeshBuilder::GenerateOBJ("fG6", "OBJ/fG6_shop.obj");
 	meshList[GEO_FG6]->textureID = LoadTGA("Image/fG6.tga");
 
-	meshList[GEO_SF1] = MeshBuilder::GenerateOBJ("sf1", "OBJ/sf1.obj");
+	meshList[GEO_SF1] = MeshBuilder::GenerateOBJ("sf1", "OBJ/sf1_shop.obj");
 	meshList[GEO_SF1]->textureID = LoadTGA("Image/sf1.tga");
 
-	meshList[GEO_DF6] = MeshBuilder::GenerateOBJ("df6", "OBJ/df6.obj");
+	meshList[GEO_DF6] = MeshBuilder::GenerateOBJ("df6", "OBJ/df6_shop.obj");
 	meshList[GEO_DF6]->textureID = LoadTGA("Image/df6.tga");
 
-	meshList[GEO_A10] = MeshBuilder::GenerateOBJ("a10", "OBJ/a10.obj");
+	meshList[GEO_A10] = MeshBuilder::GenerateOBJ("a10", "OBJ/a10_shop.obj");
 	meshList[GEO_A10]->textureID = LoadTGA("Image/a10.tga");
 
 	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);

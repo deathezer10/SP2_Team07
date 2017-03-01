@@ -89,7 +89,7 @@ void Camera3::updateCursor(double dt) {
 
 	lastX = currentX;
 	lastY = currentY;
-	
+
 }
 
 void Camera3::Update(double dt) {
@@ -111,6 +111,7 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = _dt;
+	float CAMERA_STRAFE_SPEED = 45 * _dt;
 	float CAMERA_LEFT_RIGHT_SPEED = 60.0f * _dt;
 	float rotationSpeed = _dt;
 
@@ -141,31 +142,37 @@ void Camera3::Update(double dt) {
 	}
 
 	if (canYaw) {
-		if (Application::IsKeyPressed('A') || ((mouseMovedX < 0 && mouseYawEnabled) && !Application::IsKeyPressed('D'))) { // Left
-			yaw -= CAMERA_LEFT_RIGHT_SPEED;
-			roll -= CAMERA_LEFT_RIGHT_SPEED;
+		if ((mouseMovedX < 0 && mouseYawEnabled)) { // Left
+
+			float angle = rotationSpeed * mouseMovedDistanceX  * 1.5f;
+			yaw -= angle;
+			roll -= mouseMovedDistanceX * 0.05f;
 
 			if (roll > 0) {
-				roll -= CAMERA_LEFT_RIGHT_SPEED * 2;
+				roll -= CAMERA_LEFT_RIGHT_SPEED;
 			}
 
+
 			Mtx44 rotation;
-			rotation.SetToRotation(CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+			rotation.SetToRotation(angle, 0, 1, 0);
 			view = (target - position).Normalized();
 			view = rotation * view;
 			target = position + view;
 			up = rotation * up;
 		}
-		else if ((!Application::IsKeyPressed('A') && Application::IsKeyPressed('D')) || (!Application::IsKeyPressed('A') && (mouseMovedX > 0 && mouseYawEnabled))) { // Right
-			yaw += CAMERA_LEFT_RIGHT_SPEED;
-			roll += CAMERA_LEFT_RIGHT_SPEED;
+		else if (mouseMovedX > 0 && mouseYawEnabled) { // Right
+
+			float angle = rotationSpeed * mouseMovedDistanceX * 1.5f;
+			yaw += angle;
+			roll += mouseMovedDistanceX * 0.05f;
 
 			if (roll < 0) {
-				roll += CAMERA_LEFT_RIGHT_SPEED * 2;
+				roll += CAMERA_LEFT_RIGHT_SPEED;
 			}
 
+
 			Mtx44 rotation;
-			rotation.SetToRotation(-CAMERA_LEFT_RIGHT_SPEED, 0, 1, 0);
+			rotation.SetToRotation(-angle, 0, 1, 0);
 			view = (target - position).Normalized();
 			view = rotation * view;
 			target = position + view;
@@ -173,28 +180,26 @@ void Camera3::Update(double dt) {
 		}
 	}
 
-	
-	// Camera Move Up / Down
-	if (Application::IsKeyPressed('Z')) { // Thrust Up
-	position = position + up  * CAMERA_LEFT_RIGHT_SPEED;
-	target = position + view;
-	}
-	else if (Application::IsKeyPressed('X')) { // Thrust Down
-	position = position - up * CAMERA_LEFT_RIGHT_SPEED;
-	target = position + view;
-	}
-	
 
-	
-	if (Application::IsKeyPressed('Q')) { // Strafe Left
-	position = position - right * CAMERA_LEFT_RIGHT_SPEED;
-	target = position + view;
+	// Camera Move Up / Down
+	if (Application::IsKeyPressed('Q')) { // Thrust Down
+		position = position - up * CAMERA_STRAFE_SPEED;
+		target = position + view;
 	}
-	else if (Application::IsKeyPressed('E')) { // Strafe Right
-	position = position + right * CAMERA_LEFT_RIGHT_SPEED;
-	target = position + view;
+	else if (Application::IsKeyPressed('E')) { // Thrust Up
+		position = position + up  * CAMERA_STRAFE_SPEED;
+		target = position + view;
 	}
-	
+
+	if (Application::IsKeyPressed('A')) { // Strafe Left
+		position = position - right * CAMERA_STRAFE_SPEED;
+		target = position + view;
+	}
+	else if (Application::IsKeyPressed('D')) { // Strafe Right
+		position = position + right * CAMERA_STRAFE_SPEED;
+		target = position + view;
+	}
+
 
 
 	// Positional bounds check

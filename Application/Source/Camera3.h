@@ -95,13 +95,13 @@ private:
 	float currentVelocity = 1;
 	float* velocityAccelerationRate;
 	float velocityDecelerationRate = 5.0f;
-	float velocityBrakingRate = 30.0f;
+	float velocityBrakingRate = 75.0f;
 	float velocityMax = 200;
 	float velocityMin = -5;
 	bool wasMovingForward = true; // Was the camera accelerating?
 
 	// Enable Mouse Horizontal Control
-	bool mouseYawEnabled = false;
+	bool mouseYawEnabled = true;
 
 	// Mouse direction moved, possible values: -1, 0, 1
 	double mouseMovedX;

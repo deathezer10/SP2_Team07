@@ -12,7 +12,9 @@
 #include "LoadTGA.h"
 #include "SceneMainMenu.h"
 #include "PlayerDataManager.h"
-
+#include "SceneCargoShip.h"
+#include "SceneDogfight.h"
+#include "SceneBoss.h"
 #include <sstream>
 
 
@@ -178,7 +180,7 @@ void SceneGameover::Update(double dt) {
 	}
 
 	///////////////////////////////////////////////vvvvvvvvvvvvvvvvvvARROW CONTROL FOR VICTORY MENUvvvvvvvvvvvvvvvvvvvvvvv/////////////////////////////////////////
-	if (_menuType == MENU_VICTORY) {
+	if (_menuType == MENU_VICTORY&&_previousScene != SCENE_BOSS) {
 		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
@@ -188,6 +190,21 @@ void SceneGameover::Update(double dt) {
 		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected += 1;
+				canPressUpDown = false;
+			}
+		}
+	}
+
+	if (_menuType == MENU_VICTORY&&_previousScene == SCENE_BOSS) {
+		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
+			if (_menuSelected >= 1) {
+				_menuSelected -= 1;
+				canPressUpDown = false;
+			}
+		}
+		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
+			if (_menuSelected <= 1) {
+				_menuSelected = 1;
 				canPressUpDown = false;
 			}
 		}
@@ -210,7 +227,7 @@ void SceneGameover::Update(double dt) {
 		}
 	}
 	/////////////////////////////////////////////////////////^^^^^^^^^^^^^^^^ARROWS CONTROL FOR GAME OVER MENU^^^^^^^^^^^^^^//////////////////////////////
-	
+
 
 	if (!Application::IsKeyPressed(VK_RETURN)) {
 		canPressEnter = true;
@@ -233,11 +250,39 @@ void SceneGameover::Update(double dt) {
 		canPressEnter = false;
 
 	}
+	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY&&_previousScene == Scene::SCENE_BOSS)
+	{
+		switch (_menuSelected)
+		{
+		case 0:
+			SceneManager::getInstance()->changeScene(new SceneMainMenu());
+			break;
+		case 1:
+			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Flag application to quit
+			break;
+		}
+		canPressEnter = false;
+	}
 
 	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY) {
 		switch (_menuSelected) {
 		case 0:
-			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change to previous Scene
+			switch (_previousScene)
+			{
+			case Scene::SCENE_TUTORIAL:
+				SceneManager::getInstance()->changeScene(new SceneDogfight()); // Change to previous Scene
+				break;
+			case Scene::SCENE_DOGFIGHT:
+				SceneManager::getInstance()->changeScene(new SceneCargoShip()); // Change to previous Scene
+				break;
+			case Scene::SCENE_CARGOSHIP:
+				SceneManager::getInstance()->changeScene(new SceneBoss()); // Change to previous Scene
+				break;
+			case Scene::SCENE_BOSS:
+				break;
+			default:
+				break;
+			}
 			break;
 		case 1:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu());
@@ -246,7 +291,6 @@ void SceneGameover::Update(double dt) {
 			glfwSetWindowShouldClose(glfwGetCurrentContext(), true); // Flag application to quit
 			break;
 		}
-
 		canPressEnter = false;
 
 	}
@@ -279,8 +323,8 @@ void SceneGameover::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-					 camera.position.z, camera.target.x, camera.target.y,
-					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+		camera.position.z, camera.target.x, camera.target.y,
+		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -292,14 +336,15 @@ void SceneGameover::Render() {
 	Vector3 tileScale(25, 8, 23);
 	glDisable(GL_DEPTH_TEST);
 	//textManager.RenderMeshOnScreen(meshList[GEO_GAMEOVER], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
-	
+
 	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.28f, Vector3(90, 0, 0), tileScale);
-	
+
 	glEnable(GL_DEPTH_TEST);
 
 
 	std::string newLine = "";
 	std::string title = _title;
+
 	std::string option1 = "Option 1";
 	std::string option2 = "Option 2";
 
@@ -309,12 +354,18 @@ void SceneGameover::Render() {
 		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
 		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
-
 	case TYPE_MENU::MENU_VICTORY:
-		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
-		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
-		break;
-
+		switch (_previousScene)
+		{
+		case Scene::SCENE_BOSS:
+			option1 = (_menuSelected == 0) ? ">Main Menu<" : "Main Menu";
+			option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
+			break;
+		default:
+			option1 = (_menuSelected == 0) ? ">Next level<" : "Next level";
+			option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
+			break;
+		}
 	}
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -322,7 +373,18 @@ void SceneGameover::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(option1, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
-	if (_menuType == MENU_VICTORY) {
+
+
+	if (_previousScene == Scene::SCENE_BOSS)
+	{
+		std::string option4 = "Currency earned: ";
+		option4.append(std::to_string(_currencyEarned));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	}
+	if (_previousScene != Scene::SCENE_BOSS)
+	{
 		std::string option3 = "Option 3";
 		std::string option4 = "Currency earned: ";
 		option4.append(std::to_string(_currencyEarned));
@@ -330,15 +392,16 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
+
 	if (_menuType == MENU_GAMEOVER) {
 		std::string option3 = "Option 3";
 		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
-	textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+
 
 	textManager.reset();
 }

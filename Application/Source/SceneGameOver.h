@@ -38,7 +38,6 @@ private:
 	TYPE_SCENE _previousScene;
 
 	int _currencyEarned;
-
 	bool canPressEnter = false;
 	bool canPressUpDown = false;
 

@@ -3,6 +3,7 @@
 #include "PlayerDataManager.h"
 
 #include <map>
+#include "GL\glew.h"
 
 
 using std::multimap;
@@ -69,6 +70,7 @@ bool Missile::update() {
 	Vector3 missileToTarget = *_MissileTargetPos - position;
 	rotationY = -Math::RadianToDegree(atan2(missileToTarget.z, missileToTarget.x)) + 180;
 	rotationZ = -Math::RadianToDegree(atan2(missileToTarget.y, missileToTarget.HorizontalLength()));
+	_fakeRoll += 720 * _scene->_dt; // spin every frame
 
 	Vector3 unitDistance = missileToTarget.Normalized(); // unit distance to travel
 
@@ -111,7 +113,54 @@ bool Missile::update() {
 }
 
 void Missile::collisionHit(Vector3& hitPos) {
+}
 
+void Missile::render() {
+	_scene->modelStack.PushMatrix();
+	_scene->modelStack.Translate(position.x, position.y, position.z);
+	_scene->modelStack.Rotate(rotationY, 0, 1, 0);
+	_scene->modelStack.Rotate(rotationZ, 0, 0, 1);
+	_scene->modelStack.Rotate(rotationX, 1, 0, 0);
+	_scene->modelStack.Scale(scale, scale, scale);
+	_scene->modelStack.PushMatrix();
+	_scene->modelStack.Rotate(_fakeRoll, 1, 0,0);
+	_scene->RenderMesh(_scene->meshList[type], isLightingEnabled);
+	_scene->modelStack.PopMatrix();
+
+	if (_isHealthBarEnabled) {
+
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_DEPTH_TEST);
+
+		const float overallSize = 0.5f;
+		float barSize = ((float)currentHP / (float)defaultHP) * overallSize;
+
+		// Background
+		_scene->modelStack.PushMatrix();
+		{
+			_scene->modelStack.Translate(0, 0.25f, -overallSize);
+			_scene->modelStack.Rotate(-90, 0, 1, 0);
+			_scene->modelStack.Scale(overallSize, 0.025f, 0.1f);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_BACKGROUND], false);
+		}
+		_scene->modelStack.PopMatrix();
+
+		// Foreground
+		_scene->modelStack.PushMatrix();
+		{
+			_scene->modelStack.Translate(0, 0.25f, -barSize);
+			_scene->modelStack.Rotate(-90, 0, 1, 0);
+			_scene->modelStack.Scale(barSize, 0.025f, 0.1f);
+			_scene->RenderMesh(_scene->meshList[Scene::GEO_HP_FOREGROUND], false);
+		}
+		_scene->modelStack.PopMatrix();
+
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+
+	}
+
+	_scene->modelStack.PopMatrix();
 
 
 }

@@ -27,8 +27,8 @@ public:
 	static Vector3* NearestXF02Pos;
 
 private:
-	float _Acceleration = 5.0f;
-	float _MaxVelocity = 20.0f;
+	float _Acceleration = 2.5f;
+	float _MaxVelocity = 12.5f;
 
 	const float _RetreatThreshold = 100; // Run away when HP is under this value
 	const float _RetreatMaxDistance = 500; // Maximum distance that the enemy can run away

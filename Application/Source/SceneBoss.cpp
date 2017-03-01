@@ -312,12 +312,7 @@ void SceneBoss::Update(double dt) {
 
 	BossHp << "Boss HP: " << (int)(_Boss->getCurrentHealth()) << " / 6000";
 	textManager.queueRenderText(UIManager::Text(BossHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-
-
-
-
-
-
+	
 	objCount << "XF02 Count: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
 
@@ -353,9 +348,8 @@ void SceneBoss::Update(double dt) {
 
 	if (_Boss->getCurrentHealth() <= 0)
 	{
-
 		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
-		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level!", SceneGameover::MENU_VICTORY, Scene::SCENE_BOSS, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+		SceneManager::getInstance()->changeScene(new SceneGameover("Great Job, Fighter! You have eliminated the Boss!", SceneGameover::MENU_VICTORY, Scene::SCENE_BOSS, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 		return;
 	}
 	if (currenttime <= 0)

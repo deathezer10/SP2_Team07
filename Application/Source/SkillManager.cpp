@@ -75,7 +75,7 @@ void SkillManager::processSkills(double dt) {
 	// End of Bullet logic
 
 	// Start of Missile logic
-	if (isTargetFullyLocked == true && lockedOnNPC != nullptr && !Application::IsKeyPressed(VK_SPACE)) { // Target is fully locked and <Spacebar> was released, fire missile!
+	if (isTargetFullyLocked == true && lockedOnNPC != nullptr && !glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE)) { // Target is fully locked and <Spacebar> was released, fire missile!
 
 		Vector3 missileSpawn = (_scene->camera.position + _scene->camera.getView().Normalized() * 2); // Spawn location for missile
 		missileSpawn.y -= 1;
@@ -88,7 +88,7 @@ void SkillManager::processSkills(double dt) {
 		rocketNextShootTime = _scene->_elapsedTime + rocketCooldownTime; // Induce cooldown
 
 	}
-	else if (Application::IsKeyPressed(VK_SPACE) && rocketNextShootTime <= _scene->_elapsedTime) { // Find a valid NPC to target
+	else if (glfwGetKey(glfwGetCurrentContext(), GLFW_KEY_SPACE) && rocketNextShootTime <= _scene->_elapsedTime) { // Find a valid NPC to target
 
 		// Search for a valid target if no NPC is locked on
 		if (lockedOnNPC == nullptr) {
@@ -120,7 +120,7 @@ void SkillManager::processSkills(double dt) {
 
 			}
 		}
-		else if (lockedOnNPC->getCurrentHealth() > 0) { // Here we process locking on to the NPC
+		else if (lockedOnNPC->getCurrentHealth() > 0) { // Is Enemy still alive?
 
 			if (isTargetFullyLocked == true) { // Target is fully locked on but <Spacebar> is still pressed
 				// Render locked on Mesh on the NPC

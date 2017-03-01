@@ -71,7 +71,7 @@ private:
 	const float _MissileEnrageSpawnInterval = 1;
 	const float _MissileSpawnInterval = 3;
 	const int _MissileDamage = 50;
-	const int _MissileHealth = 150;
+	const int _MissileHealth = 50;
 	const int _MissileAmount = 3;
 	float _MissileSpawned = 0;
 

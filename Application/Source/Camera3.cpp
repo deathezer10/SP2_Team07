@@ -94,7 +94,7 @@ void Camera3::updateCursor(double dt) {
 
 void Camera3::Update(double dt) {
 
-	_dt = (float)dt;
+	_dt = (float)dt;		
 
 	// All Controls are disabled!
 	if (canMove == false) {
@@ -111,7 +111,8 @@ void Camera3::Update(double dt) {
 	}
 
 	float CAMERA_SPEED = _dt;
-	float CAMERA_STRAFE_SPEED = 45 * _dt;
+	float CAMERA_ROLLBACK_SPEED = 45 * _dt;
+	float CAMERA_STRAFE_SPEED = 10 * _dt;
 	float CAMERA_LEFT_RIGHT_SPEED = 60.0f * _dt;
 	float rotationSpeed = _dt;
 
@@ -140,16 +141,17 @@ void Camera3::Update(double dt) {
 	else {
 		currentVelocity -= velocityDecelerationRate * _dt;
 	}
-	
+
 	if (canYaw) {
 		if ((mouseMovedX < 0 && mouseYawEnabled)) { // Left
 
 			float angle = rotationSpeed * mouseMovedDistanceX  * 1.5f;
 			yaw -= angle;
-			roll -= mouseMovedDistanceX * 0.05f;
+			roll -= mouseMovedDistanceX * 0.025f;
 
+			// Roll back to center faster
 			if (roll > 0) {
-				roll -= CAMERA_LEFT_RIGHT_SPEED;
+				roll -= CAMERA_ROLLBACK_SPEED;
 			}
 
 
@@ -164,10 +166,11 @@ void Camera3::Update(double dt) {
 
 			float angle = rotationSpeed * mouseMovedDistanceX * 1.5f;
 			yaw += angle;
-			roll += mouseMovedDistanceX * 0.05f;
+			roll += mouseMovedDistanceX * 0.025f;
 
+			// Roll back to center faster
 			if (roll < 0) {
-				roll += CAMERA_LEFT_RIGHT_SPEED;
+				roll += CAMERA_ROLLBACK_SPEED;
 			}
 
 
@@ -181,17 +184,14 @@ void Camera3::Update(double dt) {
 		if (Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) { // Strafe Left
 			position = position - right * CAMERA_STRAFE_SPEED;
 			target = position + view;
-			if (FakeYaw <= 20)
-			{
+			if (FakeYaw <= 10) {
 				FakeYaw += rotationSpeed * 60;
 			}
-			if (FakeRow <= 60)
-			{
+			if (FakeRow <= 30) {
 				FakeRow += rotationSpeed * 60;
 			}
 		}
-		else
-		{
+		else {
 			if (FakeYaw > 0)
 				FakeYaw -= rotationSpeed * 30;
 			if (FakeRow > 0)
@@ -200,34 +200,21 @@ void Camera3::Update(double dt) {
 		if (Application::IsKeyPressed('D') && !Application::IsKeyPressed('A')) { // Strafe Right
 			position = position + right * CAMERA_STRAFE_SPEED;
 			target = position + view;
-			if (FakeYaw >= -20) {
+			if (FakeYaw >= -10) {
 				FakeYaw -= rotationSpeed * 60;
 			}
-			if (FakeRow >= -60) {
+			if (FakeRow >= -30) {
 				FakeRow -= rotationSpeed * 60;
 			}
 		}
-		else
-		{
-			if (FakeYaw<0)
+		else {
+			if (FakeYaw < 0)
 				FakeYaw += rotationSpeed * 30;
-			if (FakeRow<0)
+			if (FakeRow < 0)
 				FakeRow += rotationSpeed * 60;
 		}
 
 	}
-
-
-
-
-
-	
-
-
-	// Positional bounds check
-	//position.x = Math::Clamp(position.x, -skyboxBound, skyboxBound);
-	//position.y = Math::Clamp(position.y, -skyboxBound, skyboxBound);
-	//position.z = Math::Clamp(position.z, -skyboxBound, skyboxBound);
 
 	// Limit maximum Roll angle
 	roll = Math::Clamp(roll, -rollAngleLimit, rollAngleLimit);
@@ -265,27 +252,23 @@ void Camera3::Update(double dt) {
 		if (Application::IsKeyPressed('Q') && !Application::IsKeyPressed('E')) { // Thrust Down
 			position = position - up * CAMERA_STRAFE_SPEED;
 			target = position + view;
-			if (FakePitch <= 50)
-			{
+			if (FakePitch <= 25) {
 				FakePitch += rotationSpeed * 60;
 			}
 		}
-		else
-		{
+		else {
 			if (FakePitch > 0)
 				FakePitch -= rotationSpeed * 60;
 		}
 		if (Application::IsKeyPressed('E') && !Application::IsKeyPressed('Q')) { // Thrust Up
 			position = position + up  * CAMERA_STRAFE_SPEED;
 			target = position + view;
-			if (FakePitch >= -50)
-			{
+			if (FakePitch >= -15) {
 				FakePitch -= rotationSpeed * 60;
 			}
 		}
 
-		else
-		{
+		else {
 			if (FakePitch < 0)
 				FakePitch += rotationSpeed * 60;
 		}

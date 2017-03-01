@@ -247,12 +247,12 @@ void SceneMainMenu::Render() {
 		glDisable(GL_DEPTH_TEST);
 
 		Vector3 selectionScale(5, 20, 2);
-		Vector3 tileScale(20, 80, 8);
+		Vector3 tileScale(21,1,7);
 
 		textManager.RenderMeshOnScreen(meshList[GEO_SINGLE_PLAYER], winWidth * 0.25f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		textManager.RenderMeshOnScreen(meshList[GEO_SHOP], winWidth * 0.75f, winHeight * 0.65f, Vector3(90, 0, 0), selectionScale);
 		textManager.RenderMeshOnScreen(meshList[GEO_EXIT], winWidth * 0.75f, winHeight * 0.30f, Vector3(90, 0, 0), selectionScale);
-		textManager.RenderMeshOnScreen(meshList[GEO_TITLE], winWidth * 0.50f, winHeight * 0.90f, Vector3(90, 0, 0), tileScale);
+		textManager.RenderMeshOnScreen(meshList[GEO_TITLE], winWidth * 0.50f, winHeight * 0.875f, Vector3(90, 0, 0), tileScale);
 
 		if (_outsideSelected == 0) {
 			rotate_planet += 20 * _dt;

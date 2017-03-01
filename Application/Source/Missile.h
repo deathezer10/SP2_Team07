@@ -18,6 +18,7 @@ public:
 
 	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
+	virtual void render();
 	
 
 private:
@@ -31,6 +32,7 @@ private:
 	NPC* _MissileTarget = nullptr;
 	Vector3* _MissileTargetPos;
 
+	float _fakeRoll = 0; // used to spin the missile without spinning the hp bar
 
 };
 #endif

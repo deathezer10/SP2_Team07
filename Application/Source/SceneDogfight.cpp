@@ -194,12 +194,12 @@ void SceneDogfight::Init() {
 
 	meshList[GEO_SHIELD_FOREGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(0.0f, 0.6f, 1.0f));
 	meshList[GEO_SHIELD_FOREGROUND]->textureID = LoadTGA("Image/shield_fg.tga");//texture for shield
-	
+
 	meshList[GEO_HP_BACKGROUND] = MeshBuilder::GenerateUIQuad("Cargo HP", Color(1.f, 1.0f, 1.0f));
 	meshList[GEO_HP_BACKGROUND]->textureID = LoadTGA("Image/white_bg.tga");//transparency bg
-	
+
 	meshList[GEO_RADAR_BACKGROUND] = MeshBuilder::GenerateQuad("radar bg", Color(0, 0.5f, 0));
-	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga",true);
+	meshList[GEO_RADAR_BACKGROUND]->textureID = LoadTGA("Image/radar.tga", true);
 
 	meshList[GEO_RADAR_ENEMY] = MeshBuilder::GenerateQuad("radar enemy icon", Color(1, 0, 0));
 	meshList[GEO_RADAR_PLAYER] = MeshBuilder::GenerateQuad("radar player icon", Color(0, 0, 1));
@@ -264,7 +264,7 @@ void SceneDogfight::Init() {
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
 		gg->setCollision(true);
-		objBuilder.createObject(gg,td_OBJ_TYPE::TYPE_SHOOTABLE);
+		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
 	const int powerCount = 100;
@@ -312,9 +312,10 @@ void SceneDogfight::Update(double dt) {
 	std::ostringstream timer;
 	std::ostringstream killtracker;
 
-	waypoint.RotateTowards(*XF02::NearestXF02Pos);
+	if (XF02::XF02Count > 0)
+		waypoint.RotateTowards(*XF02::NearestXF02Pos);
 
-	textManager.queueRenderText(UIManager::Text("Survive and Destroy 20 hostile XF-02 fighters!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.queueRenderText(UIManager::Text("Survive and Destroy 20 hostile XF-02 Fighters!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 	objCount << "Enemies Around: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
@@ -330,43 +331,42 @@ void SceneDogfight::Update(double dt) {
 		textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
 	}
 
-	killtracker << "Killcount: " << (int)SceneDogfight::killcount<<" /20";
+	killtracker << "Killcount: " << (int)SceneDogfight::killcount << " /20";
 	textManager.queueRenderText(UIManager::Text(killtracker.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-	objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
-	textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	
+	if (XF02::XF02Count > 0) {
+		objDist << "Distance: " << (int)((*XF02::NearestXF02Pos) - camera.position).Length() << "m";
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	}
 
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
 	if (_elapsedTime >= _NextXF02SpawnTime&&XF02::XF02Count < fighterlimit) {
-		Vector3 spawnPos1 =   Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
-		Vector3 spawnPos2 =  Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		Vector3 spawnPos1 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
+		Vector3 spawnPos2 = Vector3(Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1), Math::RandFloatMinMax(-randomrange1, randomrange1));
 
 		objBuilder.createObject(new XF02(this, spawnPos1), td_OBJ_TYPE::TYPE_ENEMY);
 		objBuilder.createObject(new XF02(this, spawnPos2), td_OBJ_TYPE::TYPE_ENEMY);
 		_NextXF02SpawnTime = _elapsedTime + _SpawnXF02Interval;
 	}
 
-	if (killcount ==_maxKillcount) {
-		if (PlayerDataManager::getInstance()->getPlayerData()->level02_unlocked == false)
-		{
+	if (killcount == _maxKillcount) {
+		if (PlayerDataManager::getInstance()->getPlayerData()->level02_unlocked == false) {
 			PlayerDataManager::getInstance()->getPlayerData()->level02_unlocked = true;
 			PlayerDataManager::getInstance()->SaveData();
 			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
 			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level, level 2 Unlocked!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 			return;
 		}
-		else
-		{
+		else {
 			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
 			SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level!", SceneGameover::MENU_VICTORY, Scene::SCENE_DOGFIGHT, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
 			return;
 		}
 	}
-	
-	if (currenttime<=0)
-	{
+
+	if (currenttime <= 0) {
 		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
 		return;
 	}
@@ -382,7 +382,7 @@ void SceneDogfight::Render() {
 
 		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
 
-		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z, 
+		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
 						 camera.target.x, camera.target.y, camera.target.z,
 						 camera.up.x, camera.up.y, camera.up.z);
 	}
@@ -435,7 +435,7 @@ void SceneDogfight::Render() {
 	modelStack.Translate(camera.playerView.x, camera.playerView.y - 0.5f, camera.playerView.z);
 	modelStack.Rotate(-camera.getYaw() + camera.FakeYaw, 0, 1, 0);
 	modelStack.Rotate(-camera.getPitch() + camera.FakePitch, 0, 0, 1);
-	modelStack.Rotate(-camera.getRoll()+ camera.FakeRow, 1, 0, 0);
+	modelStack.Rotate(-camera.getRoll() + camera.FakeRow, 1, 0, 0);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 

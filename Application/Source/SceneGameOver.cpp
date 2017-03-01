@@ -119,11 +119,8 @@ void SceneGameover::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
-	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
-	meshList[GEO_UI]->textureID = LoadTGA("Image/shop/ui.tga");
-
-	meshList[GEO_GAMEOVER] = MeshBuilder::GenerateQuad("game over", Color(1, 1, 1), 1.f);
-	meshList[GEO_GAMEOVER]->textureID = LoadTGA("Image//game_over.tga");
+	//	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
+	//	meshList[GEO_UI]->textureID = LoadTGA("Image/shop/ui.tga");
 
 	// Lighting 1
 	light[0].position.Set(4, 4, 0);
@@ -250,10 +247,8 @@ void SceneGameover::Update(double dt) {
 		canPressEnter = false;
 
 	}
-	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY&&_previousScene == Scene::SCENE_BOSS)
-	{
-		switch (_menuSelected)
-		{
+	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY&&_previousScene == Scene::SCENE_BOSS) {
+		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu());
 			break;
@@ -267,8 +262,7 @@ void SceneGameover::Update(double dt) {
 	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY) {
 		switch (_menuSelected) {
 		case 0:
-			switch (_previousScene)
-			{
+			switch (_previousScene) {
 			case Scene::SCENE_TUTORIAL:
 				SceneManager::getInstance()->changeScene(new SceneDogfight()); // Change to previous Scene
 				break;
@@ -323,8 +317,8 @@ void SceneGameover::Render() {
 
 	viewStack.LoadIdentity();
 	viewStack.LookAt(camera.position.x, camera.position.y,
-		camera.position.z, camera.target.x, camera.target.y,
-		camera.target.z, camera.up.x, camera.up.y, camera.up.z);
+					 camera.position.z, camera.target.x, camera.target.y,
+					 camera.target.z, camera.up.x, camera.up.y, camera.up.z);
 	modelStack.LoadIdentity();
 
 
@@ -333,14 +327,11 @@ void SceneGameover::Render() {
 
 	float winWidth = (float)Application::windowWidth() / 10;
 	float winHeight = (float)Application::windowHeight() / 10;
-	Vector3 tileScale(25, 8, 23);
+	Vector3 tileScale(25, 8, 23);/*
 	glDisable(GL_DEPTH_TEST);
-	//textManager.RenderMeshOnScreen(meshList[GEO_GAMEOVER], winWidth / 2, winHeight / 2, Vector3(90, 0, 0), Vector3(52, 1, 52));
-
 	textManager.RenderMeshOnScreen(meshList[GEO_UI], winWidth * 0.50f, winHeight * 0.28f, Vector3(90, 0, 0), tileScale);
-
 	glEnable(GL_DEPTH_TEST);
-
+	*/
 
 	std::string newLine = "";
 	std::string title = _title;
@@ -355,8 +346,7 @@ void SceneGameover::Render() {
 		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
 	case TYPE_MENU::MENU_VICTORY:
-		switch (_previousScene)
-		{
+		switch (_previousScene) {
 		case Scene::SCENE_BOSS:
 			option1 = (_menuSelected == 0) ? ">Main Menu<" : "Main Menu";
 			option2 = (_menuSelected == 1) ? ">Quit<" : "Quit";
@@ -375,16 +365,14 @@ void SceneGameover::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
 
-	if (_previousScene == Scene::SCENE_BOSS)
-	{
+	if (_previousScene == Scene::SCENE_BOSS) {
 		std::string option4 = "Currency earned: ";
 		option4.append(std::to_string(_currencyEarned));
 		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	}
-	if (_previousScene != Scene::SCENE_BOSS&&_menuType==MENU_VICTORY)
-	{
+	if (_previousScene != Scene::SCENE_BOSS&&_menuType == MENU_VICTORY) {
 		std::string option3 = "Option 3";
 		std::string option4 = "Currency earned: ";
 		option4.append(std::to_string(_currencyEarned));
@@ -392,7 +380,7 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	    textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
 
 	if (_menuType == MENU_GAMEOVER) {

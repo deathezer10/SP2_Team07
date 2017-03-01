@@ -309,13 +309,13 @@ void SceneTutorial::Update(double dt) {
 		waypoint.RotateTowards(*Ring::NearestRingPos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [W/S] to Accelerate/Decelerate", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Transition to next objective
 		if (Ring::RingCount == 0) {
@@ -333,13 +333,13 @@ void SceneTutorial::Update(double dt) {
 		waypoint.RotateTowards(*Ring::NearestRingPos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Strafe Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("Mouse [Left/Right] to turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Strafe Left/Right", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Left/Right] to Turn Left/Right", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Transition to next objective
 		if (Ring::RingCount == 0) {
@@ -357,13 +357,13 @@ void SceneTutorial::Update(double dt) {
 		waypoint.RotateTowards(*Ring::NearestRingPos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Up/Down] to rotate Up/Down", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [Q/E] to Thrust Down/Up", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Up/Down] to Look Up/Down", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [Q/E] to Thrust Up/Down", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Transition to next objective
 		if (Ring::RingCount == 0) {
@@ -382,13 +382,14 @@ void SceneTutorial::Update(double dt) {
 		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
 
 		textManager.queueRenderText(UIManager::Text("Eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Left-Click to Shoot", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] [Left-Click] to Shoot", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("[Tip] Hold [SpaceBar] to fire Missile", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objCount << "Training Dummy(s) left: " << Tdummy::TdummyCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
 		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Transition to next objective
 		if (Tdummy::TdummyCount == 0) {
@@ -410,7 +411,7 @@ void SceneTutorial::Update(double dt) {
 		textManager.queueRenderText(UIManager::Text("Asteroids can kill you! Try crashing into it!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objDist << "Distance: " << (int)(Vector3(0, 0, 100) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Transition to next objective
 		if (Rock::RockCount == 0) {
@@ -430,10 +431,10 @@ void SceneTutorial::Update(double dt) {
 	case 5: // Recover your HP
 		waypoint.RotateTowards(Vector3(0, 0, 150));
 
-		textManager.queueRenderText(UIManager::Text("Ouch! That hurts.. Pick up the <Repair Kit> to recover Full HP!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("Ouch! That hurts.. Pick up the [Repair Kit] to recover Full HP!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objDist << "Distance: " << (int)(Vector3(0, 0, 150) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Player recovered, change objective!
 		if (PlayerDataManager::getInstance()->getPlayerStats()->current_health >= 100) {
@@ -452,10 +453,10 @@ void SceneTutorial::Update(double dt) {
 	case 6: // Barrage all dummies
 		waypoint.RotateTowards(*Tdummy::NearestTdummyPos);
 
-		textManager.queueRenderText(UIManager::Text("Pick up the <Barrage> Power-Up and eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("Pick up the [Barrage] Power-Up and eliminate all Training Dummies!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Dummies eliminated
 		if (Tdummy::TdummyCount == 0) {
@@ -476,10 +477,10 @@ void SceneTutorial::Update(double dt) {
 			waypoint.RotateTowards(*Ring::NearestRingPos);
 		}
 
-		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up <Speed Boost> & Sprint to the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("Final Mission: Pick Up [Speed Boost] and reach the Checkpoint!", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 
 		// Objective Complete!
 		if (Ring::RingCount == 0) {
@@ -490,7 +491,7 @@ void SceneTutorial::Update(double dt) {
 				PlayerDataManager::getInstance()->SaveData();
 			}
 
-			SceneManager::getInstance()->changeScene(new SceneGameover("You have completed the Tutorial!", SceneGameover::TYPE_MENU::MENU_VICTORY, TYPE_SCENE::SCENE_TUTORIAL));
+			SceneManager::getInstance()->changeScene(new SceneGameover("Great Job! You've completed the Tutorial!", SceneGameover::TYPE_MENU::MENU_VICTORY, TYPE_SCENE::SCENE_TUTORIAL));
 			return;
 		}
 		break;

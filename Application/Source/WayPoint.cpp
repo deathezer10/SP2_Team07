@@ -2,7 +2,7 @@
 #include "WayPoint.h"
 #include "Scene.h"
 
-
+#include "GL\glew.h"
 
 WayPoint::WayPoint(Scene* scene) {
 

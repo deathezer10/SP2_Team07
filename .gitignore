@@ -1,7 +1,7 @@
-/Debug/*
+Debug/*
 !/Debug/glew32.dll
 
-/Release/*
+Release/*
 !/Release/glew32.dll
 
 *.opensdf

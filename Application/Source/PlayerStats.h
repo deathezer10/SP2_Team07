@@ -38,7 +38,7 @@ const int Ship_Stats[12] {
 		5, 2, 1,
 
 		// DF-6
-		2, 4, 0,
+		2, 4, 1,
 
 		// A-10
 		1, 2, 5
@@ -72,7 +72,7 @@ public:
 	const int minimum_base_speed = 5;
 
 	// Multiplier for each Upgrades level
-	const int multiplier_bullet_damage = 20;
+	const int multiplier_bullet_damage = 5;
 	const int multiplier_bullet_speed = 20;
 	const int multiplier_shield_capacity = 20;
 

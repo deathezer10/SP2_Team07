@@ -67,6 +67,12 @@ bool D01::update() {
 		break;
 
 	}
+	//scaling the healthbar to health left in percentage
+	if (hp > Math::EPSILON)//so that the healthbar do not scale to x axis to 0 and crash the program
+	{
+		hp = (float)currentHP / (float)defaultHP;
+	}
+
 
 	if (currentHP <= 0) {
 		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 1500;

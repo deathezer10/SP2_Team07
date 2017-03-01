@@ -29,7 +29,7 @@ public:
 	virtual void collisionHit(Vector3& hitPos);
 
 	static const int EnrageDistanceThreshold = 500; // If distance is above this, trigger Boss's enrage mode
-
+	float hp = 1;
 private:
 	float _Acceleration = 5.0f;
 	float _MaxVelocity = 20.0f;

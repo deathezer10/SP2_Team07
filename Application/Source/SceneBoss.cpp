@@ -286,6 +286,7 @@ void SceneBoss::Update(double dt) {
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
+	
 	pauseManager.UpdatePauseMenu((float)dt);
 
 	if (pauseManager.isPaused()) {
@@ -300,13 +301,22 @@ void SceneBoss::Update(double dt) {
 	light[0].position.Set(camera.position.x, camera.position.y, camera.position.z);
 	light[0].spotDirection = camera.position - camera.target;
 
+	std::ostringstream BossHp;
 	std::ostringstream objCount;
 	std::ostringstream currency;
 	std::ostringstream timer;
 
 	waypoint.RotateTowards(_Boss->position);
 
-	textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+	textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+	BossHp << "Boss HP: " << (int)(_Boss->getCurrentHealth()) << " / 6000";
+	textManager.queueRenderText(UIManager::Text(BossHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+
+
+
+
 
 	objCount << "XF02 Count: " << XF02::XF02Count;
 	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
@@ -326,6 +336,28 @@ void SceneBoss::Update(double dt) {
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
+	int BossDis;
+	BossDis=(int)(_Boss->position - camera.position).Length();
+	
+
+	if ( BossDis >D01::EnrageDistanceThreshold)
+	{
+		std::ostringstream warning;
+		warning << "Warning:Long Distance Attack Inbound!" ;
+		textManager.queueRenderText(UIManager::Text(warning.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
+		std::ostringstream Dist;
+		Dist << "Battle Area Distance: " << BossDis-D01::EnrageDistanceThreshold << " m";
+		textManager.queueRenderText(UIManager::Text(Dist.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
+
+	}
+
+	if (_Boss->getCurrentHealth() <= 0)
+	{
+
+		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+		SceneManager::getInstance()->changeScene(new SceneGameover("You have cleared this level!", SceneGameover::MENU_VICTORY, Scene::SCENE_BOSS, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+		return;
+	}
 	if (currenttime <= 0)
 	{
 		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
@@ -410,7 +442,14 @@ void SceneBoss::Render() {
 		return;
 	}
 
-	textManager.renderTextOnScreen(UIManager::Text("<Objective>", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+
+	// Cargo Ship health bar
+	float winWidth = (float)Application::windowWidth() / 10;
+	float winHeight = (float)Application::windowHeight() / 10;
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25 * _Boss->hp, 1, 1));
+	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25, 1, 1));
+
 
 	// Render all pending text onto screen
 	textManager.dequeueMesh();

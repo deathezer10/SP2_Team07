@@ -219,43 +219,6 @@ void Camera3::Update(double dt) {
 
 
 
-		if (Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) { // Strafe Left
-			position = position - right * CAMERA_STRAFE_SPEED;
-			target = position + view;
-			if (FakeYaw <= 20)
-			{
-				FakeYaw += rotationSpeed * 60;
-			}
-			if (FakeRow <= 60)
-			{
-				FakeRow += rotationSpeed * 60;
-			}
-		}
-		else
-		{
-			if (FakeYaw > 0)
-				FakeYaw -= rotationSpeed * 30;
-			if (FakeRow > 0)
-				FakeRow -= rotationSpeed * 60;
-		}
-		if (Application::IsKeyPressed('D') && !Application::IsKeyPressed('A')) { // Strafe Right
-			position = position + right * CAMERA_STRAFE_SPEED;
-			target = position + view;
-			if (FakeYaw >= -20) {
-				FakeYaw -= rotationSpeed * 60;
-			}
-			if (FakeRow >= -60) {
-				FakeRow -= rotationSpeed * 60;
-			}
-		}
-		else
-		{
-			if (FakeYaw<0)
-				FakeYaw += rotationSpeed * 30;
-			if (FakeRow<0)
-				FakeRow += rotationSpeed * 60;
-		}
-
 
 
 	

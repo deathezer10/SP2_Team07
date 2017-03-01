@@ -329,12 +329,12 @@ void SceneTutorial::Update(double dt) {
 		}
 		break;
 
-	case 1: // Yaw left/right to rotate fighter
+	case 1: // Yaw left/right to rotate fighter and strafe
 		waypoint.RotateTowards(*Ring::NearestRingPos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [A/D] to Strafe Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
+		textManager.queueRenderText(UIManager::Text("Mouse [Left/Right] to turn Left/Right", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
@@ -353,12 +353,12 @@ void SceneTutorial::Update(double dt) {
 		}
 		break;
 
-	case 2: // mouse up/down to pitch
+	case 2: // mouse up/down to pitch and thrust up/dowm
 		waypoint.RotateTowards(*Ring::NearestRingPos);
 
 		textManager.queueRenderText(UIManager::Text("Collect the Ring", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 		textManager.queueRenderText(UIManager::Text("[Tip] Mouse [Up/Down] to rotate Up/Down", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
-
+		textManager.queueRenderText(UIManager::Text("[Tip] Press [Q/E] to Thrust Down/Up", Color(1, 0, 1), UIManager::ANCHOR_TOP_CENTER));
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
@@ -561,9 +561,9 @@ void SceneTutorial::Render() {
 	// Character Transform
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.playerView.x, camera.playerView.y - 0.5f, camera.playerView.z);
-	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
-	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
-	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
+	modelStack.Rotate(-camera.getYaw() + camera.FakeYaw, 0, 1, 0);
+	modelStack.Rotate(-camera.getPitch() + camera.FakePitch, 0, 0, 1);
+	modelStack.Rotate(-camera.getRoll() + camera.FakeRow, 1, 0, 0);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 

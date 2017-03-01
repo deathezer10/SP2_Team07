@@ -56,6 +56,9 @@ public:
 	void setVelocity(float speed) { currentVelocity = speed; };
 	float getMaxVelocity() { return velocityMax; };
 
+	float FakePitch = 0;
+	float FakeYaw = 0;
+	float FakeRow = 0;
 	Vector3 playerView; // Player model offset, used for indicating that the player has moved
 
 	// Reset the helper variables of this class back to default

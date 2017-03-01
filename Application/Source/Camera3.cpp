@@ -140,7 +140,7 @@ void Camera3::Update(double dt) {
 	else {
 		currentVelocity -= velocityDecelerationRate * _dt;
 	}
-
+	
 	if (canYaw) {
 		if ((mouseMovedX < 0 && mouseYawEnabled)) { // Left
 
@@ -182,23 +182,70 @@ void Camera3::Update(double dt) {
 
 
 	// Camera Move Up / Down
-	if (Application::IsKeyPressed('Q')) { // Thrust Down
+	if (Application::IsKeyPressed('Q') && !Application::IsKeyPressed('E')) { // Thrust Down
 		position = position - up * CAMERA_STRAFE_SPEED;
 		target = position + view;
+		if (FakePitch<=50)
+		{
+			FakePitch += rotationSpeed * 60;
+		}
 	}
-	else if (Application::IsKeyPressed('E')) { // Thrust Up
+	else
+	{
+		if(FakePitch > 0)
+			FakePitch -= rotationSpeed * 60;
+	}
+	if (Application::IsKeyPressed('E') && !Application::IsKeyPressed('Q')) { // Thrust Up
 		position = position + up  * CAMERA_STRAFE_SPEED;
 		target = position + view;
+		if (FakePitch>=-50)
+		{
+			FakePitch -= rotationSpeed * 60;
+		}
 	}
 
-	if (Application::IsKeyPressed('A')) { // Strafe Left
+	 else
+	 {
+		 if (FakePitch < 0)
+			 FakePitch += rotationSpeed * 60;
+	 }
+	 if (Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) { // Strafe Left
 		position = position - right * CAMERA_STRAFE_SPEED;
 		target = position + view;
+		if (FakeYaw<= 20) 
+		{
+		FakeYaw += rotationSpeed * 60;
+	    }
+		if (FakeRow <= 60)
+		{
+			FakeRow += rotationSpeed * 60;
+		}
 	}
-	else if (Application::IsKeyPressed('D')) { // Strafe Right
+	else
+	{
+		if (FakeYaw > 0) 
+			FakeYaw -= rotationSpeed * 30;
+		if (FakeRow > 0)
+			FakeRow -= rotationSpeed * 60;
+	}
+	 if (Application::IsKeyPressed('D') && !Application::IsKeyPressed('A')) { // Strafe Right
 		position = position + right * CAMERA_STRAFE_SPEED;
 		target = position + view;
+		if (FakeYaw >= -20) {
+			FakeYaw -= rotationSpeed * 60;
+		}
+		if (FakeRow >= -60) {
+			FakeRow -= rotationSpeed * 60;
+		}
 	}
+	 else
+	 {
+		 if (FakeYaw<0)
+			FakeYaw += rotationSpeed * 30;
+		 if (FakeRow<0)
+			 FakeRow += rotationSpeed * 60;
+	 }
+	
 
 
 

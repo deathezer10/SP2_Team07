@@ -407,9 +407,9 @@ void SceneCargoShip::Render() {
 	// Character Transform
 	modelStack.PushMatrix();
 	modelStack.Translate(camera.playerView.x, camera.playerView.y - 0.5f, camera.playerView.z);
-	modelStack.Rotate(-camera.getYaw(), 0, 1, 0);
-	modelStack.Rotate(-camera.getPitch(), 0, 0, 1);
-	modelStack.Rotate(-camera.getRoll(), 1, 0, 0);
+	modelStack.Rotate(-camera.getYaw() + camera.FakeYaw, 0, 1, 0);
+	modelStack.Rotate(-camera.getPitch() + camera.FakePitch, 0, 0, 1);
+	modelStack.Rotate(-camera.getRoll() + camera.FakeRow, 1, 0, 0);
 	RenderMesh(meshList[GEO_SPACESHIP], true);
 	modelStack.PopMatrix();
 

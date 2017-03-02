@@ -185,8 +185,13 @@ void Camera3::Update(double dt) {
 		}
 		if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) { // Strafe Left
 
-			if (!glfwGetKey(window, GLFW_KEY_W))
+			if (!glfwGetKey(window, GLFW_KEY_W)){
 				currentVelocity += *velocityAccelerationRate * _dt;
+			}
+			else {
+				CAMERA_SPEED *= currentVelocity;
+				position += view * CAMERA_SPEED;
+			}
 
 			position -= right * (fabs(currentVelocity) / 100);
 			target = position + view;
@@ -206,8 +211,13 @@ void Camera3::Update(double dt) {
 		}
 		if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) { // Strafe Right
 
-			if (!glfwGetKey(window, GLFW_KEY_W))
+			if (!glfwGetKey(window, GLFW_KEY_W)){
 				currentVelocity += *velocityAccelerationRate * _dt;
+			}
+			else {
+				CAMERA_SPEED *= currentVelocity;
+				position += view * CAMERA_SPEED;
+			}
 
 			position += right * (fabs(currentVelocity) / 100);
 			target = position + view;
@@ -297,7 +307,7 @@ void Camera3::Update(double dt) {
 	if (std::abs(position.x) >= skyboxBound || std::abs(position.y) >= skyboxBound || std::abs(position.z) >= skyboxBound) {
 		currentVelocity = -10;
 	}
-	
+
 	// Move the Camera according to the velocity
 
 	if (!glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)){

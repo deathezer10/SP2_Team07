@@ -338,8 +338,10 @@ void SceneTutorial::Update(double dt) {
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		if (Ring::NearestRingPos->IsZero() == false){
+			objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		}
 
 		// Transition to next objective
 		if (Ring::RingCount == 0) {
@@ -362,9 +364,10 @@ void SceneTutorial::Update(double dt) {
 		objCount << "Ring(s) left: " << Ring::RingCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
 
-		objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-
+		if (Ring::NearestRingPos->IsZero() == false){
+			objDist << "Distance: " << (int)((*Ring::NearestRingPos) - camera.position).Length() << "m";
+			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		}
 		// Transition to next objective
 		if (Ring::RingCount == 0) {
 			camera.setVelocity(1);
@@ -387,9 +390,11 @@ void SceneTutorial::Update(double dt) {
 
 		objCount << "Training Dummy(s) left: " << Tdummy::TdummyCount;
 		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 0, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-		objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
-		textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		
+		if (Tdummy::NearestTdummyPos->IsZero() == false){
+			objDist << "Distance: " << (int)((*Tdummy::NearestTdummyPos) - camera.position).Length() << "m";
+			textManager.queueRenderText(UIManager::Text(objDist.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+		}
 
 		// Transition to next objective
 		if (Tdummy::TdummyCount == 0) {

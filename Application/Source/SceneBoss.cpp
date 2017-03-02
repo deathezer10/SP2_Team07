@@ -283,7 +283,7 @@ void SceneBoss::Update(double dt) {
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
-	rotateangle += dt;
+	rotateangle += _dt;
 	pauseManager.UpdatePauseMenu((float)dt);
 
 	if (pauseManager.isPaused()) {
@@ -304,9 +304,9 @@ void SceneBoss::Update(double dt) {
 	std::ostringstream timer;
 	std::ostringstream timer2;
 
-	if (!Application::IsKeyPressed(0x1B)&&IsBossSpawn==false)
+	if (!Application::IsKeyPressed(0x1B) && IsBossSpawn == false)
 	{
-		currenttime2 -= dt;
+		currenttime2 -= _dt;
 		timer2 << "Time left before boss spawn : " << (int)currenttime2;
 		textManager.queueRenderText(UIManager::Text(timer2.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	}
@@ -467,7 +467,7 @@ void SceneBoss::Render() {
 
 
 	// Cargo Ship health bar
-	if (currenttime2 <= 0&&IsBossSpawn==true)
+	if (currenttime2 <= 0 && IsBossSpawn == true)
 	{
 		float winWidth = (float)Application::windowWidth() / 10;
 		float winHeight = (float)Application::windowHeight() / 10;

@@ -295,12 +295,15 @@ void Camera3::Update(double dt) {
 	if (std::abs(position.x) >= skyboxBound || std::abs(position.y) >= skyboxBound || std::abs(position.z) >= skyboxBound) {
 		currentVelocity = -10;
 	}
-
-	CAMERA_SPEED *= currentVelocity;
-
+	
 	// Move the Camera according to the velocity
-	position += view * CAMERA_SPEED;
-	target = position + view;
+
+	if (!glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)){
+		CAMERA_SPEED *= currentVelocity;
+		position += view * CAMERA_SPEED;
+		target = position + view;
+	}
+
 
 	// Clamping max current velocity
 	if (glfwGetKey(window, GLFW_KEY_S))

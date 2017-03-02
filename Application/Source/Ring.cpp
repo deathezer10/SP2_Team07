@@ -32,12 +32,13 @@ bool Ring::update() {
 	Vector3 NearestRingToCamera = (*NearestRingPos) - _scene->camera.position;
 
 
-	if (NearestRingToCamera.Length() > CurrentRingToCamera.Length()) {
+	if (NearestRingToCamera.LengthSquared() > CurrentRingToCamera.LengthSquared()) {
 		NearestRingPos = &position;
 	}
 
 	// Interacted
 	if (collider.checkCollision(_scene->camera.getCollider()) == true) {
+		NearestRingPos = &Vector3(0, 0, 0);
 		_scene->objBuilder.destroyObject(this);
 		return true;
 	}

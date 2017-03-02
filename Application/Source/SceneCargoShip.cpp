@@ -262,14 +262,14 @@ void SceneCargoShip::Init() {
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
-		objBuilder.createObject(gg);
+		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
 	const int powerCount = 100;
 
 	for (size_t i = 0; i < powerCount; i++) {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
-		objBuilder.createObject(gg,td_OBJ_TYPE::TYPE_SHOOTABLE);
+		objBuilder.createObject(gg);
 	}
 
 	//create cargoship
@@ -291,7 +291,7 @@ void SceneCargoShip::Update(double dt) {
 		return;
 	}
 
-	
+
 
 	camera.Update(dt);
 	objBuilder.objInteractor.updateInteraction();
@@ -357,13 +357,13 @@ void SceneCargoShip::Render() {
 		Vector3 playerViewOffset = camera.position + (camera.getView().Normalized() * 3);
 
 		viewStack.LookAt(playerViewOffset.x, playerViewOffset.y, playerViewOffset.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 	else {
 		viewStack.LookAt(camera.position.x, camera.position.y, camera.position.z,
-						 camera.target.x, camera.target.y, camera.target.z,
-						 camera.up.x, camera.up.y, camera.up.z);
+			camera.target.x, camera.target.y, camera.target.z,
+			camera.up.x, camera.up.y, camera.up.z);
 	}
 
 	modelStack.LoadIdentity();

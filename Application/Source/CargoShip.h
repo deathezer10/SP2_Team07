@@ -15,7 +15,7 @@ public:
 	virtual bool update();
 	virtual void collisionHit(Vector3& hitPos);
 	
-	float Destination = 1750.0f;
+	float Destination = 1800.0f;
 	float hp = 1;
 
 	static Vector3* HyperPosition;

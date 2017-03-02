@@ -24,7 +24,7 @@ Missile::Missile(Scene* scene, Vector3 pos, NPC* target) : NPC(scene, pos, false
 	collider.setBoundingBoxSize(Vector3(5, 5, 5));
 
 	_currentVelocity = Math::FAbs(scene->camera.getCurrentVelocity()); // Speed must be at least faster than player		
-	_AttackDamage = PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage * 3; // Triple of the player's bullet damage
+	_AttackDamage = PlayerDataManager::getInstance()->getPlayerStats()->current_bullet_damage * 5; // Triple of the player's bullet damage
 }
 
 // Boss Missile

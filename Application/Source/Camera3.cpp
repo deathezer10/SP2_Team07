@@ -183,83 +183,87 @@ void Camera3::Update(double dt) {
 			target = position + view;
 			up = rotation * up;
 		}
-		if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) { // Strafe Left
 
-			if (!glfwGetKey(window, GLFW_KEY_W)){
-				if (currentVelocity > 31)
-				{
-					currentVelocity -= *velocityAccelerationRate * _dt;
-				}
-				else if (currentVelocity<29)
-				{
-					currentVelocity += *velocityAccelerationRate * _dt;
-				}
-		
-				if (currentVelocity>29&& currentVelocity<31 )
-				{
-					currentVelocity = currentVelocity;
-				}
-			}
-			else {
-				CAMERA_SPEED *= currentVelocity;
-				position += view * CAMERA_SPEED;
-			}
+		if (canPitch)
+		{
+			if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) { // Strafe Left
 
-			position -= right * (fabs(currentVelocity) / 100);
-			target = position + view;
+				if (!glfwGetKey(window, GLFW_KEY_W)){
+					if (currentVelocity > 31)
+					{
+						currentVelocity -= *velocityAccelerationRate * _dt;
+					}
+					else if (currentVelocity < 29)
+					{
+						currentVelocity += *velocityAccelerationRate * _dt;
+					}
 
-			if (FakeYaw <= 10) {
-				FakeYaw += rotationSpeed * 60;
-			}
-			if (FakeRow <= 30) {
-				FakeRow += rotationSpeed * 60;
-			}
-		}
-		else {
-			if (FakeYaw > 0)
-				FakeYaw -= rotationSpeed * 30;
-			if (FakeRow > 0)
-				FakeRow -= rotationSpeed * 60;
-		}
-		if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) { // Strafe Right
-
-			if (!glfwGetKey(window, GLFW_KEY_W)){
-				if (currentVelocity > 31)
-				{
-					currentVelocity -= *velocityAccelerationRate * _dt;
+					if (currentVelocity > 29 && currentVelocity < 31)
+					{
+						currentVelocity = currentVelocity;
+					}
 				}
-				else if (currentVelocity<29)
-				{
-					currentVelocity += *velocityAccelerationRate * _dt;
+				else {
+					CAMERA_SPEED *= currentVelocity;
+					position += view * CAMERA_SPEED;
 				}
 
-				if (currentVelocity>29 && currentVelocity<31)
-				{
-					currentVelocity = currentVelocity;
+				position -= right * (fabs(currentVelocity) / 100);
+				target = position + view;
+
+				if (FakeYaw <= 10) {
+					FakeYaw += rotationSpeed * 60;
+				}
+				if (FakeRow <= 30) {
+					FakeRow += rotationSpeed * 60;
 				}
 			}
 			else {
-				CAMERA_SPEED *= currentVelocity;
-				position += view * CAMERA_SPEED;
+				if (FakeYaw > 0)
+					FakeYaw -= rotationSpeed * 30;
+				if (FakeRow > 0)
+					FakeRow -= rotationSpeed * 60;
+			}
+			if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) { // Strafe Right
+
+				if (!glfwGetKey(window, GLFW_KEY_W)){
+					if (currentVelocity > 31)
+					{
+						currentVelocity -= *velocityAccelerationRate * _dt;
+					}
+					else if (currentVelocity < 29)
+					{
+						currentVelocity += *velocityAccelerationRate * _dt;
+					}
+
+					if (currentVelocity > 29 && currentVelocity < 31)
+					{
+						currentVelocity = currentVelocity;
+					}
+				}
+				else {
+					CAMERA_SPEED *= currentVelocity;
+					position += view * CAMERA_SPEED;
+				}
+
+				position += right * (fabs(currentVelocity) / 100);
+				target = position + view;
+
+				if (FakeYaw >= -10) {
+					FakeYaw -= rotationSpeed * 60;
+				}
+				if (FakeRow >= -30) {
+					FakeRow -= rotationSpeed * 60;
+				}
+			}
+			else {
+				if (FakeYaw < 0)
+					FakeYaw += rotationSpeed * 30;
+				if (FakeRow < 0)
+					FakeRow += rotationSpeed * 60;
 			}
 
-			position += right * (fabs(currentVelocity) / 100);
-			target = position + view;
-
-			if (FakeYaw >= -10) {
-				FakeYaw -= rotationSpeed * 60;
-			}
-			if (FakeRow >= -30) {
-				FakeRow -= rotationSpeed * 60;
-			}
 		}
-		else {
-			if (FakeYaw < 0)
-				FakeYaw += rotationSpeed * 30;
-			if (FakeRow < 0)
-				FakeRow += rotationSpeed * 60;
-		}
-
 	}
 
 	// Limit maximum Roll angle
@@ -334,7 +338,7 @@ void Camera3::Update(double dt) {
 
 	// Move the Camera according to the velocity
 
-	if (!glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)){
+	if (canYaw== true&& !glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)){
 		CAMERA_SPEED *= currentVelocity;
 		position += view * CAMERA_SPEED;
 		target = position + view;

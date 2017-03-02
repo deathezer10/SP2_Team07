@@ -256,7 +256,7 @@ void SceneCargoShip::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 200;
+	const size_t rockAmount = 600;
 	const float randRange = 1000;
 
 	// Create interactable rocks

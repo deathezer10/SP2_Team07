@@ -98,7 +98,7 @@ void SceneBoss::Init() {
 	m_parameters[U_MVP] = glGetUniformLocation(m_programID, "MVP");
 
 	// Init Camera
-	camera.Init(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
+	camera.Init(Vector3(0, 0, -50), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Mtx44 projection;
 	projection.SetToPerspective(45.f, 4.f / 3.f, 0.1f, 2000.f); // far clipping
@@ -275,10 +275,7 @@ void SceneBoss::Init() {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
 		objBuilder.createObject(gg);
 	}
-
 	// Create NPCs
-	_Boss = new D01(this, Vector3(0, 0, 35));
-	objBuilder.createObject(_Boss, td_OBJ_TYPE::TYPE_ENEMY);
 }
 
 void SceneBoss::Update(double dt) {
@@ -286,7 +283,7 @@ void SceneBoss::Update(double dt) {
 	_dt = (float)dt;
 	_elapsedTime += _dt;
 
-	
+	rotateangle += dt;
 	pauseManager.UpdatePauseMenu((float)dt);
 
 	if (pauseManager.isPaused()) {
@@ -305,58 +302,76 @@ void SceneBoss::Update(double dt) {
 	std::ostringstream objCount;
 	std::ostringstream currency;
 	std::ostringstream timer;
+	std::ostringstream timer2;
 
-	waypoint.RotateTowards(_Boss->position);
-
-	textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-
-	BossHp << "Boss HP: " << (int)(_Boss->getCurrentHealth()) << " / 6000";
-	textManager.queueRenderText(UIManager::Text(BossHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
-	
-	objCount << "XF02 Count: " << XF02::XF02Count;
-	textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
-
-	if (!Application::IsKeyPressed(0x1B)) // Prevent timer from ticking when paused
+	if (!Application::IsKeyPressed(0x1B)&&IsBossSpawn==false)
 	{
-		currenttime -= dt;
-		double seconds, minutes;
-		seconds = currenttime;
+		currenttime2 -= dt;
+		timer2 << "Time left before boss spawn : " << (int)currenttime2;
+		textManager.queueRenderText(UIManager::Text(timer2.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+	}
+	if (currenttime2 <= 0 && IsBossSpawn == false)
+	{
+		_Boss = new D01(this, Vector3(0, 0, 35));
+		_Boss->rotationY = -90;
+		objBuilder.createObject(_Boss, td_OBJ_TYPE::TYPE_ENEMY);
+		IsBossSpawn = true;
+	}
 
-		minutes = seconds / 60;
-		timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
-		textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+	if (IsBossSpawn == true)
+	{
+		waypoint.RotateTowards(_Boss->position);
+		textManager.queueRenderText(UIManager::Text("Eliminate the <Destroyer-01> !", Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		BossHp << "Boss HP: " << (int)(_Boss->getCurrentHealth()) << " / 6000";
+		textManager.queueRenderText(UIManager::Text(BossHp.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
+
+		objCount << "XF02 Count: " << XF02::XF02Count;
+		textManager.queueRenderText(UIManager::Text(objCount.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_RIGHT));
+		if (!Application::IsKeyPressed(0x1B)) // Prevent timer from ticking when paused
+		{
+			currenttime -= dt;
+			double seconds, minutes;
+			seconds = currenttime;
+
+			minutes = seconds / 60;
+			timer << "Time left: " << (int)minutes % 60 << " Min " << (int)seconds % 60 << " Sec";
+			textManager.queueRenderText(UIManager::Text(timer.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_LEFT));
+		}
+
+		int BossDis;
+		BossDis = (int)(_Boss->position - camera.position).Length();
+
+
+		if (BossDis > D01::EnrageDistanceThreshold)
+		{
+			std::ostringstream warning;
+			warning << "Warning:Long Distance Attack Inbound!";
+			textManager.queueRenderText(UIManager::Text(warning.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
+			std::ostringstream Dist;
+			Dist << "Battle Area Distance: " << BossDis - D01::EnrageDistanceThreshold << " m";
+			textManager.queueRenderText(UIManager::Text(Dist.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
+
+		}
+
+		if (_Boss->getCurrentHealth() <= 0)
+		{
+			PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
+			SceneManager::getInstance()->changeScene(new SceneGameover("Great Job, Fighter! You have eliminated the Boss!", SceneGameover::MENU_VICTORY, Scene::SCENE_BOSS, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
+			return;
+		}
+		if (currenttime <= 0)
+		{
+			SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
+			return;
+		}
 	}
 
 
 	currency << "Currency earned: " << PlayerDataManager::getInstance()->getPlayerStats()->currency_earned;
 	textManager.queueRenderText(UIManager::Text(currency.str(), Color(1, 1, 0), UIManager::ANCHOR_BOT_LEFT));
 
-	int BossDis;
-	BossDis=(int)(_Boss->position - camera.position).Length();
-	
 
-	if ( BossDis >D01::EnrageDistanceThreshold)
-	{
-		std::ostringstream warning;
-		warning << "Warning:Long Distance Attack Inbound!" ;
-		textManager.queueRenderText(UIManager::Text(warning.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
-		std::ostringstream Dist;
-		Dist << "Battle Area Distance: " << BossDis-D01::EnrageDistanceThreshold << " m";
-		textManager.queueRenderText(UIManager::Text(Dist.str(), Color(1, 0, 0), UIManager::ANCHOR_TOP_CENTER));
-
-	}
-
-	if (_Boss->getCurrentHealth() <= 0)
-	{
-		PlayerDataManager::getInstance()->getPlayerStats()->currency_earned += 500;
-		SceneManager::getInstance()->changeScene(new SceneGameover("Great Job, Fighter! You have eliminated the Boss!", SceneGameover::MENU_VICTORY, Scene::SCENE_BOSS, PlayerDataManager::getInstance()->getPlayerStats()->currency_earned));
-		return;
-	}
-	if (currenttime <= 0)
-	{
-		SceneManager::getInstance()->changeScene(new SceneGameover("Defeat: You exceeded the time limit!", SceneGameover::MENU_GAMEOVER, Scene::SCENE_DOGFIGHT));
-		return;
-	}
 }
 
 void SceneBoss::Render() {
@@ -414,8 +429,21 @@ void SceneBoss::Render() {
 	}
 
 	RenderSkybox();
+	if (IsBossSpawn == true)
+	{
+		waypoint.RenderArrow();
+	}
 
-	waypoint.RenderArrow();
+
+	if (IsBossSpawn == false)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 35);
+		modelStack.Rotate(rotateangle, 0, 1, 0);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_CUBE], true);
+		modelStack.PopMatrix();
+	}
 
 	// Character Transform
 	modelStack.PushMatrix();
@@ -439,10 +467,13 @@ void SceneBoss::Render() {
 
 
 	// Cargo Ship health bar
-	float winWidth = (float)Application::windowWidth() / 10;
-	float winHeight = (float)Application::windowHeight() / 10;
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25 * _Boss->hp, 1, 1));
-	textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25, 1, 1));
+	if (currenttime2 <= 0&&IsBossSpawn==true)
+	{
+		float winWidth = (float)Application::windowWidth() / 10;
+		float winHeight = (float)Application::windowHeight() / 10;
+		textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_FOREGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25 * _Boss->hp, 1, 1));
+		textManager.RenderMeshOnScreen(meshList[Scene::GEO_HP_BACKGROUND], winWidth * 0.25f, winHeight * 0.95f, Vector3(0, 0, 0), Vector3(25, 1, 1));
+	}
 
 
 	// Render all pending text onto screen
@@ -509,7 +540,7 @@ void SceneBoss::RenderSkybox() {
 }
 
 void SceneBoss::Exit() {
-	
+
 	for (int i = 0; i < NUM_GEOMETRY; ++i) {
 		if (meshList[i] != nullptr) {
 			delete meshList[i];

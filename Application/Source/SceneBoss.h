@@ -36,6 +36,8 @@ private:
 	bool IsBossSpawn = false;
 	D01* _Boss;
 
+	float warp_turn = 0;
+
 };
 
 #endif

@@ -216,8 +216,11 @@ void SceneBoss::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image/arial.tga");
 	textManager.LoadFontWidth("Image/arial.csv");
 
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Collider", Color(0, 1, 0), 0.5f, 0.5f, 0.5f);
+	meshList[GEO_STARGATE] = MeshBuilder::GenerateOBJ("rock4", "OBJ/space_gate.obj");
+	meshList[GEO_STARGATE]->textureID = LoadTGA("Image/space_gate.tga");
 
+	meshList[GEO_WARP] = MeshBuilder::GenerateOBJ("rock4", "OBJ/warp.obj");
+	meshList[GEO_WARP]->textureID = LoadTGA("Image/space_gate.tga");
 
 	// Lighting 1
 	light[0].type = Light::LIGHT_SPOT;
@@ -434,15 +437,24 @@ void SceneBoss::Render() {
 		waypoint.RenderArrow();
 	}
 
-
+	
+	warp_turn+= 25 * (float)_dt;
 	if (IsBossSpawn == false)
 	{
 		modelStack.PushMatrix();
 		modelStack.Translate(0, 0, 35);
 		modelStack.Rotate(rotateangle, 0, 1, 0);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_CUBE], true);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_STARGATE], true);
 		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 0, 35);
+		modelStack.Rotate(warp_turn, 0, 0, 1);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_WARP], true);
+		modelStack.PopMatrix();
+
 	}
 
 	// Character Transform

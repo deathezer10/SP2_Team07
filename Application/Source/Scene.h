@@ -76,6 +76,8 @@ public:
 		GEO_BARRAGE,
 		GEO_REGEN,
 		GEO_WAYPOINT,
+		GEO_STARGATE,
+		GEO_WARP,
 
 		//Main menu decoration
 		GEO_MAIN_MENU,

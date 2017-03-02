@@ -222,6 +222,8 @@ void SceneBoss::Init() {
 	meshList[GEO_WARP] = MeshBuilder::GenerateOBJ("rock4", "OBJ/warp.obj");
 	meshList[GEO_WARP]->textureID = LoadTGA("Image/space_gate.tga");
 
+	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("Collider", Color(0, 1, 0), 0.5f, 0.5f, 0.5f);
+
 	// Lighting 1
 	light[0].type = Light::LIGHT_SPOT;
 	light[0].position.Set(0, 10, 5);
@@ -278,7 +280,7 @@ void SceneBoss::Init() {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
 		objBuilder.createObject(gg);
 	}
-	// Create NPCs
+	
 }
 
 void SceneBoss::Update(double dt) {
@@ -313,13 +315,22 @@ void SceneBoss::Update(double dt) {
 		timer2 << "Time left before boss spawn : " << (int)currenttime2;
 		textManager.queueRenderText(UIManager::Text(timer2.str(), Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
 	}
+
+	if (currenttime2 > 0){
+		camera.allowMovement(false); 
+		skillManager.disableSkills();
+		camera.ResetCursorVariables();
+	}
+
 	if (currenttime2 <= 0 && IsBossSpawn == false)
 	{
 		_Boss = new D01(this, Vector3(0, 0, 35));
 		_Boss->rotationY = -90;
 		objBuilder.createObject(_Boss, td_OBJ_TYPE::TYPE_ENEMY);
+		camera.allowMovement(true);
+		skillManager.enableSkills();
 		IsBossSpawn = true;
-	}
+	} 
 
 	if (IsBossSpawn == true)
 	{
@@ -437,8 +448,8 @@ void SceneBoss::Render() {
 		waypoint.RenderArrow();
 	}
 
-	
-	warp_turn+= 25 * (float)_dt;
+
+	warp_turn += 25 * (float)_dt;
 	if (IsBossSpawn == false)
 	{
 		modelStack.PushMatrix();

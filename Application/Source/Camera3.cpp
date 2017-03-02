@@ -94,7 +94,7 @@ void Camera3::updateCursor(double dt) {
 
 void Camera3::Update(double dt) {
 
-	_dt = (float)dt;		
+	_dt = (float)dt;
 
 	// All Controls are disabled!
 	if (canMove == false) {
@@ -102,8 +102,10 @@ void Camera3::Update(double dt) {
 		return;
 	}
 
+	GLFWwindow* window = glfwGetCurrentContext();
+
 	// Stop rotating the Camera if Cursor is shown or Window is switching modes
-	if (isMouseEnabled && glfwGetInputMode(glfwGetCurrentContext(), GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !Application::IsKeyPressed(MK_MBUTTON)) {
+	if (isMouseEnabled && glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED && !glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE)) {
 		updateCursor(dt);
 	}
 	else {
@@ -117,7 +119,7 @@ void Camera3::Update(double dt) {
 	float rotationSpeed = _dt;
 
 	// Bring roll back to zero
-	if ((!Application::IsKeyPressed('A') && !Application::IsKeyPressed('D') || ((mouseMovedX == 0) && mouseYawEnabled))) {
+	if ((!glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D) || ((mouseMovedX == 0) && mouseYawEnabled))) {
 		if (roll > 1) {
 			roll -= rollFalloffSpeed * _dt;
 		}
@@ -130,11 +132,11 @@ void Camera3::Update(double dt) {
 	}
 
 	// Camera Forward / Backward / Left / Right
-	if (Application::IsKeyPressed('W')) { // Forward
+	if (glfwGetKey(window, GLFW_KEY_W)) { // Forward
 		wasMovingForward = true;
 		currentVelocity += *velocityAccelerationRate * _dt;
 	}
-	else if (Application::IsKeyPressed('S')) { // Backward
+	else if (glfwGetKey(window, GLFW_KEY_S)) { // Backward
 		wasMovingForward = false;
 		currentVelocity -= velocityBrakingRate * _dt;
 	}
@@ -181,8 +183,12 @@ void Camera3::Update(double dt) {
 			target = position + view;
 			up = rotation * up;
 		}
-		if (Application::IsKeyPressed('A') && !Application::IsKeyPressed('D')) { // Strafe Left
-			position = position - right * CAMERA_STRAFE_SPEED;
+		if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) { // Strafe Left
+
+			if (!glfwGetKey(window, GLFW_KEY_W))
+				currentVelocity += *velocityAccelerationRate * _dt;
+
+			position -= right * (currentVelocity / 100);
 			target = position + view;
 			if (FakeYaw <= 10) {
 				FakeYaw += rotationSpeed * 60;
@@ -197,8 +203,12 @@ void Camera3::Update(double dt) {
 			if (FakeRow > 0)
 				FakeRow -= rotationSpeed * 60;
 		}
-		if (Application::IsKeyPressed('D') && !Application::IsKeyPressed('A')) { // Strafe Right
-			position = position + right * CAMERA_STRAFE_SPEED;
+		if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) { // Strafe Right
+
+			if (!glfwGetKey(window, GLFW_KEY_W))
+				currentVelocity += *velocityAccelerationRate * _dt;
+
+			position += right * (currentVelocity / 100);
 			target = position + view;
 			if (FakeYaw >= -10) {
 				FakeYaw -= rotationSpeed * 60;
@@ -249,8 +259,12 @@ void Camera3::Update(double dt) {
 			target = position + view;
 		}
 		// Camera Move Up / Down
-		if (Application::IsKeyPressed('Q') && !Application::IsKeyPressed('E')) { // Thrust Down
-			position = position - up * CAMERA_STRAFE_SPEED;
+		if (glfwGetKey(window, GLFW_KEY_Q) && !glfwGetKey(window, GLFW_KEY_E)) { // Thrust Down
+
+			if (!glfwGetKey(window, GLFW_KEY_W))
+				currentVelocity += *velocityAccelerationRate * _dt;
+
+			position -= up * (currentVelocity / 100);
 			target = position + view;
 			if (FakePitch <= 25) {
 				FakePitch += rotationSpeed * 60;
@@ -260,8 +274,12 @@ void Camera3::Update(double dt) {
 			if (FakePitch > 0)
 				FakePitch -= rotationSpeed * 60;
 		}
-		if (Application::IsKeyPressed('E') && !Application::IsKeyPressed('Q')) { // Thrust Up
-			position = position + up  * CAMERA_STRAFE_SPEED;
+		if (glfwGetKey(window, GLFW_KEY_E) && !glfwGetKey(window, GLFW_KEY_Q)) { // Thrust Up
+
+			if (!glfwGetKey(window, GLFW_KEY_W))
+				currentVelocity += *velocityAccelerationRate * _dt;
+
+			position += up * (currentVelocity / 100);
 			target = position + view;
 			if (FakePitch >= -15) {
 				FakePitch -= rotationSpeed * 60;
@@ -280,41 +298,12 @@ void Camera3::Update(double dt) {
 
 	CAMERA_SPEED *= currentVelocity;
 
-	//if (canRoll) {
-	//	if (mouseMovedX > 0) { // Left
-	//		float angle = -rotationSpeed * mouseMovedDistanceX;
-	//		yaw -= angle;
-
-	//		Mtx44 rotation;
-	//		right.y = 0;
-	//		right.Normalize();
-	//		up = right.Cross(view).Normalized();
-	//		rotation.SetToRotation(angle, 0, 1, 0);
-	//		view = rotation * view;
-	//		target = position + view;
-	//	}
-	//	else if (mouseMovedX < 0) { // Left
-	//		float angle = rotationSpeed * mouseMovedDistanceX;
-	//		yaw -= angle;
-
-	//		Mtx44 rotation;
-	//		right.y = 0;
-	//		right.Normalize();
-	//		up = right.Cross(view).Normalized();
-	//		rotation.SetToRotation(angle, 0, 1, 0);
-	//		view = rotation * view;
-	//		target = position + view;
-	//	}
-	//}
-
 	// Move the Camera according to the velocity
-	position.x += view.x * CAMERA_SPEED;
-	position.y += view.y * CAMERA_SPEED;
-	position.z += view.z * CAMERA_SPEED;
+	position += view * CAMERA_SPEED;
 	target = position + view;
 
 	// Clamping max current velocity
-	if (Application::IsKeyPressed('S'))
+	if (glfwGetKey(window, GLFW_KEY_S))
 		currentVelocity = Math::Clamp(currentVelocity, velocityMin, velocityMax);
 	else {
 		currentVelocity = Math::Clamp(currentVelocity, (wasMovingForward || currentVelocity > 0) ? 1.0f : -1.0f, velocityMax);
@@ -322,12 +311,12 @@ void Camera3::Update(double dt) {
 
 
 	// Model Offset when moving
-	if (Application::IsKeyPressed('W')) {
+	if (glfwGetKey(window, GLFW_KEY_W)) {
 		if (currentViewOffsetDistance < viewOffsetMaxLength) {
 			currentViewOffsetDistance += (float)dt * viewOffsetIncreaseSpeed;
 		}
 	}
-	else if (Application::IsKeyPressed('S')) {
+	else if (glfwGetKey(window, GLFW_KEY_S)) {
 		if (currentViewOffsetDistance > viewOffsetMinLength) {
 			currentViewOffsetDistance -= (float)dt * viewOffsetDecreaseSpeed;
 		}

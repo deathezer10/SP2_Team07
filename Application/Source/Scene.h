@@ -175,7 +175,7 @@ public:
 
 	const TYPE_SCENE sceneType;
 
-	float _dt;
+	float _dt = 0;
 	float _elapsedTime = 0;
 
 	unsigned m_parameters[U_TOTAL];

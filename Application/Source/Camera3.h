@@ -73,7 +73,7 @@ private:
 
 	Collider collider;
 
-	float _dt;
+	float _dt = 0;
 
 	// Offsets the player model when accelerating or decelerating
 	Vector3 viewOffset; // helper to offset player model

@@ -155,36 +155,23 @@ void SceneGameover::Init() {
 
 void SceneGameover::Update(double dt) {
 
-	if (Application::IsKeyPressed('1')) {
-		glEnable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed('2')) {
-		glDisable(GL_CULL_FACE);
-	}
-	if (Application::IsKeyPressed('3')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); //default fill mode
-	}
-	if (Application::IsKeyPressed('4')) {
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //wireframe mode
-	}
-
 	camera.Update(dt);
 
+	GLFWwindow* window = glfwGetCurrentContext();
 
-
-	if (!Application::IsKeyPressed(VK_UP) && !Application::IsKeyPressed(VK_DOWN)) {
+	if (!glfwGetKey(window, GLFW_KEY_UP) && !glfwGetKey(window, GLFW_KEY_DOWN)) {
 		canPressUpDown = true;
 	}
 
 	///////////////////////////////////////////////vvvvvvvvvvvvvvvvvvARROW CONTROL FOR VICTORY MENUvvvvvvvvvvvvvvvvvvvvvvv/////////////////////////////////////////
 	if (_menuType == MENU_VICTORY&&_previousScene != SCENE_BOSS) {
-		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
 				canPressUpDown = false;
 			}
 		}
-		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected += 1;
 				canPressUpDown = false;
@@ -193,13 +180,13 @@ void SceneGameover::Update(double dt) {
 	}
 
 	if (_menuType == MENU_VICTORY&&_previousScene == SCENE_BOSS) {
-		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
 				canPressUpDown = false;
 			}
 		}
-		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected = 1;
 				canPressUpDown = false;
@@ -210,13 +197,13 @@ void SceneGameover::Update(double dt) {
 
 	////////////////////////////////////////////////////////vvvvvvvvvvvvARROWS CONTROL FOR GAME OVER MENUvvvvvvvvvvvvvvvvvvvvvv//////////////////////////////
 	if (_menuType == MENU_GAMEOVER) {
-		if (Application::IsKeyPressed(VK_UP) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_UP) && canPressUpDown) {
 			if (_menuSelected >= 1) {
 				_menuSelected -= 1;
 				canPressUpDown = false;
 			}
 		}
-		if (Application::IsKeyPressed(VK_DOWN) && canPressUpDown) {
+		if (glfwGetKey(window, GLFW_KEY_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
 				_menuSelected = 1;
 				canPressUpDown = false;
@@ -226,12 +213,12 @@ void SceneGameover::Update(double dt) {
 	/////////////////////////////////////////////////////////^^^^^^^^^^^^^^^^ARROWS CONTROL FOR GAME OVER MENU^^^^^^^^^^^^^^//////////////////////////////
 
 
-	if (!Application::IsKeyPressed(VK_RETURN)) {
+	if (!glfwGetKey(window, GLFW_KEY_ENTER)) {
 		canPressEnter = true;
 	}
 
 	//////////////////////////////////////////////////////////vvvvvvvvvvvvvCHANGE GAME STATEvvvvvvvvvvvvvvvvvv//////////////////////////////////////////////
-	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_GAMEOVER) {
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && canPressEnter && _menuType == MENU_GAMEOVER) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(createScene(_previousScene)); // Change to previous Scene
@@ -247,7 +234,7 @@ void SceneGameover::Update(double dt) {
 		canPressEnter = false;
 
 	}
-	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY&&_previousScene == Scene::SCENE_BOSS) {
+	if (glfwGetKey(window, GLFW_KEY_ENTER) && canPressEnter && _menuType == MENU_VICTORY&&_previousScene == Scene::SCENE_BOSS) {
 		switch (_menuSelected) {
 		case 0:
 			SceneManager::getInstance()->changeScene(new SceneMainMenu());
@@ -259,7 +246,7 @@ void SceneGameover::Update(double dt) {
 		canPressEnter = false;
 	}
 
-	if (Application::IsKeyPressed(VK_RETURN) && canPressEnter && _menuType == MENU_VICTORY) {
+	if (glfwGetKey(window,GLFW_KEY_ENTER) && canPressEnter && _menuType == MENU_VICTORY) {
 		switch (_menuSelected) {
 		case 0:
 			switch (_previousScene) {

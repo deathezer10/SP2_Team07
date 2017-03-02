@@ -13,13 +13,15 @@ PauseManager::PauseManager(Scene* scene){
 
 void PauseManager::UpdatePauseMenu(float dt){
 
+	GLFWwindow* window = glfwGetCurrentContext();
+
 	// Check for Key Up
-	if (!Application::IsKeyPressed(PAUSE_KEY)) {
+	if (!glfwGetKey(window, PAUSE_KEY)) {
 		_canPauseButtonPress = true;
 	}
 
 	// Check if pause button is pressed
-	if (Application::IsKeyPressed(PAUSE_KEY) && _canPauseButtonPress == true) {
+	if (glfwGetKey(window, PAUSE_KEY) && _canPauseButtonPress == true) {
 		_paused = !_paused; // Toggle between true and false
 		_currentOption = 0;
 		_scene->camera.ResetCursorVariables();
@@ -30,24 +32,23 @@ void PauseManager::UpdatePauseMenu(float dt){
 	if (_paused == false)
 		return;
 
-	if (!Application::IsKeyPressed(VK_UP) && !Application::IsKeyPressed(VK_DOWN)){
+	if (!glfwGetKey(window, GLFW_KEY_UP) && !glfwGetKey(window, GLFW_KEY_DOWN)){
 		_canMenuPress = true;
 	}
 
-	if (Application::IsKeyPressed(VK_UP) && _canMenuPress){
+	if (glfwGetKey(window, GLFW_KEY_UP) && _canMenuPress){
 		--_currentOption;
 		_canMenuPress = false;
 	}
 
-	if (Application::IsKeyPressed(VK_DOWN) && _canMenuPress){
+	if (glfwGetKey(window, GLFW_KEY_DOWN) && _canMenuPress){
 		++_currentOption;
 		_canMenuPress = false;
 	}
 
 	_currentOption = Math::Clamp<short>(_currentOption, 0, 3);
 
-
-	if (Application::IsKeyPressed(VK_RETURN)){
+	if (glfwGetKey(window, GLFW_KEY_ENTER)){
 		switch (_currentOption) {
 
 		case 0: // Resume
@@ -61,6 +62,7 @@ void PauseManager::UpdatePauseMenu(float dt){
 
 		case 2: // Main Menu
 			SceneManager::getInstance()->changeScene(_scene->createScene(Scene::TYPE_SCENE::SCENE_MAINMENU));
+			return;
 			break;
 
 		case 3: // Quit
@@ -117,7 +119,7 @@ void PauseManager::RenderPauseMenu(){
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ option3t, color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ "", color, UIManager::ANCHOR_CENTER_CENTER });
 	_scene->textManager.renderTextOnScreen(UIManager::Text{ option4t, color, UIManager::ANCHOR_CENTER_CENTER });
-	
+
 	_scene->textManager.reset();
 
 }

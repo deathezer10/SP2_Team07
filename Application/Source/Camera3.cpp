@@ -186,7 +186,19 @@ void Camera3::Update(double dt) {
 		if (glfwGetKey(window, GLFW_KEY_A) && !glfwGetKey(window, GLFW_KEY_D)) { // Strafe Left
 
 			if (!glfwGetKey(window, GLFW_KEY_W)){
-				currentVelocity += *velocityAccelerationRate * _dt;
+				if (currentVelocity > 31)
+				{
+					currentVelocity -= *velocityAccelerationRate * _dt;
+				}
+				else if (currentVelocity<29)
+				{
+					currentVelocity += *velocityAccelerationRate * _dt;
+				}
+		
+				if (currentVelocity>29&& currentVelocity<31 )
+				{
+					currentVelocity = currentVelocity;
+				}
 			}
 			else {
 				CAMERA_SPEED *= currentVelocity;
@@ -212,7 +224,19 @@ void Camera3::Update(double dt) {
 		if (glfwGetKey(window, GLFW_KEY_D) && !glfwGetKey(window, GLFW_KEY_A)) { // Strafe Right
 
 			if (!glfwGetKey(window, GLFW_KEY_W)){
-				currentVelocity += *velocityAccelerationRate * _dt;
+				if (currentVelocity > 31)
+				{
+					currentVelocity -= *velocityAccelerationRate * _dt;
+				}
+				else if (currentVelocity<29)
+				{
+					currentVelocity += *velocityAccelerationRate * _dt;
+				}
+
+				if (currentVelocity>29 && currentVelocity<31)
+				{
+					currentVelocity = currentVelocity;
+				}
 			}
 			else {
 				CAMERA_SPEED *= currentVelocity;

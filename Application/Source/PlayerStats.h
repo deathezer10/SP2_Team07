@@ -79,7 +79,7 @@ public:
 	// Cooldown time, dont forget there's a minimum value for these 
 	// Formula: (baseCD - (subtracter * upgradeLevel)) + minimum
 	const float base_cd_bullet_rof = 0.55f;
-	const float substracter_cd_bullet_rof = 0.10f;
+	const float substracter_cd_bullet_rof = 0.05f;
 	const float minimum_bullet_cooldown = 0.10f;
 
 	const float base_cd_shield_recovery = 5;

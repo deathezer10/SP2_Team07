@@ -262,15 +262,18 @@ void SceneCargoShip::Init() {
 	// Create interactable rocks
 	for (size_t i = 0; i < rockAmount; i++) {
 		Rock* gg = new Rock(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)));
+		gg->setCollision(true);
 		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
-	const int powerCount = 100;
+	const int powerCount = 150;
 
+	//create power ups
 	for (size_t i = 0; i < powerCount; i++) {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));
 		objBuilder.createObject(gg);
 	}
+
 
 	//create cargoship
 	_CargoShip = new CargoShip(this, Vector3(0, 0, 40));

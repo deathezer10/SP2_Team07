@@ -257,7 +257,7 @@ void SceneDogfight::Init() {
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 2); // Make sure to pass uniform parameters after glUseProgram()
 
-	const size_t rockAmount = 200;
+	const size_t rockAmount = 600;
 	const float randRange = 500;
 
 	// Create interactable rocks
@@ -267,7 +267,7 @@ void SceneDogfight::Init() {
 		objBuilder.createObject(gg, td_OBJ_TYPE::TYPE_SHOOTABLE);
 	}
 
-	const int powerCount = 100;
+	const int powerCount = 150;
 
 	for (size_t i = 0; i < powerCount; i++) {
 		PowerUp* gg = new PowerUp(this, Vector3(Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange), Math::RandFloatMinMax(-randRange, randRange)), static_cast<PowerUp::PowerType>(Math::RandIntMinMax(0, 2)));

@@ -44,9 +44,9 @@ private:
 	void skill_thrust();
 
 	// Misc Variables
-	const float _SkillSummonCooldown = 7; // Summon cooldown
+	const float _SkillSummonCooldown = 5; // Summon cooldown
 	const float _SkillThrustCooldown = 5; // Thrust cooldown
-	const float _SkillMissileCooldown = 7; // Missile cooldown
+	const float _SkillMissileCooldown = 5; // Missile cooldown
 
 
 	// Helpers
@@ -61,7 +61,7 @@ private:
 
 	// Summon variables
 	float _SummonNextSpawnTime = 0;
-	const float _SummonSpawnInterval = 5;
+	const float _SummonSpawnInterval = 4;
 	const int _SummonAmount = 3;
 	float _SummonSpawned = 0;
 
@@ -70,8 +70,8 @@ private:
 	float _MissileNextSpawnTime = 0;
 	const float _MissileEnrageSpawnInterval = 1;
 	const float _MissileSpawnInterval = 3;
-	const int _MissileDamage = 50;
-	const int _MissileHealth = 50;
+	const int _MissileDamage = 75;
+	const int _MissileHealth = 100;
 	const int _MissileAmount = 3;
 	float _MissileSpawned = 0;
 

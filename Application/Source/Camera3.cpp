@@ -188,8 +188,9 @@ void Camera3::Update(double dt) {
 			if (!glfwGetKey(window, GLFW_KEY_W))
 				currentVelocity += *velocityAccelerationRate * _dt;
 
-			position -= right * (currentVelocity / 100);
+			position -= right * (fabs(currentVelocity) / 100);
 			target = position + view;
+
 			if (FakeYaw <= 10) {
 				FakeYaw += rotationSpeed * 60;
 			}
@@ -208,8 +209,9 @@ void Camera3::Update(double dt) {
 			if (!glfwGetKey(window, GLFW_KEY_W))
 				currentVelocity += *velocityAccelerationRate * _dt;
 
-			position += right * (currentVelocity / 100);
+			position += right * (fabs(currentVelocity) / 100);
 			target = position + view;
+
 			if (FakeYaw >= -10) {
 				FakeYaw -= rotationSpeed * 60;
 			}

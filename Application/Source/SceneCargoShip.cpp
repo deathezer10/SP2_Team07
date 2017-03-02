@@ -415,7 +415,7 @@ void SceneCargoShip::Render() {
 
 	modelStack.PushMatrix();
 	modelStack.Rotate(-90.0f, 0, 1, 0);
-	modelStack.Translate(2050, 0, 0);
+	modelStack.Translate(1850, 0, 0);
 	RenderMesh(meshList[GEO_SPACESTATION], true);
 	modelStack.PopMatrix();
 

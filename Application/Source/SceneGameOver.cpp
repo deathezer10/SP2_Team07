@@ -205,7 +205,7 @@ void SceneGameover::Update(double dt) {
 		}
 		if (glfwGetKey(window, GLFW_KEY_DOWN) && canPressUpDown) {
 			if (_menuSelected <= 1) {
-				_menuSelected = 1;
+				_menuSelected += 1;
 				canPressUpDown = false;
 			}
 		}
@@ -345,6 +345,8 @@ void SceneGameover::Render() {
 		}
 	}
 
+
+
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
@@ -352,9 +354,18 @@ void SceneGameover::Render() {
 	textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 
 
-	if (_previousScene == Scene::SCENE_BOSS) {
+	if (_menuType == MENU_VICTORY&&_previousScene == SCENE_BOSS) {
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+	}
+
+	if (_previousScene == Scene::SCENE_BOSS&&_menuType==MENU_GAMEOVER) {
+		std::string option3 = "Option 3";
+		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
 		std::string option4 = "Currency earned: ";
 		option4.append(std::to_string(_currencyEarned));
+		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(option4, Color(1, 1, 1), UIManager::ANCHOR_TOP_CENTER));
@@ -370,11 +381,12 @@ void SceneGameover::Render() {
 		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
 
-	if (_menuType == MENU_GAMEOVER) {
+	if (_menuType == MENU_GAMEOVER&&_previousScene!=SCENE_BOSS) {
 		std::string option3 = "Option 3";
 		option3 = (_menuSelected == 1) ? ">Main Menu<" : "Main Menu";
 		textManager.renderTextOnScreen(UIManager::Text(option3, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 		textManager.renderTextOnScreen(UIManager::Text(newLine, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
+		textManager.renderTextOnScreen(UIManager::Text(option2, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
 	}
 
 

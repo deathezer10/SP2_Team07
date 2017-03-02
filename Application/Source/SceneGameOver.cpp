@@ -332,6 +332,9 @@ void SceneGameover::Render() {
 	switch (_menuType) {
 
 	case TYPE_MENU::MENU_GAMEOVER:
+		glDisable(GL_DEPTH_TEST);
+
+		textManager.RenderMeshOnScreen(meshList[GEO_UI_DEFEAT], winWidth * 0.505f, winHeight * 0.40f, Vector3(90, 0, 0), tileScale);
 		option1 = (_menuSelected == 0) ? ">Restart<" : "Restart";
 		option2 = (_menuSelected == 2) ? ">Quit<" : "Quit";
 		break;
@@ -350,9 +353,7 @@ void SceneGameover::Render() {
 
 
 	
-	glDisable(GL_DEPTH_TEST);
-
-	textManager.RenderMeshOnScreen(meshList[GEO_UI_DEFEAT], winWidth * 0.505f, winHeight * 0.40f, Vector3(90, 0, 0), tileScale);
+	
 
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));

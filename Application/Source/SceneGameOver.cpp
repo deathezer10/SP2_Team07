@@ -119,6 +119,9 @@ void SceneGameover::Init() {
 	meshList[GEO_TEXT]->textureID = LoadTGA("Image//arial.tga");
 	textManager.LoadFontWidth("Image//arial.csv");
 
+	meshList[GEO_UI_DEFEAT] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
+	meshList[GEO_UI_DEFEAT]->textureID = LoadTGA("Image/ui_defeat.tga");
+
 	//	meshList[GEO_UI] = MeshBuilder::GenerateQuad("UI", Color(1, 1, 1), 1.f);
 	//	meshList[GEO_UI]->textureID = LoadTGA("Image/shop/ui.tga");
 
@@ -345,6 +348,11 @@ void SceneGameover::Render() {
 		}
 	}
 
+
+	
+	glDisable(GL_DEPTH_TEST);
+
+	textManager.RenderMeshOnScreen(meshList[GEO_UI_DEFEAT], winWidth * 0.505f, winHeight * 0.40f, Vector3(90, 0, 0), tileScale);
 
 
 	textManager.renderTextOnScreen(UIManager::Text(title, Color(1, 1, 1), UIManager::ANCHOR_CENTER_CENTER));
